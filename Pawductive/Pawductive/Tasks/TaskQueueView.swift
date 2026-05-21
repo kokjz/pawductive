@@ -25,27 +25,7 @@ struct TaskQueueView: View {
                     .foregroundColor(.primary)
                 Spacer()
                 if let profile = profiles.first {
-                    HStack(spacing: 8) {
-                        Image(.coin)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                        
-                        Text("\(profile.coins)")
-                            .font(.system(.headline, design: .rounded))
-                            .bold()
-                            .foregroundColor(.orange)
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 6)
-                    .background(
-                        Capsule()
-                            .fill(Color.orange.opacity(0.1))
-                    )
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.orange.opacity(0.2), lineWidth: 1)
-                    )
+                    UserCoinsView(profile: profile)
                 }
             }
             .padding(.horizontal)
@@ -163,5 +143,5 @@ struct TaskQueueView: View {
     NavigationStack {
         TaskQueueView()
     }
-    .modelContainer(for: TaskItem.self, inMemory: true)
+    .modelContainer(DataContainer().modelContainer)
 }

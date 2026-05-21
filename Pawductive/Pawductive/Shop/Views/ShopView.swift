@@ -23,12 +23,7 @@ struct ShopView: View {
                 Text("Shop")
                     .styleAsMainHeader()
                 Spacer()
-                Text("\(user.coins)")
-                    .styleAsMainHeader()
-                Image(.coin)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 50)
+                UserCoinsView(profile: user)
             }
             
             Picker("Category", selection: $category) {
@@ -49,5 +44,5 @@ struct ShopView: View {
 
 #Preview {
     ShopView()
-        .modelContainer(UserContainer(user: UserProfile(coins: 100)).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }

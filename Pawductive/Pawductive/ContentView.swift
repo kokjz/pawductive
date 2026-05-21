@@ -32,5 +32,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [TaskItem.self, UserProfile.self])
+        .modelContainer(DataContainer().modelContainer)
 }

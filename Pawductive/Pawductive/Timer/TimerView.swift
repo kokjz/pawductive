@@ -40,7 +40,7 @@ struct TimerView: View {
                     )
                     .rotationEffect(Angle(degrees: -90))
                     .frame(width: 250, height: 250)
-                    .animation(.linear(duration: 1.0), value: viewModel.timeRemaining)
+                    .animation(viewModel.timeRemaining == viewModel.totalDuration ? nil : .linear(duration: 1.0), value: viewModel.timeRemaining)
                 
                 Text(formatTime(viewModel.timeRemaining))
                     .font(.system(size: 52, weight: .bold, design: .rounded))
@@ -84,7 +84,7 @@ struct TimerView: View {
         .onAppear {
             viewModel.startTimer(minutes: task.expectedDurationInMinutes)
         }
-        .navigationBarBackButtonHidden(viewModel.isRunning)
+        .navigationBarBackButtonHidden(true)
         
         //detect if user exits app
         .onChange(of: scenePhase) { oldValue, newValue in
