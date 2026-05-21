@@ -9,9 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ToyShopView: View {
-    @Query private var users: [User]
+    @Query private var users: [UserProfile]
     
-    private var user: User {
+    private var user: UserProfile {
         users.first!
     }
     

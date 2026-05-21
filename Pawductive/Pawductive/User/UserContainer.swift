@@ -14,8 +14,8 @@ class UserContainer {
         modelContainer.mainContext
     }
     
-    init(user: User = User(), inMemory: Bool = true) {
-        let schema = Schema([User.self])
+    init(user: UserProfile = UserProfile(), inMemory: Bool = true) {
+        let schema = Schema([UserProfile.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])

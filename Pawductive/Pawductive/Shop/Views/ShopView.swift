@@ -9,9 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ShopView: View {
-    @Query private var users: [User]
+    @Query private var users: [UserProfile]
     
-    private var user: User {
+    private var user: UserProfile {
         users.first!
     }
     
@@ -53,5 +53,5 @@ struct ShopView: View {
 
 #Preview {
     ShopView()
-        .modelContainer(UserContainer(user: User(coins: 100)).modelContainer)
+        .modelContainer(UserContainer(user: UserProfile(coins: 100)).modelContainer)
 }

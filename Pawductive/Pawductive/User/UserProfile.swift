@@ -1,19 +1,22 @@
 //
-//  User.swift
+//  UserProfile.swift
 //  Pawductive
 //
-//  Created by Lee Zi Rong on 21/5/26.
+//  Created by Kok Jun Zhe on 21/5/26.
 //
 
+import Foundation
 import SwiftData
 
 @Model
-class User {
+class UserProfile {
+    var id: UUID
     var coins: Int
     var foodInventory: [FoodCatalog: Int] = [:]
     var toyInventory: [ToyCatalog: Int] = [:]
     
-    init(coins: Int = 0) {
+    init(coins: Int = 100) {
+        self.id = UUID()
         self.coins = coins
     }
     
