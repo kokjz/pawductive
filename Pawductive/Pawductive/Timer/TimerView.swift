@@ -21,8 +21,7 @@ struct TimerView: View {
         VStack(spacing: 40) {
             VStack(spacing: 8) {
                 Text(task.title)
-                    .font(.title)
-                    .bold()
+                    .styleAsSubHeader()
                 Text("Focus Period")
                     .foregroundColor(.secondary)
             }
@@ -87,7 +86,7 @@ struct TimerView: View {
         }
         .navigationBarBackButtonHidden(viewModel.isRunning)
         
-        //detect if user exits appp
+        //detect if user exits app
         .onChange(of: scenePhase) { oldValue, newValue in
             if newValue == .background && viewModel.isRunning {
                 viewModel.failSession()

@@ -14,14 +14,17 @@ struct TaskQueueView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var newTaskTitle: String = ""
-    @State private var newTaskDuration: String = "25"
+    @State private var newTaskDuration: String = "30"
     
     var body: some View {
         VStack(spacing: 0) {
-            //wallet balance
-            if let profile = profiles.first {
-                HStack {
-                    Spacer()
+            //unified header (title + wallet balance)
+            HStack(alignment: .center) {
+                Text("Task Queue")
+                    .styleAsMainHeader()
+                    .foregroundColor(.primary)
+                Spacer()
+                if let profile = profiles.first {
                     HStack(spacing: 8) {
                         Image(.coin)
                             .resizable()
@@ -44,11 +47,12 @@ struct TaskQueueView: View {
                             .stroke(Color.orange.opacity(0.2), lineWidth: 1)
                     )
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .background(Color(.systemGroupedBackground))
             }
-            
+            .padding(.horizontal)
+            .padding(.top, 16)
+            .padding(.bottom, 8)
+            .background(Color(.systemGroupedBackground))
+
             //task input
             VStack(spacing: 12) {
                 HStack(spacing: 12) {
@@ -132,7 +136,6 @@ struct TaskQueueView: View {
                 .listStyle(.insetGrouped)
             }
         }
-        .navigationTitle("Task Queue")
         .navigationDestination(for: TaskItem.self) { task in
             TimerView(task: task)
         }
@@ -145,7 +148,7 @@ struct TaskQueueView: View {
         try? modelContext.save()
         
         newTaskTitle = ""
-        newTaskDuration = "25"
+        newTaskDuration = "30"
     }
     
     private func deleteTasks(offsets: IndexSet) {

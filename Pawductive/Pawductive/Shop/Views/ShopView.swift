@@ -21,14 +21,10 @@ struct ShopView: View {
         VStack {
             HStack {
                 Text("Shop")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
+                    .styleAsMainHeader()
                 Spacer()
                 Text("\(user.coins)")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
+                    .styleAsMainHeader()
                 Image(.coin)
                     .resizable()
                     .scaledToFit()
