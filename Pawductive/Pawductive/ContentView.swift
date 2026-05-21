@@ -10,13 +10,27 @@ import SwiftData
 
 struct ContentView: View {
     var body: some View {
-        NavigationStack {
-            TaskQueueView()
+        //tab view at bottom of screen
+        TabView {
+            //tab 1: task queue and timer
+            NavigationStack {
+                TaskQueueView()
+            }
+            .tabItem {
+                Label("Tasks", systemImage: "checklist")
+            }
+            
+            //tab 2: shop view
+            ShopView()
+                .tabItem {
+                    Label("Shop", systemImage: "bag.fill")
+                }
         }
+        .accentColor(.orange)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: TaskItem.self, inMemory: true)
+        .modelContainer(for: [TaskItem.self, UserProfile.self])
 }
