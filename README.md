@@ -1,9 +1,8 @@
 # Pawductive 🐾
 > Gamifying productivity, one pet at a time.
-> []
-> []
 
 A native iOS productivity application developed in Swift.
+
 Built for **Orbital 26** by **No Animals Were Harmed (Team 6658)**.
 
 
