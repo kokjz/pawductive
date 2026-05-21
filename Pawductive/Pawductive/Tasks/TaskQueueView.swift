@@ -9,75 +9,127 @@ import SwiftUI
 import SwiftData
 
 struct TaskQueueView: View {
-    @Query private var profiles: [UserProfile]
     @Query(sort: \TaskItem.creationDate, order: .reverse) private var tasks: [TaskItem]
+    @Query private var profiles: [UserProfile]
     @Environment(\.modelContext) private var modelContext
     
     @State private var newTaskTitle: String = ""
-    @State private var newTaskDuration: String = "30"
+    @State private var newTaskDuration: String = "25"
     
     var body: some View {
-        VStack {
-            //coin display
+        VStack(spacing: 0) {
+            //wallet balance
             if let profile = profiles.first {
                 HStack {
-                    Text("🪙 \(profile.coins) Coins")
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(.orange)
                     Spacer()
+                    HStack(spacing: 8) {
+                        Image(.coin)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                        
+                        Text("\(profile.coins)")
+                            .font(.system(.headline, design: .rounded))
+                            .bold()
+                            .foregroundColor(.orange)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color.orange.opacity(0.1))
+                    )
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.orange.opacity(0.2), lineWidth: 1)
+                    )
                 }
                 .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color(.systemGroupedBackground))
             }
             
-            //input section
-            HStack {
-                TextField("What's next?", text: $newTaskTitle)
-                    .textFieldStyle(.roundedBorder)
-                
-                TextField("Mins", text: $newTaskDuration)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: 65)
-                    .keyboardType(.numberPad)
+            //task input
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    TextField("What's next?", text: $newTaskTitle)
+                        .textFieldStyle(.plain)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 12)
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .cornerRadius(10)
+                    
+                    HStack(spacing: 4) {
+                        TextField("Mins", text: $newTaskDuration)
+                            .multilineTextAlignment(.center)
+                            .keyboardType(.numberPad)
+                            .frame(width: 45)
+                            .padding(.vertical, 10)
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .cornerRadius(10)
+                        
+                        Text("min")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.trailing, 4)
+                    }
+                }
                 
                 Button(action: addTask) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.orange)
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Add Task")
+                            .bold()
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(newTaskTitle.isEmpty ? Color.gray.opacity(0.5) : Color.orange)
+                    .cornerRadius(12)
                 }
                 .disabled(newTaskTitle.isEmpty)
             }
             .padding()
+            .background(Color(.systemGroupedBackground))
             
-            //taskqueue
+            Divider()
+            
+            //task list
             if tasks.isEmpty {
                 ContentUnavailableView(
-                    "No Tasks",
+                    "Your Queue is Empty",
                     systemImage: "checklist",
-                    description: Text("Add a task")
+                    description: Text("Add a new task above to start being Pawductive!")
                 )
+                .background(Color(.systemBackground))
             } else {
                 List {
                     ForEach(tasks) { task in
                         NavigationLink(value: task) {
-                            HStack {
-                                VStack(alignment: .leading) {
+                            HStack(spacing: 15) {
+                                //status indicator circle
+                                Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                                    .font(.title2)
+                                    .foregroundColor(task.isCompleted ? .green : .orange)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
                                     Text(task.title)
                                         .font(.headline)
-                                    Text("\(task.expectedDurationInMinutes) mins")
+                                        .strikethrough(task.isCompleted)
+                                        .foregroundColor(task.isCompleted ? .secondary : .primary)
+                                    
+                                    Text("\(task.expectedDurationInMinutes) minutes")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
-                                Spacer()
-                                if task.isCompleted {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.green)
-                                }
                             }
+                            .padding(.vertical, 4)
                         }
                     }
                     .onDelete(perform: deleteTasks)
                 }
+                .listStyle(.insetGrouped)
             }
         }
         .navigationTitle("Task Queue")
@@ -93,7 +145,7 @@ struct TaskQueueView: View {
         try? modelContext.save()
         
         newTaskTitle = ""
-        newTaskDuration = "30"
+        newTaskDuration = "25"
     }
     
     private func deleteTasks(offsets: IndexSet) {
