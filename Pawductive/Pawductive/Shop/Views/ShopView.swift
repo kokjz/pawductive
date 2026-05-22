@@ -21,18 +21,9 @@ struct ShopView: View {
         VStack {
             HStack {
                 Text("Shop")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
+                    .styleAsMainHeader()
                 Spacer()
-                Text("\(user.coins)")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                Image(.coin)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 50)
+                UserCoinsView(profile: user)
             }
             
             Picker("Category", selection: $category) {
@@ -53,5 +44,5 @@ struct ShopView: View {
 
 #Preview {
     ShopView()
-        .modelContainer(UserContainer(user: UserProfile(coins: 100)).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }

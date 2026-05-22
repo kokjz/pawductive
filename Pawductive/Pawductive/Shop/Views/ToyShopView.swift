@@ -59,5 +59,5 @@ struct ToyShopView: View {
 
 #Preview {
     ToyShopView()
-        .modelContainer(UserContainer().modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }

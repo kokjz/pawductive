@@ -2,60 +2,35 @@
 //  ContentView.swift
 //  Pawductive
 //
-//  Created by Kok Jun Zhe on 17/5/26.
+//  Created by Kok Jun Zhe on 21/5/26.
 //
 
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        //tab view at bottom of screen
+        TabView {
+            //tab 1: task queue and timer
+            NavigationStack {
+                TaskQueueView()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
+            .tabItem {
+                Label("Tasks", systemImage: "checklist")
             }
-        } detail: {
-            Text("Select an item")
+            
+            //tab 2: shop view
+            ShopView()
+                .tabItem {
+                    Label("Shop", systemImage: "bag.fill")
+                }
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
+        .accentColor(.orange)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(DataContainer().modelContainer)
 }
