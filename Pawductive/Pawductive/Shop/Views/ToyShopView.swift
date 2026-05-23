@@ -35,7 +35,7 @@ struct ToyShopView: View {
                 Spacer()
                 
                 Button {
-                    user.buyToy(toy)
+                    user.buy(toy: toy)
                 } label: {
                     // Designed by vectorsmarket15 from www.flaticon.com
                     HStack {
@@ -54,6 +54,7 @@ struct ToyShopView: View {
                 .opacity(!user.canAfford(toy.cost) ? 0.5 : 1)
             }
         }
+        .listStyle(.plain)
     }
 }
 

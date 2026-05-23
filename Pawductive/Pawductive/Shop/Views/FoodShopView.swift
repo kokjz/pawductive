@@ -35,7 +35,7 @@ struct FoodShopView: View {
                 Spacer()
                 
                 Button {
-                    user.buyFood(food)
+                    user.buy(food: food)
                 } label: {
                     // Designed by vectorsmarket15 from www.flaticon.com
                     HStack {
@@ -54,6 +54,7 @@ struct FoodShopView: View {
                 .opacity(!user.canAfford(food.cost) ? 0.5 : 1)
             }
         }
+        .listStyle(.plain)
     }
 }
 
