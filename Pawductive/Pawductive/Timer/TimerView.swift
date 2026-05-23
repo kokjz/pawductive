@@ -85,6 +85,7 @@ struct TimerView: View {
             viewModel.startTimer(minutes: task.expectedDurationInMinutes)
         }
         .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .tabBar)
         
         //detect if user exits app
         .onChange(of: scenePhase) { oldValue, newValue in

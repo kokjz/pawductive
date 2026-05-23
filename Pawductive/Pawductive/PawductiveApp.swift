@@ -14,6 +14,6 @@ struct PawductiveApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(DataContainer(user: UserProfile(coins: 100), inMemory: false).modelContainer)
+        .modelContainer(DataContainer(user: UserProfile(coins: 0), loadInventory: false, inMemory: false).modelContainer)
     }
 }

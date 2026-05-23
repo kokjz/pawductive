@@ -25,7 +25,41 @@ enum FoodCatalog: String, Codable, CaseIterable {
         case .chickenEgg:
             return 15
         case .chickenWing:
-            return 20
+            return 25
+        case .chickenDrumstick:
+            return 30
+        case .porkBelly:
+            return 50
+        }
+    }
+    
+    var changeMood: Double {
+        switch self {
+        case .corn:
+            return 1
+        case .pumpkin:
+            return 2
+        case .chickenEgg:
+            return 3
+        case .chickenWing:
+            return 5
+        case .chickenDrumstick:
+            return 6
+        case .porkBelly:
+            return 10
+        }
+    }
+    
+    var changeEnergy: Double {
+        switch self {
+        case .corn:
+            return 5
+        case .pumpkin:
+            return 10
+        case .chickenEgg:
+            return 15
+        case .chickenWing:
+            return 25
         case .chickenDrumstick:
             return 30
         case .porkBelly:

@@ -14,16 +14,33 @@ class DataContainer {
         modelContainer.mainContext
     }
     
-    // Initializes a model container with a default user
-    init(user: UserProfile = UserProfile(), inMemory: Bool = true) {
-        let schema = Schema([TaskItem.self, UserProfile.self])
+    // Initializes a model container with a user and a pet
+    init(user: UserProfile = UserProfile(), pet: Pet = Pet(name: "Dog"), loadInventory: Bool = true, inMemory: Bool = true) {
+        let schema = Schema([UserProfile.self, TaskItem.self, Pet.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            if loadInventory {
+                loadFoodInventory(user: user)
+                loadToyInventory(user: user)
+            }
             context.insert(user)
+            context.insert(pet)
             try context.save()
         } catch {
             fatalError("Could not create model container: \(error)")
         }
+    }
+    
+    func loadFoodInventory(user: UserProfile) {
+        user.foodInventory[.corn] = 3
+        user.foodInventory[.chickenWing] = 3
+        user.foodInventory[.porkBelly] = 3
+    }
+    
+    func loadToyInventory(user: UserProfile) {
+        user.toyInventory[.frisbee] = 3
+        user.toyInventory[.treeBranch] = 3
+        user.toyInventory[.rubberDuck] = 3
     }
 }

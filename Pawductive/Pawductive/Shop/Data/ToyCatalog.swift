@@ -30,6 +30,36 @@ enum ToyCatalog: String, Codable, CaseIterable {
         }
     }
     
+    var changeMood: Double {
+        switch self {
+        case .treeBranch:
+            return 5
+        case .tennisBall:
+            return 10
+        case .kitchenTowel:
+            return 20
+        case .frisbee:
+            return 40
+        case .rubberDuck:
+            return 80
+        }
+    }
+    
+    var changeEnergy: Double {
+        switch self {
+        case .treeBranch:
+            return -1
+        case .tennisBall:
+            return -2
+        case .kitchenTowel:
+            return -4
+        case .frisbee:
+            return -8
+        case .rubberDuck:
+            return -16
+        }
+    }
+    
     // Designed by "Freepik" and "bsd" from "www.flaticon.com"
     var image: ImageResource {
         switch self {

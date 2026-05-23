@@ -20,4 +20,14 @@ enum ShopCategory: String, CaseIterable {
             ToyShopView()
         }
     }
+    
+    @ViewBuilder
+    func listView(currDate: Date) -> some View {
+        switch self {
+        case .food:
+            FoodListView(currDate: currDate)
+        case .toy:
+            ToyListView(currDate: currDate)
+        }
+    }
 }

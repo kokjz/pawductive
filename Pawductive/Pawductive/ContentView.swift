@@ -20,7 +20,13 @@ struct ContentView: View {
                 Label("Tasks", systemImage: "checklist")
             }
             
-            //tab 2: shop view
+            //tab 2: pet simulator
+            PetSimulatorView()
+                .tabItem{
+                    Label("Pet", systemImage: "pawprint.circle.fill")
+                }
+            
+            //tab 3: shop view
             ShopView()
                 .tabItem {
                     Label("Shop", systemImage: "bag.fill")
