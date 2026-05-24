@@ -15,6 +15,7 @@ Successfully implemented:
 * Anti-cheat backgrounding detection
 * Pet simulator with variable mood and energy levels
 * Item shop with persistent currency and purchase tracking
+* Basic unit testing for core component logic
 
 
 ---
@@ -112,17 +113,18 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 ## App Screenshots
 
 ### Task Queue and Timer
-![Screenshot 2026-05-23 at 11.19.33 PM](https://hackmd.io/_uploads/ryZZvH1efl.png)
-![Screenshot 2026-05-23 at 11.18.31 PM](https://hackmd.io/_uploads/rkWZwBygMg.png)
-![Screenshot 2026-05-23 at 11.19.21 PM](https://hackmd.io/_uploads/SkWZwrkefx.png)
+<img src="https://hackmd.io/_uploads/ryZZvH1efl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/rkWZwBygMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SkWZwrkefx.png" style="width: 30%;">
 
 ### Pet Simulator
-![Screenshot 2026-05-23 at 11.20.00 PM](https://hackmd.io/_uploads/SJZWPrkxfe.png)
-![Screenshot 2026-05-23 at 11.19.54 PM](https://hackmd.io/_uploads/HyZbvrJeGg.png)
+<img src="https://hackmd.io/_uploads/HyZbvrJeGg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SJZWPrkxfe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
 
 ### Food and Toy Shop
-![Screenshot 2026-05-23 at 11.20.13 PM](https://hackmd.io/_uploads/r1WbvBJeMl.png)
-![Screenshot 2026-05-23 at 11.20.06 PM](https://hackmd.io/_uploads/rkbZPrkgze.png)
+<img src="https://hackmd.io/_uploads/rkbZPrkgze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/r1WbvBJeMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 
 
 ---
