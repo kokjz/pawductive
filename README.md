@@ -13,6 +13,8 @@ Successfully implemented:
 * Core task queue and timer logic
 * Local database persistence layer
 * Anti-cheat backgrounding detection
+* Pet simulator with variable mood and energy levels
+* Item shop with persistent currency and purchase tracking
 
 
 ---
