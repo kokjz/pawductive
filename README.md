@@ -130,6 +130,19 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 ---
 
 
+## Access Instructions
+Requirements: Apple Device with XCode and Simulator
+
+1. Download project files from [GitHub](https://github.com/kokjz/pawductive/archive/refs/heads/main.zip)
+2. Unzip pawductive-main.zip
+3. Open pawductive-main/Pawductive/Pawductive.xcodeproj
+4. Run the app by pressing the play icon or by pressing ⌘ + R
+5. Try Pawductive using the Simulator!
+
+
+---
+
+
 ## Image Credits
 * **Dog Sprites:** Designed by pikisuperstar from [Magnific](https://magnific.com/)
 * **Food Sprites:** Designed by YEET from [itch.io](https://2yeet.itch.io/)
