@@ -51,12 +51,14 @@ struct PetSimulatorView: View {
             Grid(alignment: .trailing) {
                 GridRow {
                     Text("Mood: ")
+//                    Text("\(pet.mood) ")
                     ValueBarView(fillRatio: pet.mood / pet.maxMood)
                         .foregroundStyle(.yellow)
                 }
                 
                 GridRow {
                     Text("Energy: ")
+//                    Text("\(pet.energy) ")
                     ValueBarView(fillRatio: pet.energy / pet.maxEnergy)
                         .foregroundStyle(.green)
                 }
@@ -69,6 +71,11 @@ struct PetSimulatorView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: category) {
+                withAnimation {
+                    pet.update(currDate: currDate)
+                }
+            }
             category.listView(currDate: currDate)
             
             Spacer()

@@ -1,5 +1,5 @@
 //
-//  FoodListView.swift
+//  ToyListView.swift
 //  Pawductive
 //
 //  Created by Lee Zi Rong on 23/5/26.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct FoodListView: View {
+struct ToyListView: View {
     @Query private var users: [UserProfile]
     private var user: UserProfile {
         users.first!
@@ -22,17 +22,17 @@ struct FoodListView: View {
     var currDate: Date
     
     var body: some View {
-        List(user.foodInventory.keys.sorted{ $0.cost < $1.cost }, id: \.self) { food in
+        List(user.toyInventory.keys.sorted{ $0.cost < $1.cost }, id: \.self) { toy in
             HStack {
                 Label {
-                    Text(food.rawValue)
+                    Text(toy.rawValue)
                         .font(.caption)
                         .fontDesign(.rounded)
-                    Text("Available: \(user.foodInventory[food, default: 0])")
+                    Text("Available: \(user.toyInventory[toy, default: 0])")
                         .font(.caption2)
                         .fontDesign(.rounded)
                 } icon: {
-                    Image(food.image)
+                    Image(toy.image)
                         .resizable()
                         .scaledToFit()
                         .frame(minWidth: 40, minHeight: 40)
@@ -43,21 +43,23 @@ struct FoodListView: View {
                 Button("Give") {
                     withAnimation {
                         pet.update(currDate: currDate)
-                        pet.obtain(food: food)
-                        user.give(food: food)
+                        if pet.canReceive(toy: toy) {
+                            pet.receive(toy: toy)
+                            user.give(toy: toy)
+                        }
                     }
                 }
                 .fontWeight(.bold)
                 .buttonStyle(.borderedProminent)
-                .disabled(pet.energy == pet.maxEnergy)
+                .disabled(!pet.canReceive(toy: toy))
             }
         }
         .overlay {
-            if user.foodInventory.isEmpty {
+            if user.toyInventory.isEmpty {
                 ContentUnavailableView {
-                    Label("No More Food...", systemImage: "basket")
+                    Label("No More Toys...", systemImage: "basket")
                 } description: {
-                    Text("Visit the shop to buy more food!")
+                    Text("Visit the shop to buy more toys!")
                 }
             }
         }
@@ -67,9 +69,8 @@ struct FoodListView: View {
 }
 
 #Preview {
-    FoodListView(currDate: Date.now)
+    ToyListView(currDate: Date.now)
         .modelContainer(DataContainer(loadInventory: false).modelContainer)
-    
-    FoodListView(currDate: Date.now)
+    ToyListView(currDate: Date.now)
         .modelContainer(DataContainer(pet: Pet(name: "Doggy", mood: 50, energy: 50)).modelContainer)
 }
