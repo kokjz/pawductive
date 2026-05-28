@@ -66,14 +66,14 @@ import SwiftData
     
     //test 5: disallow simultaneously running timers
     @Test func testStartingNewTimerWhileAlreadyRunningOverwritesSuccessfully() {
-            let viewModel = TimerViewModel()
-            
-            viewModel.startTimer(minutes: 25)
-            #expect(viewModel.timeRemaining == 25 * 60)
-            
-            viewModel.startTimer(minutes: 10)
-            
-            #expect(viewModel.timeRemaining == 10 * 60)
-            #expect(viewModel.isRunning == true)
-        }
+        let viewModel = TimerViewModel()
+        
+        viewModel.startTimer(minutes: 25)
+        #expect(viewModel.timeRemaining == 25 * 60)
+        
+        viewModel.startTimer(minutes: 10)
+        
+        #expect(viewModel.timeRemaining == 10 * 60)
+        #expect(viewModel.isRunning == true)
+    }
 }

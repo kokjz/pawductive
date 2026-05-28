@@ -72,13 +72,13 @@ import SwiftData
     
     //test 4: task creation date tolerance
     @Test @MainActor func testTaskItemInitializationDateTolerance() throws {
-            let context = try makeInMemoryContext()
-            
-            let task = TaskItem(title: "foo", expectedDurationInMinutes: 30)
-            context.insert(task)
-            try context.save()
-            
-            let timeDifference = abs(task.creationDate.timeIntervalSinceNow)
-            #expect(timeDifference < 2.0) // 2s threshold
-        }
+        let context = try makeInMemoryContext()
+        
+        let task = TaskItem(title: "foo", expectedDurationInMinutes: 30)
+        context.insert(task)
+        try context.save()
+        
+        let timeDifference = abs(task.creationDate.timeIntervalSinceNow)
+        #expect(timeDifference < 2.0) // 2s threshold
+    }
 }
