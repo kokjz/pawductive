@@ -1,10 +1,9 @@
-# Pawductive 🐾
+## Pawductive 🐾
 > Gamifying productivity, one pet at a time.
 
 A native iOS productivity application developed in Swift.
 
 Built for **Orbital 26** by **No Animals Were Harmed (Team 6658)**.
-
 
 
 ## 🚀 Milestone 1: Technical Proof of Concept
@@ -14,6 +13,9 @@ Successfully implemented:
 * Core task queue and timer logic
 * Local database persistence layer
 * Anti-cheat backgrounding detection
+* Pet simulator with variable mood and energy levels
+* Item shop with persistent currency and purchase tracking
+* Basic unit testing for core component logic
 
 
 ---
@@ -34,6 +36,39 @@ The timer forces users to put their phones down and focus on the task at hand wi
 *   **MVVM State Engine:** Controlled by a responsive `TimerViewModel` using Swift's modern `@Observable` macro.
 *   **Interactive Progress Ring:** A clean circular progress ring that animates smoothly on a second-by-second basis.
 *   **Anti-Cheat "Stick" Logic:** Utilizing SwiftUI’s `@Environment(\.scenePhase)`, the app instantly detects if the user exits the app or locks their screen. If they leave, the timer is invalidated, the session is failed, and they are immediately booted back to the task queue with no rewards.
+
+
+### 3. Pet Simulator (Feature 3)
+Users can rename and manage their pets here. 
+
+**Mood and Energy Levels**: 
+* Levels range from 0 to 100 and decrease over time
+* Mood reduces to its current value every 24 hours
+* Energy decreases by 20 units every 24 hours
+* Levels update when the user checks on their pet or when the user gives food or toys to their pet
+
+**Sprite changes according to mood**
+|   Mood    | Pet Sprite |
+|:---------:|:----------:|
+|  [0, 25]  |  Unhappy   |
+| [25, 75]  |    Calm    |
+| [75, 100] |   Happy    |
+
+**Food and toys change mood and energy**
+| Levels |          Food           |          Toys           |
+|:------:|:-----------------------:|:-----------------------:|
+|  Mood  |   Increases Slightly    | Increases Significantly |
+| Energy | Increases Significantly |   Decreases Slightly    |
+
+Users cannot give food when energy is full. Users cannot give toys when mood is full or when the pet does not have enough energy. More expensive toys require a larger amount of energy. 
+
+
+### 4. Food and Toy Shop (Feature 4)
+User can buy food and toys for their pets here. Food and toys can be bought using the coins earned from the timer. One minute of focus equals to one coin. More expensive items generally restore mood and energy by a larger amount. 
+
+**List of Food:** Corn, Pumpkin, Chicken Egg, Chicken Wing, Chicken Breast, Pork Belly
+
+**List of Toys:** Tree branch, Tennis Ball, Kitchen Towel, Frisbee, Rubber duck
 
 
 ---
@@ -70,3 +105,45 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 *   **UI Framework:** SwiftUI
 *   **Database:** SwiftData
 *   **Testing:** Swift Testing (Unit) / XCTest (UI)
+
+
+---
+
+
+## App Screenshots
+
+### Task Queue and Timer
+<img src="https://hackmd.io/_uploads/ryZZvH1efl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/rkWZwBygMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SkWZwrkefx.png" style="width: 30%;">
+
+### Pet Simulator
+<img src="https://hackmd.io/_uploads/HyZbvrJeGg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SJZWPrkxfe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
+
+### Food and Toy Shop
+<img src="https://hackmd.io/_uploads/rkbZPrkgze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/r1WbvBJeMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
+
+---
+
+
+## Access Instructions
+Requirements: Apple Device with XCode and Simulator
+
+1. Download project files from [GitHub](https://github.com/kokjz/pawductive/archive/refs/heads/main.zip)
+2. Unzip pawductive-main.zip
+3. Open pawductive-main/Pawductive/Pawductive.xcodeproj
+4. Run the app by pressing the play icon or by pressing ⌘ + R
+5. Try Pawductive using the Simulator!
+
+
+---
+
+
+## Image Credits
+* **Dog Sprites:** Designed by pikisuperstar from [Magnific](https://magnific.com/)
+* **Food Sprites:** Designed by YEET from [itch.io](https://2yeet.itch.io/)
+* **Toy Sprites:** Desgined by Freepik and bsd from [Flaticon](https://flaticon.com/)
