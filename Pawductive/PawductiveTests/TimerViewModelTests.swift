@@ -10,7 +10,6 @@ import SwiftData
 @testable import Pawductive
 
 @Suite struct TimerViewModelTests {
-    
     //create temp database for testing
     @MainActor
     private func makeInMemoryContext() throws -> ModelContext {
@@ -64,4 +63,17 @@ import SwiftData
         #expect(profiles.count == 1)
         #expect(profiles.first?.coins == 101)
     }
+    
+    //test 5: disallow simultaneously running timers
+    @Test func testStartingNewTimerWhileAlreadyRunningOverwritesSuccessfully() {
+            let viewModel = TimerViewModel()
+            
+            viewModel.startTimer(minutes: 25)
+            #expect(viewModel.timeRemaining == 25 * 60)
+            
+            viewModel.startTimer(minutes: 10)
+            
+            #expect(viewModel.timeRemaining == 10 * 60)
+            #expect(viewModel.isRunning == true)
+        }
 }
