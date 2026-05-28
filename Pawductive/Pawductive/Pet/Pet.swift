@@ -22,7 +22,7 @@ class Pet {
     
     var lastUpdatedOn: Date
     
-    init(name: String = "<name>", mood: Double = 100, energy: Double = 100) {
+    init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
         self.name = name
         self.mood = mood
         self.energy = energy
