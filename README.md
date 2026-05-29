@@ -94,7 +94,7 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 * Variable pet sprite appearance based on energy / mood
 * Variable pet traits
 * Customisable pet room
-* Pausing pet state
+* Pet state pause toggle
 * Pet level progression system
 * Detailed information on pet status
 * Detailed information on shop items
@@ -103,6 +103,10 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 * User task completion streak
 * User daily missions system
 * App notifications system
+* Customisable app switch-out grace period
+* Customisable app switch-out allowlist
+* Custom iOS Focus on timer start to block notifications
+* Timer pause feature toggle
 
 
 ---
