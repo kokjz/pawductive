@@ -24,7 +24,7 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 ## 🚀 Milestone 1 Summary: Technical Proof of Concept
 
 
-Successfully implemented:
+**Successfully implemented:**
 * Core task queue and timer logic
 * Local database persistence layer
 * Anti-cheat backgrounding detection
@@ -90,23 +90,34 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 
 ## 🚧 Potential Features (For Future Milestones)
 
-* User-interactive animations for pet sprite
-* Variable pet sprite appearance based on energy / mood
-* Variable pet traits
-* Customisable pet room
-* Pet state pause toggle
-* Pet level progression system
-* Detailed information on pet status
-* Detailed information on shop items
-* Dynamic currency gain
-* User statistics and achievements
-* User task completion streak
-* User daily missions system
-* App notifications system
-* Customisable app switch-out grace period
-* Customisable app switch-out allowlist
-* Custom iOS Focus on timer start to block notifications
-* Timer pause feature toggle
+>#### Feedback on this section will be highly appreciated! ❤️
+
+### 1. Pet 
+* **User-interactive animations for pet sprite:** Animated pet appearance to replace the current static sprite. Pet can react to user interaction.
+* **Customisable pet room:** Customize the background in the pet simulator. Allow users to purchase decorations to customise their pet room. 
+* **Variable pet traits:** Pet can develop different traits or personality that impact how their energy / mood is affected by various items.
+* **Pet level progression system:** Pet can level up and unlock different traits / abilities that affect their energy / mood and more.
+* **Detailed information on pet status:** More detailed information on the pet status beyond two indicator bars for energy / mood (e.g. numerical energy, mood banding).
+* **Pet state pause toggle:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for a period of time.
+
+### 2. Shop
+* **Detailed information on shop items:** More detailed information on items in the shop and how they affect energy / mood.
+
+### 3. Tasks
+* **Dynamic currency gain:** Instead of the current formula which has a flat reward rate of 1 coin per minute, a different formula can be used to dynamically adjust the amount earned per minute based on the total length of the task.
+* **User task completion streak:** Rewards users for completing tasks daily.
+
+### 4. Timer
+* **Customisable app switch-out grace period:** Allows users to adjust the amount of time they can leave the app during a focus timer session without the task failing.
+* **Customisable app switch-out allowlist:** Allows users to switch out to specific apps without the task failing.
+* **Timer pause feature toggle:** Allows users to give themselves the ability to pause the timer as needed and switch out of the app without the task failing.
+
+### 5. Others
+
+* **User statistics:** Allows users to keep track of various information such as total tasks completed, time spent focusing, coins earned, etc.
+* **User daily missions system:** Gives users a set of tasks to complete daily (e.g. complete 1 task, feed the pet, etc.) to incentivise daily usage.
+* **App notifications system:** Allows user to receive notifications to alert them to various situations (e.g. pet energy/mood low, streak ending) while the app is not open.
+* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, quickstart task, view task list).
 
 
 ---
@@ -130,18 +141,31 @@ Clean database schema to manage user data locally:
 
 
 ### 3. Continuous Integration & Unit Testing
-Implements the modern **Swift Testing** framework to write test suites verifying the core logic:
-*   Tests the initial VM state, successful countdown transitions, and failed backgrounding state resets.
-*   Tests can be run locally using **Cmd + U** within Xcode.
+Implements the modern **Swift Testing** framework to write test suites verifying the core logic. The implemented unit tests ensure the following:
+
+**Tasks:**
+* Tasks can be saved successfully to the local database.
+* Tasks can be deleted successfully from the local database.
+* Task state can be toggled succesfully from incomplete to complete.
+* Tasks are created in expected time with date tolerance.
+
+**Timer:**
+* Timer starts with clean, empty values.
+* Minutes and seconds are calculated correctly on timer start.
+* Session failure resets the timer state.
+* Rewards are written accurate to the local databse on timer completion.
+* Timers running simultaneously are not allowed.
 
 **User Model:**
-*   Tests ensure that the coins held by the user determine the food and toys the user can buy from the shop.
-*   Tests ensure that coins are deducted when the user spend coins in the shop.
-*   Tests ensure that the inventory is updated when the user buys food and toys from the shop or when the user gives food and toys to the pet.
+*   The coins held by the user determine the food and toys the user can buy from the shop.
+*   Coins are deducted when the user spend coins in the shop.
+*   The inventory is updated when the user buys food and toys from the shop or when the user gives food and toys to the pet.
 
 **Pet Model:**
-*   Tests ensure that the mood and energy levels decay over time according to predefined constants.
-*   Tests ensure that the mood and energy levels update when the pet receives food and toys
+*   The mood and energy levels decay over time according to predefined constants.
+*   The mood and energy levels update when the pet receives food and toys.
+
+All above unit tests can be run locally using **⌘ + U** within Xcode.
 
 
 ---
@@ -164,7 +188,7 @@ Requirements: Apple Device with XCode and Simulator
 1. Clone this repository / download project files from GitHub and unzip pawductive-main.zip
 2. Open pawductive-main/Pawductive/Pawductive.xcodeproj in XCode
 3. Select run destination in XCode as any iOS Simulator
-4. Run the app by pressing the play icon or by pressing ⌘ + R
+4. Run the app by pressing the play icon or by pressing **⌘ + R**
 5. Try Pawductive with the Simulator!
 
 
