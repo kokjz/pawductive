@@ -12,7 +12,7 @@ import SwiftUI
 @Model
 class Pet {
     var name: String
-    var birthday: Date
+    var createdOn: Date
     var ageInDays: Int
     
     var mood: Double
@@ -22,13 +22,15 @@ class Pet {
     
     var lastUpdatedOn: Date
     
-    init(name: String, mood: Double = 100, energy: Double = 100) {
+    init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
         self.name = name
         self.mood = mood
         self.energy = energy
         self.ageInDays = 0
-        self.birthday = Date.now
-        self.lastUpdatedOn = Date.now
+        
+        let currDate = Date.now
+        self.createdOn = currDate
+        self.lastUpdatedOn = currDate
     }
 
     // Taken From: https://www.magnific.com/free-vector/kawaii-happy-shiba-inu-dog-doing-various-activities_9925813.htm
@@ -43,12 +45,22 @@ class Pet {
         }
     }
     
-    func obtain(food: FoodCatalog) {
+    func canReceive(food: FoodCatalog) -> Bool {
+        return self.energy < maxEnergy
+    }
+    
+    func receive(food: FoodCatalog) {
+        guard canReceive(food: food) else { return }
         self.mood = min(self.mood + food.changeMood, maxMood)
         self.energy = min(self.energy + food.changeEnergy, maxEnergy)
     }
     
-    func obtain(toy: ToyCatalog) {
+    func canReceive(toy: ToyCatalog) -> Bool {
+        return self.mood < maxMood && self.energy + toy.changeEnergy >= 0
+    }
+    
+    func receive(toy: ToyCatalog) {
+        guard canReceive(toy: toy) else { return }
         self.mood = min(self.mood + toy.changeMood, maxMood)
         self.energy = self.energy + toy.changeEnergy
     }
@@ -74,6 +86,6 @@ class Pet {
     }
     
     private func updateAge(_ currDate: Date) {
-        self.ageInDays = Calendar.current.dateComponents([.day], from: birthday, to: currDate).day ?? 0
+        self.ageInDays = Calendar.current.dateComponents([.day], from: createdOn, to: currDate).day ?? 0
     }
 }

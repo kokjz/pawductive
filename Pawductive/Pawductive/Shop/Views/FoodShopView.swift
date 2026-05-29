@@ -50,8 +50,8 @@ struct FoodShopView: View {
                     .frame(minWidth: 65, alignment: .trailing)
                 }
                 .buttonStyle(.bordered)
-                .disabled(!user.canAfford(food.cost))
-                .opacity(!user.canAfford(food.cost) ? 0.5 : 1)
+                .disabled(!user.canAfford(cost: food.cost))
+                .opacity(!user.canAfford(cost: food.cost) ? 0.5 : 1)
             }
         }
         .listStyle(.plain)

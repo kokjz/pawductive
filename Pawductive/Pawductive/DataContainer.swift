@@ -15,8 +15,8 @@ class DataContainer {
     }
     
     // Initializes a model container with a user and a pet
-    init(user: UserProfile = UserProfile(), pet: Pet = Pet(name: "Dog"), loadInventory: Bool = true, inMemory: Bool = true) {
-        let schema = Schema([UserProfile.self, TaskItem.self, Pet.self])
+    init(user: UserProfile = UserProfile(), pet: Pet = Pet(), loadInventory: Bool = true, inMemory: Bool = true) {
+        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
