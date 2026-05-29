@@ -3,10 +3,25 @@
 
 A native iOS productivity application developed in Swift.
 
-Built for **Orbital 26** by **No Animals Were Harmed (Team 6658)**.
+Built for Orbital 26 by No Animals Were Harmed **(Team 6658).**
+
+**Targeted Level of Achievement: Gemini**
 
 
-## 🚀 Milestone 1: Technical Proof of Concept
+---
+
+
+## Motivation
+
+In a digital era where productivity is highly valued, we wanted to make something convenient where users can reliably achieve their productivity goals while being able to enjoy the process - so we turned to the idea of using virtual pets as free dopamine hits. 
+
+Pets are widely loved yet expensive in real life, so we thought of creating a gamified mobile application where users can have fun raising and training virtual pets by responsibly setting their own fixed tasks, adhering to doing them without other distractions, and completing them for in-game rewards. 
+
+
+---
+
+
+## 🚀 Milestone 1 Summary: Technical Proof of Concept
 
 
 Successfully implemented:
@@ -21,7 +36,7 @@ Successfully implemented:
 ---
 
 
-## 🛠️ Core Features (Implemented)
+## 🛠️ Core Features (Implemented in Milestone 1)
 
 
 ### 1. Task Queue (Feature 1)
@@ -41,24 +56,23 @@ The timer forces users to put their phones down and focus on the task at hand wi
 ### 3. Pet Simulator (Feature 3)
 Users can rename and manage their pets here. 
 
-**Mood and Energy Levels**: 
+**Mood and energy levels**: 
 * Levels range from 0 to 100 and decrease over time
 * Mood reduces to its current value every 24 hours
 * Energy decreases by 20 units every 24 hours
-* Levels update when the user checks on their pet or when the user gives food or toys to their pet
 
-**Sprite changes according to mood**
+**Pet sprite changes according to mood:**
 |   Mood    | Pet Sprite |
 |:---------:|:----------:|
 |  [0, 25]  |  Unhappy   |
 | [25, 75]  |    Calm    |
 | [75, 100] |   Happy    |
 
-**Food and toys change mood and energy**
-| Levels |          Food           |          Toys           |
-|:------:|:-----------------------:|:-----------------------:|
-|  Mood  |   Increases Slightly    | Increases Significantly |
-| Energy | Increases Significantly |   Decreases Slightly    |
+**Food and toys change mood and energy levels:**
+|          |          Mood           |         Energy          |
+|:--------:|:-----------------------:|:-----------------------:|
+| **Food** |   Increases Slightly    | Increases Significantly |
+| **Toys** | Increases Significantly |   Decreases Slightly    |
 
 Users cannot give food when energy is full. Users cannot give toys when mood is full or when the pet does not have enough energy. More expensive toys require a larger amount of energy. 
 
@@ -69,6 +83,26 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 **List of Food:** Corn, Pumpkin, Chicken Egg, Chicken Wing, Chicken Breast, Pork Belly
 
 **List of Toys:** Tree branch, Tennis Ball, Kitchen Towel, Frisbee, Rubber duck
+
+
+---
+
+
+## 🚧 Potential Features (For Future Milestones)
+
+* User-interactive animations for pet sprite
+* Variable pet sprite appearance based on energy / mood
+* Variable pet traits
+* Customisable pet room
+* Pausing pet state
+* Pet level progression system
+* Detailed information on pet status
+* Detailed information on shop items
+* Dynamic currency gain
+* User statistics and achievements
+* User task completion streak
+* User daily missions system
+* App notifications system
 
 
 ---
@@ -86,7 +120,8 @@ The UI is decoupled from the business logic to ensure a testable and maintainabl
 ### 2. SwiftData Schema & Local Persistence
 Clean database schema to manage user data locally:
 *   `TaskItem`: Tracks task titles, expected durations, completion states, and creation dates.
-*   `UserProfile` (Currently stub): Tracks the user's persistent coin balance.
+*   `UserProfile`: Tracks the user's persistent coin balance and stores the food and toys bought from the shop.
+*   `Pet`: Tracks the mood and energy levels over time.
 *   **Explicit Saving:** To prevent data loss when developers force-kill the app during Xcode simulation, explicit context saving (`try? modelContext.save()`) on database transactions is implemented.
 
 
@@ -94,6 +129,15 @@ Clean database schema to manage user data locally:
 Implements the modern **Swift Testing** framework to write test suites verifying the core logic:
 *   Tests the initial VM state, successful countdown transitions, and failed backgrounding state resets.
 *   Tests can be run locally using **Cmd + U** within Xcode.
+
+**User Model:**
+*   Tests ensure that the coins held by the user determine the food and toys the user can buy from the shop.
+*   Tests ensure that coins are deducted when the user spend coins in the shop.
+*   Tests ensure that the inventory is updated when the user buys food and toys from the shop or when the user gives food and toys to the pet.
+
+**Pet Model:**
+*   Tests ensure that the mood and energy levels decay over time according to predefined constants.
+*   Tests ensure that the mood and energy levels update when the pet receives food and toys
 
 
 ---
@@ -105,6 +149,19 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 *   **UI Framework:** SwiftUI
 *   **Database:** SwiftData
 *   **Testing:** Swift Testing (Unit) / XCTest (UI)
+
+
+---
+
+
+## Access Instructions
+Requirements: Apple Device with XCode and Simulator
+
+1. Clone this repository / download project files from GitHub and unzip pawductive-main.zip
+2. Open pawductive-main/Pawductive/Pawductive.xcodeproj in XCode
+3. Select run destination in XCode as any iOS Simulator
+4. Run the app by pressing the play icon or by pressing ⌘ + R
+5. Try Pawductive with the Simulator!
 
 
 ---
@@ -125,19 +182,6 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 ### Food and Toy Shop
 <img src="https://hackmd.io/_uploads/rkbZPrkgze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 <img src="https://hackmd.io/_uploads/r1WbvBJeMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-
-
----
-
-
-## Access Instructions
-Requirements: Apple Device with XCode and Simulator
-
-1. Download project files from [GitHub](https://github.com/kokjz/pawductive/archive/refs/heads/main.zip)
-2. Unzip pawductive-main.zip
-3. Open pawductive-main/Pawductive/Pawductive.xcodeproj
-4. Run the app by pressing the play icon or by pressing ⌘ + R
-5. Try Pawductive using the Simulator!
 
 
 ---
