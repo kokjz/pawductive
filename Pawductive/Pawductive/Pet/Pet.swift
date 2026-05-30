@@ -12,15 +12,33 @@ import SwiftUI
 @Model
 class Pet {
     var name: String
-    var createdOn: Date
     var ageInDays: Int
+    var createdOn: Date
+    var lastUpdatedOn: Date
     
     var mood: Double
     var maxMood: Double = 100
+    var moodDescription: String {
+        switch self.mood {
+        case 0 ... 0.25 * maxMood:
+            return "Depressed"
+            
+        case 0.25 * maxMood ... 0.50 * maxMood:
+            return "Anxious"
+            
+        case 0.50 * maxMood ... 0.75 * maxMood:
+            return "Normal"
+        
+        case 0.75 * maxMood ... maxMood:
+            return "Happy"
+            
+        default:
+            return ""
+        }
+    }
+    
     var energy: Double
     var maxEnergy: Double = 100
-    
-    var lastUpdatedOn: Date
     
     init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
         self.name = name
@@ -35,11 +53,11 @@ class Pet {
 
     // Taken From: https://www.magnific.com/free-vector/kawaii-happy-shiba-inu-dog-doing-various-activities_9925813.htm
     var image: ImageResource {
-        switch self.mood {
-        case 0...25:
-            return .unhappy
-        case 75...100:
+        switch self.moodDescription {
+        case "Happy":
             return .happy
+        case "Depressed":
+            return .unhappy
         default:
             return .standing
         }
