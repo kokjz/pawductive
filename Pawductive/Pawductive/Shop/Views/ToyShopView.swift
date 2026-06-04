@@ -16,9 +16,9 @@ struct ToyShopView: View {
     }
     
     func description(_ toy: ToyCatalog) -> String {
-        let mood = "+" + String(format: "%.0f", toy.changeMood) + " mood"
-        let energy = String(format: "%.0f", toy.changeEnergy) + " energy"
-        return "Effects: \(mood), \(energy)"
+        let mood = "Mood +" + String(format: "%.0f", toy.changeMood)
+        let energy = "Energy " + String(format: "%.0f", toy.changeEnergy)
+        return "\(mood), \(energy)"
     }
     
     var body: some View {
@@ -31,7 +31,7 @@ struct ToyShopView: View {
                         .lineLimit(1)
                         .font(.subheadline)
                         .minimumScaleFactor(0.5)
-                    Text("Bought: \(user.toyInventory[toy, default: 0])")
+                    Text("Owned: \(user.toyInventory[toy, default: 0])")
                         .font(.subheadline)
                 } icon: {
                     Image(toy.image)
