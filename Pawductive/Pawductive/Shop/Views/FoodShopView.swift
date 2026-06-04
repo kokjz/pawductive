@@ -15,16 +15,24 @@ struct FoodShopView: View {
         users.first!
     }
     
+    func description(_ food: FoodCatalog) -> String {
+        let mood = "+" + String(format: "%.0f", food.changeMood) + " mood"
+        let energy = "+" + String(format: "%.0f", food.changeEnergy) + " energy"
+        return "Effects: \(mood), \(energy)"
+    }
+    
     var body: some View {
         List(FoodCatalog.allCases, id: \.self) { food in
             HStack {
                 Label {
                     Text(food.rawValue)
-                        .font(.caption)
-                        .fontDesign(.rounded)
+                        .font(.headline)
+                    Text(description(food))
+                        .lineLimit(1)
+                        .font(.subheadline)
+                        .minimumScaleFactor(0.5)
                     Text("Bought: \(user.foodInventory[food, default: 0])")
-                        .font(.caption2)
-                        .fontDesign(.rounded)
+                        .font(.subheadline)
                 } icon: {
                     Image(food.image)
                         .resizable()
@@ -41,7 +49,6 @@ struct FoodShopView: View {
                     HStack {
                         Text("\(food.cost)")
                             .fontWeight(.semibold)
-                            .foregroundStyle(.black)
                         Image(.coin)
                             .resizable()
                             .scaledToFit()
