@@ -48,22 +48,21 @@ struct PetSimulatorView: View {
 //                    numberOfTaps += 1
 //                }
             
-            Grid(alignment: .trailing) {
-                GridRow {
-                    Text("Mood: ")
-//                    Text("\(pet.mood) ")
-                    ValueBarView(fillRatio: pet.mood / pet.maxMood)
-                        .foregroundStyle(.yellow)
-                }
-                
-                GridRow {
-                    Text("Energy: ")
-//                    Text("\(pet.energy) ")
-                    ValueBarView(fillRatio: pet.energy / pet.maxEnergy)
-                        .foregroundStyle(.green)
-                }
+            ZStack {
+                ValueBarView(fillRatio: pet.mood / pet.maxMood)
+                    .foregroundStyle(.yellow)
+                Text("Mood: " + pet.moodDescription)
+                    .font(.headline)
+                    .foregroundStyle(.white)
             }
-            .padding(.bottom, 30)
+
+            ZStack {
+                ValueBarView(fillRatio: pet.energy / pet.maxEnergy)
+                    .foregroundStyle(.green)
+                Text("Energy: " + String(format: "%.0f", pet.energy))
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
         
             Picker("Category", selection: $category) {
                 ForEach(ShopCategory.allCases, id: \.self) { category in

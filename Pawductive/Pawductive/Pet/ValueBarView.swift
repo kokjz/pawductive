@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ValueBarView: View {
     var fillRatio: CGFloat
-    var width: CGFloat = 200
-    var height: CGFloat = 20
+    var width: CGFloat = 300
+    var height: CGFloat = 30
     
     var ratio: CGFloat {
         return min(max(fillRatio, 0), 1)
@@ -29,5 +29,5 @@ struct ValueBarView: View {
 }
 
 #Preview {
-    ValueBarView(fillRatio: 0.20)
+    ValueBarView(fillRatio: 0.25)
 }
