@@ -16,7 +16,7 @@ class DataContainer {
     
     // Initializes a model container with a user and a pet
     init(user: UserProfile = UserProfile(), pet: Pet = Pet(), loadInventory: Bool = true, inMemory: Bool = true) {
-        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self])
+        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self, Modifier.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -26,6 +26,9 @@ class DataContainer {
             }
             context.insert(user)
             context.insert(pet)
+            insertModifiers(for: pet)
+            insertFoodModifiers()
+            insertToyModifiers()
             try context.save()
         } catch {
             fatalError("Could not create model container: \(error)")
@@ -33,14 +36,57 @@ class DataContainer {
     }
     
     func loadFoodInventory(user: UserProfile) {
-        user.foodInventory[.corn] = 3
-        user.foodInventory[.chickenWing] = 3
-        user.foodInventory[.porkBelly] = 3
+        user.foodInventory[Food.corn.name] = 3
+        user.foodInventory[Food.chickenWing.name] = 3
+        user.foodInventory[Food.porkBelly.name] = 3
     }
     
     func loadToyInventory(user: UserProfile) {
-        user.toyInventory[.frisbee] = 3
-        user.toyInventory[.treeBranch] = 3
-        user.toyInventory[.rubberDuck] = 3
+        user.toyInventory[Toy.frisbee.name] = 3
+        user.toyInventory[Toy.treeBranch.name] = 3
+        user.toyInventory[Toy.rubberDuck.name] = 3
+    }
+
+    func insertModifiers(for pet: Pet) {
+        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        
+        pet.moodDecayModifier = moodModifier
+        pet.energyDecayModifier = energyModifier
+        
+        context.insert(moodModifier)
+        context.insert(energyModifier)
+    }
+    
+    func insertFoodModifiers() {
+        let costModifier = Modifier(name: "", details: "", level: 0, maxLevel: 2)
+        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        
+        for food in Food.allFoods {
+            food.costModifier = costModifier
+            food.moodModifier = moodModifier
+            food.energyModifier = energyModifier
+        }
+        
+        context.insert(costModifier)
+        context.insert(moodModifier)
+        context.insert(energyModifier)
+    }
+    
+    func insertToyModifiers() {
+        let costModifier = Modifier(name: "", details: "", level: 0, maxLevel: 2)
+        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        
+        for toy in Toy.allToys {
+            toy.costModifier = costModifier
+            toy.moodModifier = moodModifier
+            toy.energyModifier = energyModifier
+        }
+        
+        context.insert(costModifier)
+        context.insert(moodModifier)
+        context.insert(energyModifier)
     }
 }

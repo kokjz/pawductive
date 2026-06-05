@@ -16,13 +16,13 @@ struct ToyShopView: View {
     }
     
     var body: some View {
-        List(ToyCatalog.allCases, id: \.self) { toy in
+        List(Toy.allToys) { toy in
             HStack {
                 Label {
-                    Text(toy.rawValue)
+                    Text(toy.name)
                         .font(.caption)
                         .fontDesign(.rounded)
-                    Text("Bought: \(user.toyInventory[toy, default: 0])")
+                    Text("Bought: \(user.toyInventory[toy.name, default: 0])")
                         .font(.caption2)
                         .fontDesign(.rounded)
                 } icon: {

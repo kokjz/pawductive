@@ -22,13 +22,13 @@ struct ToyListView: View {
     var currDate: Date
     
     var body: some View {
-        List(user.toyInventory.keys.sorted{ $0.cost < $1.cost }, id: \.self) { toy in
+        List(Toy.allToys.filter({ toy in user.toyInventory.keys.contains(toy.name) })) { toy in
             HStack {
                 Label {
-                    Text(toy.rawValue)
+                    Text(toy.name)
                         .font(.caption)
                         .fontDesign(.rounded)
-                    Text("Available: \(user.toyInventory[toy, default: 0])")
+                    Text("Available: \(user.toyInventory[toy.name, default: 0])")
                         .font(.caption2)
                         .fontDesign(.rounded)
                 } icon: {

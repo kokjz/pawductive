@@ -22,13 +22,13 @@ struct FoodListView: View {
     var currDate: Date
     
     var body: some View {
-        List(user.foodInventory.keys.sorted{ $0.cost < $1.cost }, id: \.self) { food in
+        List(Food.allFoods.filter({ food in user.foodInventory.keys.contains(food.name) })) { food in
             HStack {
                 Label {
-                    Text(food.rawValue)
+                    Text(food.name)
                         .font(.caption)
                         .fontDesign(.rounded)
-                    Text("Available: \(user.foodInventory[food, default: 0])")
+                    Text("Available: \(user.foodInventory[food.name, default: 0])")
                         .font(.caption2)
                         .fontDesign(.rounded)
                 } icon: {

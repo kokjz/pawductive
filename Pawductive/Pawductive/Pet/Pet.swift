@@ -28,7 +28,12 @@ class Pet {
         default: return ""
         }
     }
-    var moodHalfLife: Double = 1 // days
+    
+    var moodDecayModifier: Modifier?
+    var moodHalfLife: Double {
+        guard let moodDecayModifier else { return 1 }
+        return 1 + Double(moodDecayModifier.level) * 0.2
+    }
     
     var energy: Double
     var maxEnergy: Double = 100
@@ -40,17 +45,21 @@ class Pet {
         default: return ""
         }
     }
-    var dailyEnergyConsumption: Double = 20 // units per day
+    
+    var energyDecayModifier: Modifier?
+    var dailyEnergyConsumption: Double {
+        guard let energyDecayModifier else { return 20 }
+        return 20 - Double(energyDecayModifier.level) * 2
+    }
     
     init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
         self.name = name
         self.mood = mood
         self.energy = energy
-        self.ageInDays = 0
         
-        let currDate = Date.now
-        self.createdOn = currDate
-        self.lastUpdatedOn = currDate
+        self.ageInDays = 0
+        self.createdOn = Date.now
+        self.lastUpdatedOn = Date.now
     }
 
     // Taken From: https://www.magnific.com/free-vector/kawaii-happy-shiba-inu-dog-doing-various-activities_9925813.htm
@@ -65,24 +74,24 @@ class Pet {
         }
     }
     
-    func canReceive(food: FoodCatalog) -> Bool {
+    func canReceive(food: Food) -> Bool {
         return self.energy < maxEnergy
     }
     
-    func receive(food: FoodCatalog) {
+    func receive(food: Food) {
         guard canReceive(food: food) else { return }
-        self.mood = min(self.mood + food.changeMood, maxMood)
-        self.energy = min(self.energy + food.changeEnergy, maxEnergy)
+        self.mood = min(self.mood + food.moodEffects, maxMood)
+        self.energy = min(self.energy + food.energyEffects, maxEnergy)
     }
     
-    func canReceive(toy: ToyCatalog) -> Bool {
-        return self.mood < maxMood && self.energy + toy.changeEnergy >= 0
+    func canReceive(toy: Toy) -> Bool {
+        return self.mood < maxMood && self.energy + toy.energyEffects >= 0
     }
     
-    func receive(toy: ToyCatalog) {
+    func receive(toy: Toy) {
         guard canReceive(toy: toy) else { return }
-        self.mood = min(self.mood + toy.changeMood, maxMood)
-        self.energy = self.energy + toy.changeEnergy
+        self.mood = min(self.mood + toy.moodEffects, maxMood)
+        self.energy = self.energy + toy.energyEffects
     }
     
     func update(currDate: Date) {
