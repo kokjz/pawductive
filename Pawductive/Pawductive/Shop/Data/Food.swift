@@ -42,11 +42,11 @@ class Food: Identifiable {
 }
 
 extension Food {
+    static let allFoods: [Food] = [.corn, .pumpkin, .chickenEgg, .chickenWing, .chickenDrumstick, .porkBelly]
     static let corn = Food(name: "Corn", value: 5, image: .corn)
     static let pumpkin = Food(name: "Pumpkin", value: 10, image: .pumpkin)
     static let chickenEgg = Food(name: "Chicken Egg", value: 15, image: .chickenEgg)
     static let chickenWing = Food(name: "Chicken Wing", value: 25, image: .chickenWing)
     static let chickenDrumstick = Food(name: "Chicken Drumstick", value: 30, image: .chickenDrumstick)
     static let porkBelly = Food(name: "Pork Belly", value: 50, image: .porkBelly)
-    static let allFoods: [Food] = [.corn, .pumpkin, .chickenEgg, .chickenWing, .chickenDrumstick, .porkBelly]
 }

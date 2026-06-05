@@ -43,10 +43,10 @@ class Toy: Identifiable {
 }
 
 extension Toy {
+    static let allToys: [Toy] = [.treeBranch, .tennisBall, .kitchenTowel, .frisbee, .rubberDuck]
     static let treeBranch = Toy(name: "Tree Branch", value: 5, image: .treeBranch)
     static let tennisBall = Toy(name: "Tennis Ball", value: 10, image: .tennisBall)
     static let kitchenTowel = Toy(name: "Kitchen Towel", value: 20, image: .kitchenTowel)
     static let frisbee = Toy(name: "Frisbee", value: 40, image: .frisbee)
     static let rubberDuck = Toy(name: "Rubber Duck", value: 80, image: .rubberDuck)
-    static let allToys: [Toy] = [.treeBranch, .tennisBall, .kitchenTowel, .frisbee, .rubberDuck]
 }

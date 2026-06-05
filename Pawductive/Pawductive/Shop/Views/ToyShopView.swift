@@ -15,9 +15,9 @@ struct ToyShopView: View {
         users.first!
     }
     
-    func description(_ toy: ToyCatalog) -> String {
-        let mood = "Mood +" + String(format: "%.0f", toy.changeMood)
-        let energy = "Energy " + String(format: "%.0f", toy.changeEnergy)
+    func description(_ toy: Toy) -> String {
+        let mood = "Mood +" + String(format: "%.1f", toy.moodEffects)
+        let energy = "Energy " + String(format: "%.1f", toy.energyEffects)
         return "\(mood), \(energy)"
     }
     
@@ -25,13 +25,13 @@ struct ToyShopView: View {
         List(Toy.allToys) { toy in
             HStack {
                 Label {
-                    Text(toy.rawValue)
+                    Text(toy.name)
                         .font(.headline)
                     Text(description(toy))
                         .lineLimit(1)
                         .font(.subheadline)
                         .minimumScaleFactor(0.5)
-                    Text("Owned: \(user.toyInventory[toy, default: 0])")
+                    Text("Owned: \(user.toyInventory[toy.name, default: 0])")
                         .font(.subheadline)
                 } icon: {
                     Image(toy.image)
