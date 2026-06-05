@@ -21,20 +21,11 @@ class Pet {
     var maxMood: Double = 100
     var moodDescription: String {
         switch self.mood {
-        case 0 ... 0.25 * maxMood:
-            return "Depressed"
-            
-        case 0.25 * maxMood ... 0.50 * maxMood:
-            return "Anxious"
-            
-        case 0.50 * maxMood ... 0.75 * maxMood:
-            return "Normal"
-        
-        case 0.75 * maxMood ... maxMood:
-            return "Happy"
-            
-        default:
-            return ""
+        case 0 ... 0.25 * maxMood: return "Depressed"
+        case 0.25 * maxMood ... 0.50 * maxMood: return "Anxious"
+        case 0.50 * maxMood ... 0.75 * maxMood: return "Normal"
+        case 0.75 * maxMood ... maxMood: return "Happy"
+        default: return ""
         }
     }
     var moodHalfLife: Double = 1 // days
@@ -42,18 +33,11 @@ class Pet {
     var energy: Double
     var maxEnergy: Double = 100
     var energyDescription: String {
-        switch self.mood {
-        case 0 ... 0.25 * maxMood:
-            return "Low"
-            
-        case 0.25 * maxMood ... 0.75 * maxMood:
-            return "Average"
-        
-        case 0.75 * maxMood ... maxMood:
-            return "High"
-            
-        default:
-            return ""
+        switch self.energy {
+        case 0 ... 0.25 * maxEnergy: return "Low"
+        case 0.25 * maxEnergy ... 0.75 * maxEnergy: return "Average"
+        case 0.75 * maxEnergy ... maxEnergy: return "High"
+        default: return ""
         }
     }
     var dailyEnergyConsumption: Double = 20 // units per day
