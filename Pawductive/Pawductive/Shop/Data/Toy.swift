@@ -35,6 +35,10 @@ class Toy: Identifiable {
         return -1 * (value / 5.0) * (1.0 - Double(energyModifier.level) * 0.1)
     }
     
+    var experiencePoints: Int {
+        return Int(value);
+    }
+    
     private init(name: String, value: Double, image: ImageResource) {
         self.name = name
         self.value = value

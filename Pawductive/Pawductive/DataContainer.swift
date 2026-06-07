@@ -48,8 +48,8 @@ class DataContainer {
     }
 
     func insertModifiers(for pet: Pet) {
-        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
-        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let moodModifier = Modifier(name: "Resilient Pet", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "Energized Pet", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5)
         
         pet.moodDecayModifier = moodModifier
         pet.energyDecayModifier = energyModifier
@@ -59,9 +59,9 @@ class DataContainer {
     }
     
     func insertFoodModifiers() {
-        let costModifier = Modifier(name: "", details: "", level: 0, maxLevel: 2)
-        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
-        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let costModifier = Modifier(name: "Cheaper Food", details: "Cost of food decreases", level: 0, maxLevel: 2)
+        let moodModifier = Modifier(name: "Delicious Food", details: "Food increases mood by a larger amount", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "Nutritious Food", details: "Food increases energy by a larger amount", level: 0, maxLevel: 5)
         
         for food in Food.allFoods {
             food.costModifier = costModifier
@@ -75,9 +75,9 @@ class DataContainer {
     }
     
     func insertToyModifiers() {
-        let costModifier = Modifier(name: "", details: "", level: 0, maxLevel: 2)
-        let moodModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
-        let energyModifier = Modifier(name: "", details: "", level: 0, maxLevel: 5)
+        let costModifier = Modifier(name: "Cheaper Toys", details: "Cost of toys decreases", level: 0, maxLevel: 2)
+        let moodModifier = Modifier(name: "Tougher Toys", details: "Toys increase mood by a larger amount", level: 0, maxLevel: 5)
+        let energyModifier = Modifier(name: "Lighter Toys", details: "Toys decrease energy by a smaller amount", level: 0, maxLevel: 5)
         
         for toy in Toy.allToys {
             toy.costModifier = costModifier

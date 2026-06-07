@@ -35,7 +35,7 @@ struct PetSimulatorView: View {
                 .fontDesign(.rounded)
                 .multilineTextAlignment(.center)
                 
-            Text("Age: \(pet.ageInDays) Days")
+            Text("Age: \(pet.ageInDays) days")
                 .styleAsSubHeader()
             
             Image(pet.image)
@@ -63,6 +63,15 @@ struct PetSimulatorView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
             }
+            
+            ZStack {
+                ValueBarView(fillRatio: pet.currentProgress)
+                    .foregroundStyle(.blue)
+                Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.experiencePointsPerLevel) XP)")")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
+            
         
             Picker("Category", selection: $category) {
                 ForEach(ShopCategory.allCases, id: \.self) { category in

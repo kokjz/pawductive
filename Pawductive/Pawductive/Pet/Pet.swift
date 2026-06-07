@@ -48,8 +48,23 @@ class Pet {
     
     var energyDecayModifier: Modifier?
     var dailyEnergyConsumption: Double {
-        guard let energyDecayModifier else { return 20 }
-        return 20 - Double(energyDecayModifier.level) * 2
+        guard let energyDecayModifier else { return 0.2 * maxEnergy }
+        return (0.2 * maxEnergy) - Double(energyDecayModifier.level) * 2
+    }
+    
+    var level: Int {
+        let trueLevel = totalExperiencePoints / experiencePointsPerLevel
+        return trueLevel > maxLevel ? maxLevel : trueLevel
+    }
+    var maxLevel: Int = 11
+    var currentProgress: Double {
+        Double(currentExperiencePoints) / Double(experiencePointsPerLevel)
+    }
+    
+    var totalExperiencePoints: Int = 0
+    var experiencePointsPerLevel: Int = 3000
+    var currentExperiencePoints: Int {
+        level == maxLevel ? experiencePointsPerLevel : totalExperiencePoints - experiencePointsPerLevel * level
     }
     
     init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
@@ -82,6 +97,7 @@ class Pet {
         guard canReceive(food: food) else { return }
         self.mood = min(self.mood + food.moodEffects, maxMood)
         self.energy = min(self.energy + food.energyEffects, maxEnergy)
+        self.totalExperiencePoints += food.experiencePoints
     }
     
     func canReceive(toy: Toy) -> Bool {
@@ -92,6 +108,7 @@ class Pet {
         guard canReceive(toy: toy) else { return }
         self.mood = min(self.mood + toy.moodEffects, maxMood)
         self.energy = self.energy + toy.energyEffects
+        self.totalExperiencePoints += toy.experiencePoints
     }
     
     func update(currDate: Date) {
