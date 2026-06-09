@@ -21,10 +21,12 @@ struct ContentView: View {
             }
             
             //tab 2: pet simulator
-            PetSimulatorView()
-                .tabItem{
-                    Label("Pet", systemImage: "pawprint.circle.fill")
-                }
+            NavigationStack {
+                PetSimulatorView()
+            }
+            .tabItem{
+                Label("Pet", systemImage: "pawprint.circle.fill")
+            }
             
             //tab 3: shop view
             ShopView()

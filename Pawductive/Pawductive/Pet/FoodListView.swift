@@ -64,7 +64,7 @@ struct FoodListView: View {
             }
         }
         .listStyle(.plain)
-        .frame(maxHeight: 300)
+        .frame(maxHeight: 200)
     }
 }
 

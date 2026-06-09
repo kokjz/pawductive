@@ -18,7 +18,9 @@ class Pet {
     var lastUpdatedOn: Date
     
     var mood: Double
-    var maxMood: Double = 100
+    var maxMood: Double {
+        Double(min(200, 100 + level * 10))
+    }
     var moodDescription: String {
         switch self.mood {
         case 0 ... 0.25 * maxMood: return "Depressed"
@@ -36,7 +38,9 @@ class Pet {
     }
     
     var energy: Double
-    var maxEnergy: Double = 100
+    var maxEnergy: Double {
+        Double(min(200, 100 + level * 10))
+    }
     var energyDescription: String {
         switch self.energy {
         case 0 ... 0.25 * maxEnergy: return "Low"
@@ -65,6 +69,10 @@ class Pet {
     var experiencePointsPerLevel: Int = 3000
     var currentExperiencePoints: Int {
         level == maxLevel ? experiencePointsPerLevel : totalExperiencePoints - experiencePointsPerLevel * level
+    }
+    
+    var modifierPoints: Int {
+        return 1 + level * 3
     }
     
     init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
