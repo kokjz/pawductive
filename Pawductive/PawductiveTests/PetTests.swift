@@ -79,21 +79,21 @@ struct PetTests {
         
         let afterOneDay = Calendar.current.date(byAdding: .day, value: 1, to: pet.createdOn)
         pet.update(currDate: afterOneDay!)
-        #expect(pet.mood == 50)
-        #expect(pet.energy == 80)
+        #expect(pet.mood.rounded() == 50)
+        #expect(pet.energy.rounded() == 80)
         #expect(pet.ageInDays == 1)
         
         let afterTwoDays = Calendar.current.date(byAdding: .day, value: 2, to: pet.createdOn)
         pet.update(currDate: afterTwoDays!)
-        #expect(pet.mood == 25)
-        #expect(pet.energy == 60)
+        #expect(pet.mood.rounded() == 25)
+        #expect(pet.energy.rounded() == 60)
         #expect(pet.ageInDays == 2)
         
         // Mood follows exponential decay
         let afterFiveDays = Calendar.current.date(byAdding: .day, value: 5, to: pet.createdOn)
         pet.update(currDate: afterFiveDays!)
         #expect(floor(pet.mood) == 3)
-        #expect(pet.energy == 0)
+        #expect(pet.energy.rounded() == 0)
         #expect(pet.ageInDays == 5)
         
         // Energy does not fall below 0

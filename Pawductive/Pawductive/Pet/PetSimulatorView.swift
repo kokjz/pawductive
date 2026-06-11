@@ -26,6 +26,8 @@ struct PetSimulatorView: View {
 //        Calendar.current.date(byAdding: .day, value: numberOfTaps, to: Date.now)!
 //    }
     
+    @State private var showModifiers = false
+    
     var body: some View {
         VStack {
             @Bindable var pet = pet
@@ -35,7 +37,7 @@ struct PetSimulatorView: View {
                 .fontDesign(.rounded)
                 .multilineTextAlignment(.center)
                 
-            Text("Age: \(pet.ageInDays) Days")
+            Text("Age: \(pet.ageInDays) days")
                 .styleAsSubHeader()
             
             Image(pet.image)
@@ -63,6 +65,15 @@ struct PetSimulatorView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
             }
+            
+            ZStack {
+                ValueBarView(fillRatio: pet.currentProgress)
+                    .foregroundStyle(.blue)
+                Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.experiencePointsPerLevel) XP)")")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+            }
+            
         
             Picker("Category", selection: $category) {
                 ForEach(ShopCategory.allCases, id: \.self) { category in
@@ -77,6 +88,14 @@ struct PetSimulatorView: View {
             }
             category.listView(currDate: currDate)
             
+            Button("Open Modifiers") {
+                showModifiers = true
+            }
+            .buttonStyle(.borderedProminent)
+            .navigationDestination(isPresented: $showModifiers) {
+                ModifiersView()
+            }
+            
             Spacer()
         }
         .onAppear{
@@ -89,6 +108,8 @@ struct PetSimulatorView: View {
 }
 
 #Preview {
-    PetSimulatorView()
-        .modelContainer(DataContainer().modelContainer)
+    NavigationStack {
+        PetSimulatorView()
+    }
+    .modelContainer(DataContainer().modelContainer)
 }

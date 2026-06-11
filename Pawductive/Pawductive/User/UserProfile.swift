@@ -12,8 +12,8 @@ import SwiftData
 class UserProfile {
     var id: UUID
     var coins: Int
-    var foodInventory: [FoodCatalog: Int] = [:]
-    var toyInventory: [ToyCatalog: Int] = [:]
+    var foodInventory: [String: Int] = [:]
+    var toyInventory: [String: Int] = [:]
     
     init(coins: Int = 100) {
         precondition(coins >= 0)
@@ -26,33 +26,33 @@ class UserProfile {
         return self.coins >= cost
     }
     
-    func buy(food: FoodCatalog) {
+    func buy(food: Food) {
         guard canAfford(cost: food.cost) else { return }
         self.coins -= food.cost
-        foodInventory[food, default: 0] += 1
+        foodInventory[food.name, default: 0] += 1
     }
     
-    func buy(toy: ToyCatalog) {
+    func buy(toy: Toy) {
         guard canAfford(cost: toy.cost) else { return }
         self.coins -= toy.cost
-        toyInventory[toy, default: 0] += 1
+        toyInventory[toy.name, default: 0] += 1
     }
     
-    func give(food: FoodCatalog) {
-        guard let count = foodInventory[food], count > 0 else { return }
+    func give(food: Food) {
+        guard let count = foodInventory[food.name], count > 0 else { return }
         if count == 1 {
-            foodInventory.removeValue(forKey: food)
+            foodInventory.removeValue(forKey: food.name)
         } else {
-            foodInventory[food] = count - 1
+            foodInventory[food.name] = count - 1
         }
     }
     
-    func give(toy: ToyCatalog) {
-        guard let count = toyInventory[toy], count > 0 else { return }
+    func give(toy: Toy) {
+        guard let count = toyInventory[toy.name], count > 0 else { return }
         if count == 1 {
-            toyInventory.removeValue(forKey: toy)
+            toyInventory.removeValue(forKey: toy.name)
         } else {
-            toyInventory[toy] = count - 1
+            toyInventory[toy.name] = count - 1
         }
     }
 }
