@@ -19,6 +19,8 @@ struct ToyListView: View {
         pets.first!
     }
     
+    @State private var playTask: Task<Void, Never>?
+    
     var currDate: Date
     
     var body: some View {
@@ -46,6 +48,15 @@ struct ToyListView: View {
                         if pet.canReceive(toy: toy) {
                             pet.receive(toy: toy)
                             user.give(toy: toy)
+                            
+                            playTask?.cancel()
+                            playTask = Task {
+                                pet.state = .playing
+                                try? await Task.sleep(for: .seconds(3))
+                                if Task.isCancelled { return }
+                                guard pet.state == .playing else { return }
+                                pet.state = .resting
+                            }
                         }
                     }
                 }
@@ -64,7 +75,7 @@ struct ToyListView: View {
             }
         }
         .listStyle(.plain)
-        .frame(maxHeight: 300)
+        .frame(maxHeight: 200)
     }
 }
 

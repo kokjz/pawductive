@@ -19,6 +19,8 @@ struct FoodListView: View {
         pets.first!
     }
     
+    @State private var eatTask: Task<Void, Never>?
+    
     var currDate: Date
     
     var body: some View {
@@ -46,6 +48,15 @@ struct FoodListView: View {
                         if pet.canReceive(food: food) {
                             pet.receive(food: food)
                             user.give(food: food)
+                            
+                            eatTask?.cancel()
+                            eatTask = Task {
+                                pet.state = .eating
+                                try? await Task.sleep(for: .seconds(3))
+                                if Task.isCancelled { return }
+                                guard pet.state == .eating else { return }
+                                pet.state = .resting
+                            }
                         }
                     }
                 }

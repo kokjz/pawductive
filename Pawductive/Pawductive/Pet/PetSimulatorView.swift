@@ -44,6 +44,7 @@ struct PetSimulatorView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 300, maxHeight: 300)
+                .animation(.default, value: pet.state)
 
 //                // NOTE: FOR TESTING ONLY
 //                .onTapGesture {
@@ -111,5 +112,7 @@ struct PetSimulatorView: View {
     NavigationStack {
         PetSimulatorView()
     }
-    .modelContainer(DataContainer().modelContainer)
+    .modelContainer(DataContainer(
+        pet: Pet(mood: 0, energy: 0)
+    ).modelContainer)
 }
