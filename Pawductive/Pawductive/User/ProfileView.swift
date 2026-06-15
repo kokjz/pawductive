@@ -53,7 +53,8 @@ struct ProfileView: View {
                         .padding(.horizontal)
                     ScrollView {
                         VStack(spacing: 12) {
-                            ForEach(Achievement.allCases) { achievement in achievementRow(achievement: achievement, stats: stats) }
+                            ForEach(sortedAchievements(for: stats)) { achievement in
+                                achievementRow(achievement: achievement, stats: stats) }
                         }
                         .padding(.horizontal)
                     }
@@ -101,7 +102,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(achievement.title)
                     .font(.headline)
-                    .foregroundColor(unlocked ? .primary : .secondary)
+                    .foregroundColor(unlocked ? .secondary : .primary)
                 Text(achievement.requirementDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -111,7 +112,21 @@ struct ProfileView: View {
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
-        .opacity(unlocked ? 1.0 : 0.6) //gray out if locked
+        .opacity(unlocked ? 0.8 : 1.0) //gray out if unlocked
+    }
+    
+    //achievement sort by incompletion
+    private func sortedAchievements(for stats: UserStats) -> [Achievement] {
+        Achievement.allCases.sorted { a, b in
+            let aUnlocked = a.isunlocked(stats: stats)
+            let bUnlocked = b.isunlocked(stats: stats)
+            if aUnlocked == bUnlocked {
+                let aIndex = Achievement.allCases.firstIndex(of: a) ?? 0
+                let bIndex = Achievement.allCases.firstIndex(of: b) ?? 0
+                return aIndex < bIndex
+            }
+            return !aUnlocked && bUnlocked
+        }
     }
 }
 
