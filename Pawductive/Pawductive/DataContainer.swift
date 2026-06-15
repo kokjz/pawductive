@@ -20,16 +20,23 @@ class DataContainer {
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            if loadInventory {
-                loadFoodInventory(user: user)
-                loadToyInventory(user: user)
+            let descriptor = FetchDescriptor<UserProfile>()
+            let existingUsers = try? context.fetch(descriptor)
+            if existingUsers?.isEmpty ?? true {
+                if loadInventory {
+                    loadFoodInventory(user: user)
+                    loadToyInventory(user: user)
+                }
+                context.insert(user)
+                context.insert(pet)
+                insertModifiers(for: pet)
+                insertFoodModifiers()
+                insertToyModifiers()
+                try context.save()
+                print("Database empty, seed default user and pet success")
+            } else {
+                print("User profile found, skipping seeding")
             }
-            context.insert(user)
-            context.insert(pet)
-            insertModifiers(for: pet)
-            insertFoodModifiers()
-            insertToyModifiers()
-            try context.save()
         } catch {
             fatalError("Could not create model container: \(error)")
         }
