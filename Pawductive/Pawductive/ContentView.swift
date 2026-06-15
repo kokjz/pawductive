@@ -37,6 +37,14 @@ struct ContentView: View {
                 .tabItem {
                     Label("Shop", systemImage: "bag.fill")
                 }
+            
+            //tab 4: profile view
+            NavigationStack {
+                ProfileView()
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.circle.fill")
+            }
         }
         .accentColor(.orange)
         
