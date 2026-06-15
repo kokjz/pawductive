@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    //access database to fetch userstats
+    @Environment(\.modelContext) private var modelContext
+    @Query private var stats: [UserStats]
+    
     var body: some View {
         //tab view at bottom of screen
         TabView {
@@ -35,6 +39,21 @@ struct ContentView: View {
                 }
         }
         .accentColor(.orange)
+        
+        //first launch check
+        .onAppear {
+            firstTimeStatInit()
+        }
+    }
+    
+    //helper fn for first-time stat init
+    private func firstTimeStatInit() {
+        if stats.isEmpty {
+            let initStats = UserStats()
+            modelContext.insert(initStats)
+            try? modelContext.save()
+            print("Default user stats initialised success")
+        }
     }
 }
 
