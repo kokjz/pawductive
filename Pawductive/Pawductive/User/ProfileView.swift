@@ -95,7 +95,7 @@ struct ProfileView: View {
                 Circle()
                     .fill(unlocked ? Color.orange.opacity(0.1) : Color.gray.opacity(0.1))
                     .frame(width: 48, height: 48)
-                Text(unlocked ? "✅" : "🔒")
+                Text(unlocked ? "🏆" : "🔒")
                     .font(.title2)
             }
             VStack(alignment: .leading, spacing: 4) {
