@@ -27,6 +27,7 @@ struct PetSimulatorView: View {
 //    }
     
     @State private var showModifiers = false
+    @State private var animatePet = false
     
     var body: some View {
         VStack {
@@ -44,6 +45,14 @@ struct PetSimulatorView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 300, maxHeight: 300)
+                .animation(.default, value: pet.state)
+                .onTapGesture { animatePet.toggle() }
+                .phaseAnimator([0, 1, -1, 0], trigger: animatePet)
+                { content, phase in
+                    content.rotationEffect(.degrees(phase * 5))
+                } animation: { phase in
+                    Animation.easeInOut(duration: 0.3)
+                }
 
 //                // NOTE: FOR TESTING ONLY
 //                .onTapGesture {
@@ -111,5 +120,7 @@ struct PetSimulatorView: View {
     NavigationStack {
         PetSimulatorView()
     }
-    .modelContainer(DataContainer().modelContainer)
+    .modelContainer(DataContainer(
+        pet: Pet(mood: 0, energy: 0)
+    ).modelContainer)
 }
