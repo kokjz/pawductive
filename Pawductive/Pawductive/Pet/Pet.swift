@@ -23,10 +23,12 @@ class Pet {
     }
     var moodDescription: String {
         switch self.mood {
-        case 0 ... 0.25 * maxMood: return "Depressed"
-        case 0.25 * maxMood ... 0.50 * maxMood: return "Anxious"
-        case 0.50 * maxMood ... 0.75 * maxMood: return "Normal"
-        case 0.75 * maxMood ... maxMood: return "Happy"
+        case 0 ... 0.25 * maxMood: 
+            return "Angry"
+        case 0.25 * maxMood ... 0.75 * maxMood: 
+            return "Normal"
+        case 0.75 * maxMood ... maxMood: 
+            return "Happy"
         default: return ""
         }
     }
@@ -43,9 +45,12 @@ class Pet {
     }
     var energyDescription: String {
         switch self.energy {
-        case 0 ... 0.25 * maxEnergy: return "Low"
-        case 0.25 * maxEnergy ... 0.75 * maxEnergy: return "Average"
-        case 0.75 * maxEnergy ... maxEnergy: return "High"
+        case 0 ... 0.25 * maxEnergy: 
+            return "Low"
+        case 0.25 * maxEnergy ... 0.75 * maxEnergy: 
+            return "Average"
+        case 0.75 * maxEnergy ... maxEnergy: 
+            return "High"
         default: return ""
         }
     }
@@ -85,15 +90,26 @@ class Pet {
         self.lastUpdatedOn = Date.now
     }
 
-    // Taken From: https://www.magnific.com/free-vector/kawaii-happy-shiba-inu-dog-doing-various-activities_9925813.htm
+    var state = PetState.resting
+
     var image: ImageResource {
-        switch self.moodDescription {
-        case "Happy":
-            return .happy
-        case "Depressed":
-            return .unhappy
-        default:
-            return .standing
+        switch self.state {
+        case .eating:
+            return .eating
+        case .playing:
+            return .playing
+        case .resting:
+            if self.energyDescription == "Low" {
+                return .sleeping
+            }
+            switch self.moodDescription {
+            case "Angry":
+                return .angry
+            case "Happy":
+                return .happy
+            default:
+                return .normal
+            }
         }
     }
     
@@ -205,4 +221,8 @@ class Pet {
         let daysToLowEnergy = (self.energy - lowEnergy) / dailyEnergyConsumption
         return self.lastUpdatedOn.addingTimeInterval(daysToLowEnergy * 24 * 60 * 60)
     }
+}
+
+enum PetState: String, Codable {
+    case eating, playing, resting
 }
