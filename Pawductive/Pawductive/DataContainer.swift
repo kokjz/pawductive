@@ -6,6 +6,7 @@
 //
 
 import SwiftData
+import Foundation
 
 class DataContainer {
     let modelContainer: ModelContainer
@@ -16,7 +17,16 @@ class DataContainer {
     
     // Initializes a model container with a user and a pet
     init(user: UserProfile = UserProfile(), pet: Pet = Pet(), loadInventory: Bool = true, inMemory: Bool = true) {
-        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self, Modifier.self, UserStats.self])
+        let schema = Schema([
+            Background.self,
+            Modifier.self,
+            Pet.self,
+            ShownDecor.self,
+            StoredDecor.self,
+            TaskItem.self,
+            UserProfile.self,
+            UserStats.self
+        ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -28,12 +38,18 @@ class DataContainer {
                     loadToyInventory(user: user)
                 }
                 context.insert(user)
-                context.insert(pet)
-                insertModifiers(for: pet)
-                insertFoodModifiers()
-                insertToyModifiers()
+                
                 let stats = UserStats()
                 context.insert(stats)
+                
+                insertFoodModifiers()
+                insertToyModifiers()
+                
+                insertPetModifiers(pet)
+                context.insert(pet)
+            
+                insertBackgrounds()
+                insertStoredDecors()
                 try context.save()
                 print("Database empty, seed default user and pet success")
             } else {
@@ -56,7 +72,7 @@ class DataContainer {
         user.toyInventory[Toy.rubberDuck.name] = 3
     }
 
-    func insertModifiers(for pet: Pet) {
+    func insertPetModifiers(_ pet: Pet) {
         let moodModifier =
             Modifier(label: "Pet1", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
         let energyModifier =
@@ -105,5 +121,34 @@ class DataContainer {
         context.insert(costModifier)
         context.insert(moodModifier)
         context.insert(energyModifier)
+    }
+    
+    func insertBackgrounds() {
+        let backgrounds = [
+            Background(name: "Room", imageName: "room")
+        ]
+        
+        for background in backgrounds {
+            context.insert(background)
+        }
+    }
+    
+    func insertStoredDecors() {
+        guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
+        guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
+        
+        let storedDecors = [
+            StoredDecor(decor: Decor(name: "Cabinet", imageName: "cabinet", relativeHeight: 0.5, cost: 200), background: room),
+            StoredDecor(decor: Decor(name: "Clock", imageName: "clock", relativeHeight: 0.2, cost: 100), background: room),
+            StoredDecor(decor: Decor(name: "Mirror", imageName: "mirror", relativeHeight: 0.4, cost: 150), background: room),
+            StoredDecor(decor: Decor(name: "Plant", imageName: "plant", relativeHeight: 0.2, cost: 50), background: room),
+            StoredDecor(decor: Decor(name: "Sofa", imageName: "sofa", relativeHeight: 0.4, cost: 300), background: room),
+            StoredDecor(decor: Decor(name: "Vase", imageName: "vase", relativeHeight: 0.4, cost: 75), background: room),
+            StoredDecor(decor: Decor(name: "Window", imageName: "window", relativeHeight: 0.6, cost: 250), background: room),
+        ]
+        
+        for storedDecor in storedDecors {
+            context.insert(storedDecor)
+        }
     }
 }
