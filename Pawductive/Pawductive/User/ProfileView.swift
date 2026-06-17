@@ -102,7 +102,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(achievement.title)
                     .font(.headline)
-                    .foregroundColor(unlocked ? .secondary : .primary)
+                    .foregroundColor(unlocked ? .primary : .secondary)
                 Text(achievement.requirementDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -112,10 +112,10 @@ struct ProfileView: View {
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
-        .opacity(unlocked ? 0.8 : 1.0) //gray out if unlocked
+        .opacity(unlocked ? 1.0 : 0.8) //gray out if locked
     }
     
-    //achievement sort by incompletion
+    //achievement sort by completion
     private func sortedAchievements(for stats: UserStats) -> [Achievement] {
         Achievement.allCases.sorted { a, b in
             let aUnlocked = a.isunlocked(stats: stats)
@@ -125,7 +125,7 @@ struct ProfileView: View {
                 let bIndex = Achievement.allCases.firstIndex(of: b) ?? 0
                 return aIndex < bIndex
             }
-            return !aUnlocked && bUnlocked
+            return aUnlocked && !bUnlocked
         }
     }
 }
