@@ -79,6 +79,15 @@ class TimerViewModel {
             print("Created new profile. Balance: \(newProfile.coins) coins")
         }
         
+        //update user stats
+        let statsDescriptor = FetchDescriptor<UserStats>()
+        if let statsList = try? context.fetch(statsDescriptor), let stats = statsList.first {
+            stats.totalTasksCompleted += 1
+            let minutesFocused = totalDuration / 60
+            stats.totalMinutesFocused += minutesFocused
+            stats.totalCoinsEarned += coinsEarned
+            print("User stats updated success. Tasks: \(stats.totalTasksCompleted), Mins: \(stats.totalMinutesFocused), Coins: \(stats.totalCoinsEarned)")
+        }
         try? context.save()
     }
     

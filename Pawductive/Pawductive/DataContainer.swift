@@ -1,5 +1,5 @@
 //
-//  UserContainer.swift
+//  DataContainer.swift
 //  Pawductive
 //
 //  Created by Lee Zi Rong on 21/5/26.
@@ -16,20 +16,29 @@ class DataContainer {
     
     // Initializes a model container with a user and a pet
     init(user: UserProfile = UserProfile(), pet: Pet = Pet(), loadInventory: Bool = true, inMemory: Bool = true) {
-        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self, Modifier.self])
+        let schema = Schema([TaskItem.self, UserProfile.self, Pet.self, Modifier.self, UserStats.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            if loadInventory {
-                loadFoodInventory(user: user)
-                loadToyInventory(user: user)
+            let descriptor = FetchDescriptor<UserProfile>()
+            let existingUsers = try? context.fetch(descriptor)
+            if existingUsers?.isEmpty ?? true {
+                if loadInventory {
+                    loadFoodInventory(user: user)
+                    loadToyInventory(user: user)
+                }
+                context.insert(user)
+                context.insert(pet)
+                insertModifiers(for: pet)
+                insertFoodModifiers()
+                insertToyModifiers()
+                let stats = UserStats()
+                context.insert(stats)
+                try context.save()
+                print("Database empty, seed default user and pet success")
+            } else {
+                print("User profile found, skipping seeding")
             }
-            context.insert(user)
-            context.insert(pet)
-            insertModifiers(for: pet)
-            insertFoodModifiers()
-            insertToyModifiers()
-            try context.save()
         } catch {
             fatalError("Could not create model container: \(error)")
         }
