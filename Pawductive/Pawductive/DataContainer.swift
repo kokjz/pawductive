@@ -1,5 +1,5 @@
 //
-//  UserContainer.swift
+//  DataContainer.swift
 //  Pawductive
 //
 //  Created by Lee Zi Rong on 21/5/26.
@@ -32,6 +32,8 @@ class DataContainer {
                 insertModifiers(for: pet)
                 insertFoodModifiers()
                 insertToyModifiers()
+                let stats = UserStats()
+                context.insert(stats)
                 try context.save()
                 print("Database empty, seed default user and pet success")
             } else {
