@@ -29,6 +29,8 @@ struct ProfileView: View {
                     Text("Statistics")
                         .styleAsSubHeader()
                         .padding(.horizontal)
+                    streakCard(streak: stats.currentStreak)
+                        .padding(.horizontal)
                     HStack(spacing: 16) {
                         statCard(
                             title: "Total Tasks Completed",
@@ -65,6 +67,33 @@ struct ProfileView: View {
             Spacer()
         }
         .background(Color(.systemGroupedBackground))
+    }
+    
+    //streakcard component
+    private func streakCard(streak: Int) -> some View {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(streak > 0 ? Color.orange.opacity(0.1) : Color.gray.opacity(0.1))
+                    .frame(width: 75, height: 75)
+                Text(streak > 0 ? "🐐🔥" : "💔🥀")
+                    .font(.title2)
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Streak: \(streak) Day\(streak == 1 ? "" : "s")")
+                    .font(.system(.title3, design: .rounded))
+                    .bold()
+                    .foregroundColor(streak > 0 ? .orange : .secondary)
+                Text(streak > 0 ? "On fire! Keep it up goat!" : "Come on, do something...")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(streak > 0 ? Color.orange.opacity(0.2) : Color.clear, lineWidth: 1))
     }
     
     //statcard component
