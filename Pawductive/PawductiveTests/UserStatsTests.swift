@@ -5,6 +5,7 @@
 //  Created by Kok Jun Zhe on 16/6/26.
 //
 
+import Foundation
 import Testing
 import SwiftData
 @testable import Pawductive
@@ -113,5 +114,43 @@ import SwiftData
         #expect(Achievement.OneMinAchievement.isunlocked(stats: stats) == true)
         #expect(Achievement.ThirtyMinAchievement.isunlocked(stats: stats) == true)
         #expect(Achievement.OneHourAchievement.isunlocked(stats: stats) == true)
+    }
+    
+    //test 4: user streak logic
+    @Test @MainActor func testUserStreak() throws {
+        let context = try makeInMemoryContext()
+        let viewModel = TimerViewModel()
+        viewModel.startTimer(minutes: 1)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        //first completion
+        let stats = UserStats()
+        context.insert(stats)
+        try context.save()
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 1)
+        #expect(stats.lastActiveDate != nil)
+        
+        //streak maintained
+        stats.currentStreak = 6
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        stats.lastActiveDate = yesterday
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 7) //SIX SEVENNNNN
+        
+        //no double-incrementing for two completions in same day
+        stats.currentStreak = 7
+        stats.lastActiveDate = Date()
+        try context.save()
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 7)
+        
+        //streak broken
+        stats.currentStreak = 7
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        stats.lastActiveDate = twoDaysAgo
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 1)
     }
 }
