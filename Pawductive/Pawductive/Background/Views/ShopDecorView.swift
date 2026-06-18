@@ -9,18 +9,23 @@ import SwiftData
 import SwiftUI
 
 struct ShopDecorView: View {
+    @Query private var users: [UserProfile]
+    private var user: UserProfile {
+        users.first!
+    }
+    
     var storedDecor: StoredDecor
     var cardWidth: CGFloat
+    var cardHeight: CGFloat
     
     var body: some View {
         VStack {
             Text(storedDecor.decor.name)
                 .styleAsSubHeader()
             
-            Text("Display \(storedDecor.shownDecors.count) : Store \(storedDecor.numStored)")
+            Text("Display \(storedDecor.shownDecors.count) / Store \(storedDecor.numStored)")
                 .font(.caption)
                 .fontDesign(.rounded)
-
             
             Image(storedDecor.decor.imageName)
                 .resizable()
@@ -29,41 +34,51 @@ struct ShopDecorView: View {
             
             HStack {
                 Button {
-                    // TODO
+                    withAnimation(.bouncy){
+                        user.coins -= storedDecor.decor.cost
+                        storedDecor.numStored += 1
+                    }
                 } label: {
                     Text("BUY").frame(maxWidth: .infinity)
                         .font(.caption)
                         .fontWeight(.bold)
                         .fontDesign(.rounded)
                 }
+                .disabled(user.coins < storedDecor.decor.cost)
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
                 
                 Button {
-                    // TODO
+                    withAnimation(.bouncy) {
+                        user.coins += storedDecor.decor.cost
+                        storedDecor.numStored -= 1
+                    }
                 } label: {
                     Text("SELL").frame(maxWidth: .infinity)
                         .font(.caption)
                         .fontWeight(.bold)
                         .fontDesign(.rounded)
                 }
+                .disabled(storedDecor.numStored <= 0)
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
             }
             
-            Text("Cost \(storedDecor.decor.cost) coins")
+            Text("Cost: \(storedDecor.decor.cost) Coins")
                 .font(.caption)
+                .fontWeight(.medium)
                 .fontDesign(.rounded)
         }
-        .padding(10)
-        .frame(width: cardWidth)
+        .padding()
+        .frame(width: cardWidth, height: cardHeight)
         .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
 
 #Preview {
-    let data = DataContainer()
+    let data = DataContainer(user: UserProfile(coins: 500))
     let storedDecor = try! data.context.fetch(FetchDescriptor<StoredDecor>()).first!
-    ShopDecorView(storedDecor: storedDecor, cardWidth: 170).modelContainer(data.modelContainer)
+    ShopDecorView(storedDecor: storedDecor, cardWidth: 170, cardHeight: 300)
+        .modelContainer(data.modelContainer)
 }

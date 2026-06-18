@@ -14,8 +14,9 @@ struct DecorShopView: View {
         users.first!
     }
     
-    var cardWidth: CGFloat = 170
     var background: Background
+    let cardWidth: CGFloat = 170
+    let cardHeight: CGFloat = 300
     
     var body: some View {
         VStack {
@@ -31,9 +32,9 @@ struct DecorShopView: View {
                     GridItem(.adaptive(minimum: cardWidth, maximum: cardWidth), spacing: 20)
                 ], spacing: 20) {
                     ForEach(background.storedDecors.sorted(by: {
-                        d1, d2 in d1.decor.cost < d2.decor.cost
+                        $0.decor.cost < $1.decor.cost
                     })) { storedDecor in
-                        ShopDecorView(storedDecor: storedDecor, cardWidth: cardWidth)
+                        ShopDecorView(storedDecor: storedDecor, cardWidth: cardWidth, cardHeight: cardHeight)
                     }
                 }
             }
@@ -43,7 +44,7 @@ struct DecorShopView: View {
 }
 
 #Preview {
-    let data = DataContainer()
+    let data = DataContainer(user: UserProfile(coins: 500))
     let background = try! data.context.fetch(FetchDescriptor<Background>()).first!
     DecorShopView(background: background).modelContainer(data.modelContainer)
 }

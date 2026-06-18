@@ -10,12 +10,15 @@ import SwiftUI
 
 @Model
 class ShownDecor {
-    var relativePosition: CGPoint
+    var relativeX: CGFloat
+    var relativeY: CGFloat
     
-    @Relationship var storedDecor: StoredDecor
+    @Relationship(inverse: \StoredDecor.shownDecors)
+    var storedDecor: StoredDecor
     
-    init(relativePosition: CGPoint, storedDecor: StoredDecor) {
-        self.relativePosition = relativePosition
+    init(relativeX: CGFloat = 0.5, relativeY: CGFloat = 0.5, storedDecor: StoredDecor) {
+        self.relativeX = relativeX
+        self.relativeY = relativeY
         self.storedDecor = storedDecor
     }
 }
