@@ -153,4 +153,39 @@ import SwiftData
         viewModel.claimRewards(context: context)
         #expect(stats.currentStreak == 1)
     }
+    
+    //test 5: streak maintenance on app launch
+    @Test @MainActor func testLaunchStreakReset() throws {
+        //first launch
+        let container1 = DataContainer(loadInventory: false, inMemory: false) //write to disk for test only, clean up later
+        let context1 = container1.context
+        let descriptor = FetchDescriptor<UserStats>()
+        let statsList = try context1.fetch(descriptor)
+        guard let stats = statsList.first else { Issue.record("UserStats not seeded on first run"); return }
+        
+        //simulate broken streak
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        stats.currentStreak = 5
+        stats.lastActiveDate = twoDaysAgo
+        try context1.save()
+        
+        //second launch
+        let container2 = DataContainer(loadInventory: false, inMemory: false)
+        let context2 = container2.context
+        let statsList2 = try context2.fetch(descriptor)
+        let stats2 = statsList2.first
+        #expect(stats2?.currentStreak == 0) //should have detected broken streak and reset
+        
+        //cleanup
+        let userDescriptor = FetchDescriptor<UserProfile>()
+        if let users = try? context2.fetch(userDescriptor) {
+            for user in users { context2.delete(user) }
+        }
+        if let stats = try? context2.fetch(descriptor) {
+            for stat in stats { context2.delete(stat) }
+        }
+        try? context2.save()
+    }
 }

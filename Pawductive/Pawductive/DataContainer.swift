@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 21/5/26.
 //
 
+import Foundation
 import SwiftData
 
 class DataContainer {
@@ -37,6 +38,7 @@ class DataContainer {
                 try context.save()
                 print("Database empty, seed default user and pet success")
             } else {
+                checkAndResetBrokenStreak()
                 print("User profile found, skipping seeding")
             }
         } catch {
@@ -105,5 +107,25 @@ class DataContainer {
         context.insert(costModifier)
         context.insert(moodModifier)
         context.insert(energyModifier)
+    }
+    
+    //check user streak validity on launch
+    private func checkAndResetBrokenStreak() {
+        let statsDescriptor = FetchDescriptor<UserStats>()
+        if let statsList = try? context.fetch(statsDescriptor), let stats = statsList.first {
+            if let lastActive = stats.lastActiveDate {
+                let calendar = Calendar.current
+                let lastActiveMidnight = calendar.startOfDay(for: lastActive)
+                let todayMidnight = calendar.startOfDay(for: Date())
+                let components = calendar.dateComponents([.day], from: lastActiveMidnight, to: todayMidnight)
+                if let daysBetween = components.day, daysBetween > 1 { //streak broken
+                    stats.currentStreak = 0
+                    try? context.save()
+                    print("Broken streak detected on launch, reset to 0")
+                } else { //streak still active
+                    print("Streak still active on launch, current streak: \(stats.currentStreak)")
+                }
+            }
+        }
     }
 }
