@@ -14,7 +14,14 @@ struct DecorShopView: View {
         users.first!
     }
     
-    var background: Background
+    @Query private var pets: [Pet]
+    private var pet: Pet {
+        pets.first!
+    }
+    var background: Background {
+        pet.background
+    }
+    
     let cardWidth: CGFloat = 170
     let cardHeight: CGFloat = 300
     
@@ -44,7 +51,5 @@ struct DecorShopView: View {
 }
 
 #Preview {
-    let data = DataContainer(user: UserProfile(coins: 500))
-    let background = try! data.context.fetch(FetchDescriptor<Background>()).first!
-    DecorShopView(background: background).modelContainer(data.modelContainer)
+    DecorShopView().modelContainer(DataContainer().modelContainer)
 }

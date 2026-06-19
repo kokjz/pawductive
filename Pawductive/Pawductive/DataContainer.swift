@@ -15,8 +15,7 @@ class DataContainer {
         modelContainer.mainContext
     }
     
-    // Initializes a model container with a user and a pet
-    init(user: UserProfile = UserProfile(), pet: Pet = Pet(), loadInventory: Bool = true, inMemory: Bool = true) {
+    init(coins: Int = 500, mood: Double = 100, energy: Double = 100, loadInventory: Bool = true, inMemory: Bool = true) {
         let schema = Schema([
             Background.self,
             Modifier.self,
@@ -33,6 +32,7 @@ class DataContainer {
             let descriptor = FetchDescriptor<UserProfile>()
             let existingUsers = try? context.fetch(descriptor)
             if existingUsers?.isEmpty ?? true {
+                let user = UserProfile(coins: coins)
                 if loadInventory {
                     loadFoodInventory(user: user)
                     loadToyInventory(user: user)
@@ -42,14 +42,15 @@ class DataContainer {
                 let stats = UserStats()
                 context.insert(stats)
                 
-                insertFoodModifiers()
-                insertToyModifiers()
-                
-                insertPetModifiers(pet)
-                context.insert(pet)
-            
                 insertBackgrounds()
                 insertStoredDecors()
+                
+                let pet = createPet(mood: mood, energy: energy)!
+                insertPetModifiers(pet)
+                context.insert(pet)
+                
+                insertFoodModifiers()
+                insertToyModifiers()
                 try context.save()
                 print("Database empty, seed default user and pet success")
             } else {
@@ -125,7 +126,8 @@ class DataContainer {
     
     func insertBackgrounds() {
         let backgrounds = [
-            Background(name: "Room", imageName: "room")
+            Background(name: "Room", imageName: "room"),
+            Background(name: "Yard", imageName: "yard"),
         ]
         
         for background in backgrounds {
@@ -135,20 +137,43 @@ class DataContainer {
     
     func insertStoredDecors() {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
-        guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
         
-        let storedDecors = [
+        guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
+        let storedRoomDecors = [
+            StoredDecor(decor: Decor(name: "Vase", imageName: "vase", relativeHeight: 0.3, cost: 75), background: room),
             StoredDecor(decor: Decor(name: "Cabinet", imageName: "cabinet", relativeHeight: 0.5, cost: 200), background: room),
             StoredDecor(decor: Decor(name: "Clock", imageName: "clock", relativeHeight: 0.2, cost: 100), background: room),
-            StoredDecor(decor: Decor(name: "Mirror", imageName: "mirror", relativeHeight: 0.4, cost: 150), background: room),
+            StoredDecor(decor: Decor(name: "Mirror", imageName: "mirror", relativeHeight: 0.2, cost: 150), background: room),
             StoredDecor(decor: Decor(name: "Plant", imageName: "plant", relativeHeight: 0.2, cost: 50), background: room),
-            StoredDecor(decor: Decor(name: "Sofa", imageName: "sofa", relativeHeight: 0.4, cost: 300), background: room),
-            StoredDecor(decor: Decor(name: "Vase", imageName: "vase", relativeHeight: 0.4, cost: 75), background: room),
-            StoredDecor(decor: Decor(name: "Window", imageName: "window", relativeHeight: 0.6, cost: 250), background: room),
+            StoredDecor(decor: Decor(name: "Sofa", imageName: "sofa", relativeHeight: 0.35, cost: 300), background: room),
+            StoredDecor(decor: Decor(name: "Window", imageName: "window", relativeHeight: 0.5, cost: 250), background: room),
         ]
-        
-        for storedDecor in storedDecors {
+        for storedDecor in storedRoomDecors {
             context.insert(storedDecor)
         }
+        
+        guard let yard = backgrounds.filter({ $0.name == "Yard" }).first else { return }
+        let storedYardDecors = [
+            StoredDecor(decor: Decor(name: "Armchair", imageName: "armchair", relativeHeight: 0.20, cost: 80), background: yard),
+            StoredDecor(decor: Decor(name: "Basket Swing", imageName: "basketSwing", relativeHeight: 0.40, cost: 180), background: yard),
+            StoredDecor(decor: Decor(name: "BBQ Grill", imageName: "bbqGrill", relativeHeight: 0.30, cost: 120), background: yard),
+            StoredDecor(decor: Decor(name: "Dog House", imageName: "dogHouse", relativeHeight: 0.20, cost: 250), background: yard),
+            StoredDecor(decor: Decor(name: "Lawnmower", imageName: "lawnmower", relativeHeight: 0.15, cost: 100), background: yard),
+            StoredDecor(decor: Decor(name: "Orange Juice", imageName: "orangeJuice", relativeHeight: 0.10, cost: 30), background: yard),
+            StoredDecor(decor: Decor(name: "Parasol", imageName: "parasol", relativeHeight: 0.40, cost: 200), background: yard),
+            StoredDecor(decor: Decor(name: "Tennis Ball", imageName: "tennisBallYard", relativeHeight: 0.05, cost: 20), background: yard),
+            StoredDecor(decor: Decor(name: "Tomato Plant", imageName: "tomatoPlant", relativeHeight: 0.20, cost: 40), background: yard),
+            StoredDecor(decor: Decor(name: "Tree House", imageName: "treeHouse", relativeHeight: 0.60, cost: 500), background: yard),
+            StoredDecor(decor: Decor(name: "Wooden Table", imageName: "woodenTable", relativeHeight: 0.10, cost: 60), background: yard),
+        ]
+        for storedDecor in storedYardDecors {
+            context.insert(storedDecor)
+        }
+    }
+    
+    func createPet(mood: Double, energy: Double) -> Pet? {
+        guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return nil }
+        guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return nil }
+        return Pet(mood: mood, energy: energy, background: room)
     }
 }

@@ -12,7 +12,10 @@ class Background {
     var name: String
     var imageName: String
     
-    @Relationship var storedDecors = [StoredDecor]()
+    @Relationship(deleteRule: .cascade)
+    var shownDecors = [ShownDecor]()
+    @Relationship(deleteRule: .cascade)
+    var storedDecors = [StoredDecor]()
     
     init(name: String, imageName: String) {
         self.name = name

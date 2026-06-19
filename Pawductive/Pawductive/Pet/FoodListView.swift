@@ -84,5 +84,5 @@ struct FoodListView: View {
         .modelContainer(DataContainer(loadInventory: false).modelContainer)
     
     FoodListView(currDate: Date.now)
-        .modelContainer(DataContainer(pet: Pet(name: "Doggy", mood: 50, energy: 50)).modelContainer)
+        .modelContainer(DataContainer(mood: 50, energy: 50).modelContainer)
 }

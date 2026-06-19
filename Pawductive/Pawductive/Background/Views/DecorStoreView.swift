@@ -9,9 +9,18 @@ import SwiftData
 import SwiftUI
 
 struct DecorStoreView: View {
-    var background: Background
+    @Query private var pets: [Pet]
+    private var pet: Pet {
+        pets.first!
+    }
+    var background: Background {
+        pet.background
+    }
+    
+    let width: CGFloat
+    let height: CGFloat
     let cardWidth: CGFloat = 170
-    let cardHeight: CGFloat = 270
+    let cardHeight: CGFloat = 230
     
     @State private var showDecorShop = false
     
@@ -33,7 +42,7 @@ struct DecorStoreView: View {
                         .fontDesign(.rounded)
                 }
                 .navigationDestination(isPresented: $showDecorShop) {
-                    DecorShopView(background: background)
+                    DecorShopView()
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.orange)
@@ -55,7 +64,7 @@ struct DecorStoreView: View {
             .overlay {
                 if background.storedDecors.filter({ $0.numStored > 0 }).isEmpty {
                     ContentUnavailableView {
-                        Label("No Decors Stored Here", systemImage: "bin.xmark")
+                        Label("No Stored Decors", systemImage: "bin.xmark")
                     } description: {
                         Text("Buy some decors from the shop!")
                     }
@@ -63,17 +72,15 @@ struct DecorStoreView: View {
             }
         }
         .padding()
-        .frame(height: 370)
+        .frame(width: width, height: height)
         .background(Color(.systemFill))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
 #Preview {
-    let data = DataContainer(user: UserProfile(coins: 500))
-    let background = try! data.context.fetch(FetchDescriptor<Background>()).first!
     NavigationStack {
-        DecorStoreView(background: background)
+        DecorStoreView(width: 400 * 0.9, height: 400 * 0.8)
     }
-    .modelContainer(data.modelContainer)
+    .modelContainer(DataContainer().modelContainer)
 }

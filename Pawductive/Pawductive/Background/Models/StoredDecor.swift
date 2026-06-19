@@ -12,10 +12,11 @@ import SwiftUI
 class StoredDecor {
     var decor: Decor
     var numStored: Int
-    
+
+    @Relationship(deleteRule: .cascade)
+    var shownDecors = [ShownDecor]()
     @Relationship(inverse: \Background.storedDecors)
     var background: Background
-    @Relationship var shownDecors = [ShownDecor]()
     
     init(decor: Decor, numStored: Int = 0, background: Background) {
         self.decor = decor

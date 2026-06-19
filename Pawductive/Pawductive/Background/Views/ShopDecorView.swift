@@ -14,9 +14,9 @@ struct ShopDecorView: View {
         users.first!
     }
     
-    var storedDecor: StoredDecor
-    var cardWidth: CGFloat
-    var cardHeight: CGFloat
+    let storedDecor: StoredDecor
+    let cardWidth: CGFloat
+    let cardHeight: CGFloat
     
     var body: some View {
         VStack {
@@ -77,7 +77,7 @@ struct ShopDecorView: View {
 }
 
 #Preview {
-    let data = DataContainer(user: UserProfile(coins: 500))
+    let data = DataContainer()
     let storedDecor = try! data.context.fetch(FetchDescriptor<StoredDecor>()).first!
     ShopDecorView(storedDecor: storedDecor, cardWidth: 170, cardHeight: 300)
         .modelContainer(data.modelContainer)

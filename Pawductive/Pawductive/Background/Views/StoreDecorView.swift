@@ -11,9 +11,9 @@ import SwiftData
 struct StoreDecorView: View {
     @Environment(\.modelContext) private var context
     
-    var storedDecor: StoredDecor
-    var cardWidth: CGFloat
-    var cardHeight: CGFloat
+    let storedDecor: StoredDecor
+    let cardWidth: CGFloat
+    let cardHeight: CGFloat
     
     var body: some View {
         VStack {
@@ -27,12 +27,14 @@ struct StoreDecorView: View {
             Image(storedDecor.decor.imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: cardWidth * 0.8, height: cardWidth * 0.8)
+                .frame(width: cardHeight * 0.4, height: cardHeight * 0.4)
             
             Button {
                 withAnimation(.bouncy){
                     storedDecor.numStored -= 1
-                    context.insert(ShownDecor(storedDecor: storedDecor))
+                    context.insert(ShownDecor(order: storedDecor.background.shownDecors.count,
+                                              storedDecor: storedDecor,
+                                              background: storedDecor.background))
                 }
             } label: {
                 Text("Display Decor")
@@ -52,8 +54,8 @@ struct StoreDecorView: View {
 }
 
 #Preview {
-    let data = DataContainer(user: UserProfile(coins: 500))
+    let data = DataContainer()
     let storedDecor = try! data.context.fetch(FetchDescriptor<StoredDecor>()).first!
-    StoreDecorView(storedDecor: storedDecor, cardWidth: 170, cardHeight: 270)
+    StoreDecorView(storedDecor: storedDecor, cardWidth: 170, cardHeight: 230)
         .modelContainer(data.modelContainer)
 }

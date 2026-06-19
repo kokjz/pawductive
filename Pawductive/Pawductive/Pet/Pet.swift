@@ -80,10 +80,13 @@ class Pet {
         return 1 + level * 3
     }
     
-    init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
+    @Relationship var background: Background
+    
+    init(name: String = "Dog", mood: Double = 100, energy: Double = 100, background: Background) {
         self.name = name
         self.mood = mood
         self.energy = energy
+        self.background = background
         
         self.ageInDays = 0
         self.createdOn = Date.now
