@@ -86,11 +86,32 @@ class TimerViewModel {
             let minutesFocused = totalDuration / 60
             stats.totalMinutesFocused += minutesFocused
             stats.totalCoinsEarned += coinsEarned
+            updateStreak(for: stats)
             print("User stats updated success. Tasks: \(stats.totalTasksCompleted), Mins: \(stats.totalMinutesFocused), Coins: \(stats.totalCoinsEarned)")
         }
         try? context.save()
     }
     
+    //update streak
+    private func updateStreak(for stats: UserStats) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        if let lastActive = stats.lastActiveDate {
+            let lastActiveStartOfDay = calendar.startOfDay(for: lastActive)
+            let components = calendar.dateComponents([.day], from: lastActiveStartOfDay, to: today)
+            if let daysBetween = components.day {
+                if daysBetween == 1 {
+                    stats.currentStreak += 1
+                } else if daysBetween > 1 {
+                    stats.currentStreak = 1
+                }
+            }
+        } else {
+            stats.currentStreak = 1
+        }
+        stats.lastActiveDate = Date()
+    }
+   
     //prevent memory leaks
     deinit {
         timer?.invalidate()

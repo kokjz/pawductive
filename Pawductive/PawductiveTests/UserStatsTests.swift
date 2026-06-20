@@ -5,6 +5,7 @@
 //  Created by Kok Jun Zhe on 16/6/26.
 //
 
+import Foundation
 import Testing
 import SwiftData
 @testable import Pawductive
@@ -113,5 +114,78 @@ import SwiftData
         #expect(Achievement.OneMinAchievement.isunlocked(stats: stats) == true)
         #expect(Achievement.ThirtyMinAchievement.isunlocked(stats: stats) == true)
         #expect(Achievement.OneHourAchievement.isunlocked(stats: stats) == true)
+    }
+    
+    //test 4: user streak logic
+    @Test @MainActor func testUserStreak() throws {
+        let context = try makeInMemoryContext()
+        let viewModel = TimerViewModel()
+        viewModel.startTimer(minutes: 1)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        //first completion
+        let stats = UserStats()
+        context.insert(stats)
+        try context.save()
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 1)
+        #expect(stats.lastActiveDate != nil)
+        
+        //streak maintained
+        stats.currentStreak = 6
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        stats.lastActiveDate = yesterday
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 7) //SIX SEVENNNNN
+        
+        //no double-incrementing for two completions in same day
+        stats.currentStreak = 7
+        stats.lastActiveDate = Date()
+        try context.save()
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 7)
+        
+        //streak broken
+        stats.currentStreak = 7
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        stats.lastActiveDate = twoDaysAgo
+        viewModel.claimRewards(context: context)
+        #expect(stats.currentStreak == 1)
+    }
+    
+    //test 5: streak maintenance on app launch
+    @Test @MainActor func testLaunchStreakReset() throws {
+        //first launch
+        let container1 = DataContainer(loadInventory: false, inMemory: false) //write to disk for test only, clean up later
+        let context1 = container1.context
+        let descriptor = FetchDescriptor<UserStats>()
+        let statsList = try context1.fetch(descriptor)
+        guard let stats = statsList.first else { Issue.record("UserStats not seeded on first run"); return }
+        
+        //simulate broken streak
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: today)!
+        stats.currentStreak = 5
+        stats.lastActiveDate = twoDaysAgo
+        try context1.save()
+        
+        //second launch
+        let container2 = DataContainer(loadInventory: false, inMemory: false)
+        let context2 = container2.context
+        let statsList2 = try context2.fetch(descriptor)
+        let stats2 = statsList2.first
+        #expect(stats2?.currentStreak == 0) //should have detected broken streak and reset
+        
+        //cleanup
+        let userDescriptor = FetchDescriptor<UserProfile>()
+        if let users = try? context2.fetch(userDescriptor) {
+            for user in users { context2.delete(user) }
+        }
+        if let stats = try? context2.fetch(descriptor) {
+            for stat in stats { context2.delete(stat) }
+        }
+        try? context2.save()
     }
 }
