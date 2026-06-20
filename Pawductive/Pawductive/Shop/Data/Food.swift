@@ -25,13 +25,15 @@ class Food: Identifiable {
     var moodModifier: Modifier?
     var moodEffects: Double {
         guard let moodModifier else { return value / 5.0 }
-        return (value / 5.0) * (1.0 + Double(moodModifier.level) * 0.2)
+        let levelRatio = Double(moodModifier.level) / Double(moodModifier.maxLevel)
+        return (value / 5.0) * (1.0 + levelRatio * 1.0)
     }
     
     var energyModifier: Modifier?
     var energyEffects: Double {
         guard let energyModifier else { return value }
-        return value * (1.0 + Double(energyModifier.level) * 0.2)
+        let levelRatio = Double(energyModifier.level) / Double(energyModifier.maxLevel)
+        return value * (1.0 + levelRatio * 1.0)
     }
     
     var experiencePoints: Int {

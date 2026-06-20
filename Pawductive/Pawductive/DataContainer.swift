@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import Foundation
 
 class DataContainer {
     let modelContainer: ModelContainer
@@ -16,7 +15,14 @@ class DataContainer {
         modelContainer.mainContext
     }
     
-    init(coins: Int = 500, mood: Double = 100, energy: Double = 100, loadInventory: Bool = true, inMemory: Bool = true) {
+    init(coins: Int = 800,
+         mood: Double = 100,
+         energy: Double = 100,
+         experiencePoints: Int = 0,
+         loadInventory: Bool = true,
+         loadDecorations: Bool = true,
+         inMemory: Bool = true)
+    {
         let schema = Schema([
             Background.self,
             Modifier.self,
@@ -45,8 +51,11 @@ class DataContainer {
                 
                 insertBackgrounds()
                 insertStoredDecors()
+                if loadDecorations {
+                    loadRoomDecorations()
+                }
                 
-                let pet = createPet(mood: mood, energy: energy)!
+                let pet = createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!
                 insertPetModifiers(pet)
                 context.insert(pet)
                 
@@ -173,10 +182,31 @@ class DataContainer {
         }
     }
     
-    func createPet(mood: Double, energy: Double) -> Pet? {
+    func loadRoomDecorations() {
+        guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
+        guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
+        
+        guard let vase = room.storedDecors.filter({ $0.decor.name == "Vase" }).first else { return }
+        guard let plant = room.storedDecors.filter({ $0.decor.name == "Plant" }).first else { return }
+        guard let mirror = room.storedDecors.filter({ $0.decor.name == "Mirror" }).first else { return }
+        
+        let shownDecors = [
+            ShownDecor(order: 0, relativeX: 0.073, relativeY: 0.673, storedDecor: vase, background: room),
+            ShownDecor(order: 1, relativeX: 0.927, relativeY: 0.673, storedDecor: vase, background: room),
+            ShownDecor(order: 2, relativeX: 0.144, relativeY: 0.726, storedDecor: plant, background: room),
+            ShownDecor(order: 3, relativeX: 0.848, relativeY: 0.726, storedDecor: plant, background: room),
+            ShownDecor(order: 4, relativeX: 0.500, relativeY: 0.350, storedDecor: mirror, background: room),
+        ]
+        
+        for shownDecor in shownDecors {
+            context.insert(shownDecor)
+        }
+    }
+    
+    func createPet(mood: Double, energy: Double, experiencePoints: Int) -> Pet? {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return nil }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return nil }
-        return Pet(mood: mood, energy: energy, background: room)
+        return Pet(mood: mood, energy: energy, experiencePoints: experiencePoints, background: room)
     }
     
     //check user streak validity on launch

@@ -22,7 +22,7 @@ struct PawductiveApp: App {
                     }
                 }
         }
-        .modelContainer(DataContainer(coins: 0, loadInventory: false, inMemory: false).modelContainer)
+        .modelContainer(DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer)
     }
     
     func requestNotificationPermission() {

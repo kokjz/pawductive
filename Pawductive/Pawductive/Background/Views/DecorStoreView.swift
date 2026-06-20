@@ -18,7 +18,6 @@ struct DecorStoreView: View {
     }
     
     let width: CGFloat
-    let height: CGFloat
     let cardWidth: CGFloat = 170
     let cardHeight: CGFloat = 230
     
@@ -72,7 +71,7 @@ struct DecorStoreView: View {
             }
         }
         .padding()
-        .frame(width: width, height: height)
+        .frame(width: width)
         .background(Color(.systemFill))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -80,7 +79,7 @@ struct DecorStoreView: View {
 
 #Preview {
     NavigationStack {
-        DecorStoreView(width: 400 * 0.9, height: 400 * 0.8)
+        DecorStoreView(width: 400 * 0.9)
     }
     .modelContainer(DataContainer().modelContainer)
 }

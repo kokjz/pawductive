@@ -24,15 +24,15 @@ struct BackgroundView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .frame(width: geometry.size.width * 0.9, alignment: .center)
                 
                 Spacer()
                 
-                DecorStoreView(width: geometry.size.width * 0.9, height: geometry.size.width * 0.8)
+                DecorStoreView(width: geometry.size.width * 0.9)
             }
             .navigationTitle("Edit Background")
             .navigationBarTitleDisplayMode(.inline)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .padding(.horizontal)
         }
     }
 }
