@@ -10,19 +10,22 @@ import Testing
 @testable import Pawductive
 
 struct PetTests {
+    let room = Background(name: "Room", imageName: "room")
 
     @Test @MainActor func testCanReceiveFood() async throws {
         // Can receive food when energy is not full
-        #expect(Pet(mood: 100, energy: 99).canReceive(food: .porkBelly))
-        #expect(Pet(mood: 0, energy: 99).canReceive(food: .porkBelly))
+        #expect(Pet(mood: 100, energy: 99, background: room).canReceive(food: .porkBelly))
+        #expect(Pet(mood: 0, energy: 99, background: room).canReceive(food: .porkBelly))
         
         // Cannot receive food when energy is full
-        #expect(!Pet(mood: 100, energy: 100).canReceive(food: .porkBelly))
-        #expect(!Pet(mood: 0, energy: 100).canReceive(food: .porkBelly))
+        #expect(!Pet(mood: 100, energy: 100, background: room).canReceive(food: .porkBelly))
+        #expect(!Pet(mood: 0, energy: 100, background: room).canReceive(food: .porkBelly))
     }
     
     @Test @MainActor func testReceiveFood() async throws {
-        let pet = Pet(mood: 10, energy: 50)
+        let room = Background(name: "Room", imageName: "room")
+        
+        let pet = Pet(mood: 10, energy: 50, background: room)
         
         pet.receive(food: .chickenDrumstick)
         #expect(pet.mood == 16)
@@ -41,17 +44,17 @@ struct PetTests {
     
     @Test @MainActor func testCanReceiveToy() async throws {
         // Can receive toy when mood is not full and pet has sufficient energy
-        #expect(Pet(mood: 99, energy: 16).canReceive(toy: .rubberDuck))
+        #expect(Pet(mood: 99, energy: 16, background: room).canReceive(toy: .rubberDuck))
         
         // Cannot receive toy when mood is full
-        #expect(!Pet(mood: 100, energy: 16).canReceive(toy: .rubberDuck))
+        #expect(!Pet(mood: 100, energy: 16, background: room).canReceive(toy: .rubberDuck))
         
         // Cannot receive toy when pet does not have enough energy
-        #expect(!Pet(mood: 99, energy: 15).canReceive(toy: .rubberDuck))
+        #expect(!Pet(mood: 99, energy: 15, background: room).canReceive(toy: .rubberDuck))
     }
     
     @Test @MainActor func testReceiveToy() async throws {
-        let pet = Pet(mood: 0, energy: 30)
+        let pet = Pet(mood: 0, energy: 30, background: room)
         
         pet.receive(toy: .rubberDuck)
         #expect(pet.mood == 80)
@@ -74,7 +77,7 @@ struct PetTests {
     }
     
     @Test @MainActor func testUpdatePet() async throws {
-        let pet = Pet(mood: 100, energy: 100)
+        let pet = Pet(mood: 100, energy: 100, background: room)
         #expect(pet.ageInDays == 0)
         
         let afterOneDay = Calendar.current.date(byAdding: .day, value: 1, to: pet.createdOn)

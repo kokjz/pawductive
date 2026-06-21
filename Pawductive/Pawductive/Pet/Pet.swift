@@ -36,7 +36,8 @@ class Pet {
     var moodDecayModifier: Modifier?
     var moodHalfLife: Double {
         guard let moodDecayModifier else { return 1 }
-        return 1 + Double(moodDecayModifier.level) * 0.2
+        let levelRatio = Double(moodDecayModifier.level) / Double(moodDecayModifier.maxLevel)
+        return 1.0 + levelRatio * 1.0
     }
     
     var energy: Double
@@ -58,7 +59,8 @@ class Pet {
     var energyDecayModifier: Modifier?
     var dailyEnergyConsumption: Double {
         guard let energyDecayModifier else { return 0.2 * maxEnergy }
-        return (0.2 * maxEnergy) - Double(energyDecayModifier.level) * 2
+        let levelRatio = Double(energyDecayModifier.level) / Double(energyDecayModifier.maxLevel)
+        return (0.2 * maxEnergy) * (1.0 - levelRatio * 0.5)
     }
     
     var level: Int {
@@ -70,7 +72,7 @@ class Pet {
         Double(currentExperiencePoints) / Double(experiencePointsPerLevel)
     }
     
-    var totalExperiencePoints: Int = 0
+    var totalExperiencePoints: Int
     var experiencePointsPerLevel: Int = 3000
     var currentExperiencePoints: Int {
         level == maxLevel ? experiencePointsPerLevel : totalExperiencePoints - experiencePointsPerLevel * level
@@ -80,10 +82,14 @@ class Pet {
         return 1 + level * 3
     }
     
-    init(name: String = "Dog", mood: Double = 100, energy: Double = 100) {
+    @Relationship var background: Background
+    
+    init(name: String = "DOG", mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0, background: Background) {
         self.name = name
         self.mood = mood
         self.energy = energy
+        self.totalExperiencePoints = experiencePoints
+        self.background = background
         
         self.ageInDays = 0
         self.createdOn = Date.now
@@ -177,7 +183,7 @@ class Pet {
             if let date = self.lowMoodFutureDate() {
                 center.add(self.notification(
                     identifier: "pet.lowMood",
-                    title: "\(self.name) is sad 😔",
+                    title: "\(self.name) IS ANGRY 😠",
                     body: "Give \(self.name) some toys!",
                     futureDate: date
 //                    futureDate: Date().addingTimeInterval(10) // FOR TESTING ONLY
@@ -188,7 +194,7 @@ class Pet {
             if let date = self.lowEnergyFutureDate() {
                 center.add(self.notification(
                     identifier: "pet.lowEnergy",
-                    title: "\(self.name) is hungry 🤤",
+                    title: "\(self.name) IS HUNGRY 🤤",
                     body: "Give \(self.name) some food!",
                     futureDate: date
 //                    futureDate: Date().addingTimeInterval(10) // FOR TESTING ONLY

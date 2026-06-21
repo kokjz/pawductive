@@ -15,6 +15,9 @@ struct PetSimulatorView: View {
     }
     
     @State private var category: ShopCategory = .food
+    @State private var animatePet = false
+    @State private var showModifiers = false
+    @State private var showBackgroundEditor = false
     
     var currDate: Date {
         Date.now
@@ -26,93 +29,120 @@ struct PetSimulatorView: View {
 //        Calendar.current.date(byAdding: .day, value: numberOfTaps, to: Date.now)!
 //    }
     
-    @State private var showModifiers = false
-    @State private var animatePet = false
-    
     var body: some View {
-        VStack {
-            @Bindable var pet = pet
-            TextField("\(pet.name)", text: $pet.name)
-                .font(.title)
-                .fontWeight(.bold)
-                .fontDesign(.rounded)
-                .multilineTextAlignment(.center)
+        GeometryReader { geometry in
+            VStack {
+                @Bindable var pet = pet
+                TextField("\(pet.name)", text: $pet.name)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
+                    .multilineTextAlignment(.center)
+                    .textInputAutocapitalization(.characters)
                 
-            Text("Age: \(pet.ageInDays) days")
-                .styleAsSubHeader()
-            
-            Image(pet.image)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 300, maxHeight: 300)
-                .animation(.default, value: pet.state)
-                .onTapGesture { animatePet.toggle() }
-                .phaseAnimator([0, 1, -1, 0], trigger: animatePet)
-                { content, phase in
-                    content.rotationEffect(.degrees(phase * 5))
-                } animation: { phase in
-                    Animation.easeInOut(duration: 0.3)
+                HStack {
+                    Button {
+                        showModifiers = true
+                    } label: {
+                        Text("Open Modifiers")
+                            .fontWeight(.medium)
+                            .fontDesign(.rounded)
+                            .frame(width: geometry.size.width * 0.35)
+                    }
+                    .navigationDestination(isPresented: $showModifiers) {
+                        ModifiersView()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.cyan)
+                    
+                    Button {
+                        showBackgroundEditor = true
+                    } label: {
+                        Text("Edit Background")
+                            .fontWeight(.medium)
+                            .fontDesign(.rounded)
+                            .frame(width: geometry.size.width * 0.35)
+                    }
+                    .navigationDestination(isPresented: $showBackgroundEditor) {
+                        BackgroundView(pet: pet)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.cyan)
                 }
-
-//                // NOTE: FOR TESTING ONLY
-//                .onTapGesture {
-//                    numberOfTaps += 1
-//                }
-            
-            ZStack {
-                ValueBarView(fillRatio: pet.mood / pet.maxMood)
-                    .foregroundStyle(.yellow)
-                Text("Mood: " + pet.moodDescription)
-                    .font(.headline)
-                    .foregroundStyle(.white)
-            }
-
-            ZStack {
-                ValueBarView(fillRatio: pet.energy / pet.maxEnergy)
-                    .foregroundStyle(.green)
-                Text("Energy: " + String(format: "%.0f", pet.energy))
-                    .font(.headline)
-                    .foregroundStyle(.white)
-            }
-            
-            ZStack {
-                ValueBarView(fillRatio: pet.currentProgress)
-                    .foregroundStyle(.blue)
-                Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.experiencePointsPerLevel) XP)")")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-            }
-            
-        
-            Picker("Category", selection: $category) {
-                ForEach(ShopCategory.allCases, id: \.self) { category in
-                    Text(category.rawValue).tag(category)
+                
+                ZStack(alignment: .bottom) {
+                    CanvasView(width: geometry.size.width * 0.8, height: geometry.size.width * 0.8)
+                        .allowsHitTesting(false)
+                    Image(pet.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: geometry.size.width * 0.25, height: geometry.size.width * 0.25, alignment: .bottom)
+                        .padding(.bottom)
+                        .animation(.default, value: pet.state)
+                        .phaseAnimator([0, 1, -1, 0], trigger: animatePet)
+                        { content, phase in
+                            content.rotationEffect(.degrees(phase * 5))
+                        } animation: { phase in
+                            Animation.easeInOut(duration: 0.3)
+                        }
+                        .onTapGesture { animatePet.toggle() }
+//                        // NOTE: FOR TESTING ONLY
+//                        .onTapGesture {
+//                            numberOfTaps += 1
+//                        }
                 }
+                
+                ZStack {
+                    ValueBarView(fillRatio: pet.currentProgress, width: geometry.size.width * 0.80 + 10)
+                        .foregroundStyle(.blue)
+                    Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.experiencePointsPerLevel) XP)")")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+                
+                HStack(spacing: 10) {
+                    ZStack {
+                        ValueBarView(fillRatio: pet.mood / pet.maxMood, width: geometry.size.width * 0.4)
+                            .foregroundStyle(.yellow)
+                        Text("Mood: " + pet.moodDescription)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    }
+                    
+                    ZStack {
+                        ValueBarView(fillRatio: pet.energy / pet.maxEnergy, width: geometry.size.width * 0.4)
+                            .foregroundStyle(.green)
+                        Text("Energy: " + String(format: "%.0f", pet.energy))
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    }
+                }
+            
+                Picker("Category", selection: $category) {
+                    ForEach(ShopCategory.allCases, id: \.self) { category in
+                        Text(category.rawValue).tag(category)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: category) {
+                    withAnimation {
+                        pet.update(currDate: currDate)
+                    }
+                }
+                
+                category.listView(currDate: currDate)
+                
+                Spacer()
             }
-            .pickerStyle(.segmented)
-            .onChange(of: category) {
+            .onAppear{
                 withAnimation {
                     pet.update(currDate: currDate)
                 }
             }
-            category.listView(currDate: currDate)
-            
-            Button("Open Modifiers") {
-                showModifiers = true
-            }
-            .buttonStyle(.borderedProminent)
-            .navigationDestination(isPresented: $showModifiers) {
-                ModifiersView()
-            }
-            
-            Spacer()
+            .padding()
+            .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height, alignment: .center)
         }
-        .onAppear{
-            withAnimation {
-                pet.update(currDate: currDate)
-            }
-        }
-        .padding()
+        .tint(.orange)
     }
 }
 
@@ -120,7 +150,5 @@ struct PetSimulatorView: View {
     NavigationStack {
         PetSimulatorView()
     }
-    .modelContainer(DataContainer(
-        pet: Pet(mood: 0, energy: 0)
-    ).modelContainer)
+    .modelContainer(DataContainer(mood: 150, energy: 150, experiencePoints: 15000).modelContainer)
 }
