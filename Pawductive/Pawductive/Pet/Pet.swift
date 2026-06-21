@@ -147,7 +147,6 @@ class Pet {
         self.updateEnergy(currDate)
         self.updateAge(currDate)
         lastUpdatedOn = currDate
-        scheduleNotifications()
     }
     
     private func updateMood(_ currDate: Date) {
@@ -164,64 +163,14 @@ class Pet {
         self.ageInDays = Calendar.current.dateComponents([.day], from: createdOn, to: currDate).day ?? 0
     }
     
-    private func scheduleNotifications() {
-        let center = UNUserNotificationCenter.current()
-        
-        // Obtain the notification settings.
-        center.getNotificationSettings { settings in
-            
-            // Verify the authorization status.
-            guard (settings.authorizationStatus == .authorized) ||
-                    (settings.authorizationStatus == .provisional) else { return }
-            
-            // Remove outdated notification requests.
-            center.removePendingNotificationRequests(
-                withIdentifiers: ["pet.lowMood", "pet.lowEnergy"]
-            )
-            
-            // Schedule low mood notification.
-            if let date = self.lowMoodFutureDate() {
-                center.add(self.notification(
-                    identifier: "pet.lowMood",
-                    title: "\(self.name) IS ANGRY 😠",
-                    body: "Give \(self.name) some toys!",
-                    futureDate: date
-//                    futureDate: Date().addingTimeInterval(10) // FOR TESTING ONLY
-                ))
-            }
-            
-            // Schedule low energy notification.
-            if let date = self.lowEnergyFutureDate() {
-                center.add(self.notification(
-                    identifier: "pet.lowEnergy",
-                    title: "\(self.name) IS HUNGRY 🤤",
-                    body: "Give \(self.name) some food!",
-                    futureDate: date
-//                    futureDate: Date().addingTimeInterval(10) // FOR TESTING ONLY
-                ))
-            }
-        }
-    }
-    
-    private func notification(identifier: String, title: String, body: String, futureDate: Date) -> UNNotificationRequest {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = .default
-        
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: futureDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        return UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-    }
-    
-    private func lowMoodFutureDate() -> Date? {
+    func lowMoodFutureDate() -> Date? {
         let lowMood = 0.25 * maxMood
         guard self.mood > lowMood else { return nil }
         let daysToLowMood = moodHalfLife * log2(self.mood / lowMood)
         return self.lastUpdatedOn.addingTimeInterval(daysToLowMood * 24 * 60 * 60)
     }
     
-    private func lowEnergyFutureDate() -> Date? {
+    func lowEnergyFutureDate() -> Date? {
         let lowEnergy = 0.25 * maxEnergy
         guard self.energy > lowEnergy else { return nil }
         let daysToLowEnergy = (self.energy - lowEnergy) / dailyEnergyConsumption

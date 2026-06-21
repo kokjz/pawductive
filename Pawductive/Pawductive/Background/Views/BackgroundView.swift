@@ -11,9 +11,13 @@ import SwiftUI
 struct BackgroundView: View {
     @Query private var backgrounds: [Background]
     
-    @Bindable var pet: Pet
+    @Query private var pets: [Pet]
+    private var pet: Pet {
+        pets.first!
+    }
     
     var body: some View {
+        @Bindable var pet = pet
         GeometryReader { geometry in
             VStack {
                 CanvasView(width: geometry.size.width * 0.9, height: geometry.size.width * 0.9)
@@ -39,9 +43,8 @@ struct BackgroundView: View {
 
 #Preview {
     let data = DataContainer(coins: 10000)
-    let pet = try! data.context.fetch(FetchDescriptor<Pet>()).first!
     NavigationStack {
-        BackgroundView(pet: pet)
+        BackgroundView()
     }
     .modelContainer(data.modelContainer)
 }

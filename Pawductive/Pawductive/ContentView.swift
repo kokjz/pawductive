@@ -9,6 +9,23 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    
+    @Query private var notificationManagers: [NotificationManager]
+    private var notificationManager: NotificationManager {
+        notificationManagers.first!
+    }
+    
+    @Query private var pets: [Pet]
+    private var pet: Pet {
+        pets.first!
+    }
+    
+    @Query private var userStatsList: [UserStats]
+    private var userStats: UserStats {
+        userStatsList.first!
+    }
+    
     var body: some View {
         //tab view at bottom of screen
         TabView {
@@ -43,6 +60,14 @@ struct ContentView: View {
             }
         }
         .accentColor(.orange)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .background {
+                notificationManager.scheduleNotifications(pet: pet, userStats: userStats)
+            }
+        }
+        .onAppear {
+            notificationManager.requestNotificationPermission()
+        }
     }
 }
 

@@ -45,7 +45,8 @@ struct PetSimulatorView: View {
                         showModifiers = true
                     } label: {
                         Text("Open Modifiers")
-                            .fontWeight(.medium)
+                            .lineLimit(1)
+                            .fontWeight(.semibold)
                             .fontDesign(.rounded)
                             .frame(width: geometry.size.width * 0.35)
                     }
@@ -53,21 +54,20 @@ struct PetSimulatorView: View {
                         ModifiersView()
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.cyan)
                     
                     Button {
                         showBackgroundEditor = true
                     } label: {
                         Text("Edit Background")
-                            .fontWeight(.medium)
+                            .lineLimit(1)
+                            .fontWeight(.semibold)
                             .fontDesign(.rounded)
                             .frame(width: geometry.size.width * 0.35)
                     }
                     .navigationDestination(isPresented: $showBackgroundEditor) {
-                        BackgroundView(pet: pet)
+                        BackgroundView()
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.cyan)
                 }
                 
                 ZStack(alignment: .bottom) {
