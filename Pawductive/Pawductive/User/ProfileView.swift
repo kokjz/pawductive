@@ -12,6 +12,8 @@ struct ProfileView: View {
     //fetch stats from db
     @Query private var statsList: [UserStats]
     
+    @State private var showNotificationManager: Bool = false
+    
     var body: some View {
         VStack(spacing: 24) {
             //header
@@ -19,6 +21,15 @@ struct ProfileView: View {
                 Text("User Profile")
                     .styleAsMainHeader()
                 Spacer()
+                Image(systemName: "bell.badge.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.orange)
+                    .onTapGesture {
+                        showNotificationManager = true
+                    }
+                    .navigationDestination(isPresented: $showNotificationManager) {
+                        NotificationManagerView()
+                    }
             }
             .padding(.horizontal)
             .padding(.top)
@@ -160,6 +171,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
-        .modelContainer(DataContainer().modelContainer)
+    NavigationStack {
+        ProfileView()
+    }
+    .modelContainer(DataContainer().modelContainer)
 }

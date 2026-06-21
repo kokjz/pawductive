@@ -14,22 +14,7 @@ struct PawductiveApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear {
-                    UNUserNotificationCenter.current().getNotificationSettings { settings in
-                        if settings.authorizationStatus == .notDetermined {
-                            requestNotificationPermission()
-                        }
-                    }
-                }
         }
         .modelContainer(DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer)
-    }
-    
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(
-            options: [.alert, .badge, .sound]
-        ) { granted, error in
-            print("Granted:", granted)
-        }
     }
 }

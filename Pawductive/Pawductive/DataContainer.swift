@@ -26,6 +26,7 @@ class DataContainer {
         let schema = Schema([
             Background.self,
             Modifier.self,
+            NotificationManager.self,
             Pet.self,
             ShownDecor.self,
             StoredDecor.self,
@@ -45,9 +46,8 @@ class DataContainer {
                     loadToyInventory(user: user)
                 }
                 context.insert(user)
-                
-                let stats = UserStats()
-                context.insert(stats)
+                context.insert(UserStats())
+                context.insert(NotificationManager())
                 
                 insertBackgrounds()
                 insertStoredDecors()
