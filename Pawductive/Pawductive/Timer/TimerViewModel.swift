@@ -62,8 +62,9 @@ class TimerViewModel {
     
     //coin calculation
     private func calculateReward(context: ModelContext) {
-        //placeholder formula, 1 coin per min
-        let coinsEarned = totalDuration / 60
+        //new formula, ramps up coin gain rate per extra min spent
+        let minsFocused = Double(totalDuration / 60)
+        let coinsEarned = Int(minsFocused + (minsFocused * minsFocused / 100.0))
         print("Earned \(coinsEarned) coins")
         
         //fetch user profile
