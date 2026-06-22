@@ -76,4 +76,27 @@ import SwiftData
         #expect(viewModel.timeRemaining == 10 * 60)
         #expect(viewModel.isRunning == true)
     }
+    
+    //test 6: dynamic currency gain formula
+    @Test func testDynamicCurrGainFormula() {
+        let viewModel = TimerViewModel()
+        
+        //10min
+        viewModel.startTimer(minutes: 10)
+        let m1 = Double(viewModel.totalDuration / 60)
+        let coins1 = Int(m1 + (m1 * m1 / 100))
+        #expect(coins1 == 11)
+        
+        //30min
+        viewModel.startTimer(minutes: 30)
+        let m2 = Double(viewModel.totalDuration / 60)
+        let coins2 = Int(m2 + (m2 * m2 / 100))
+        #expect(coins2 == 39)
+        
+        //60min
+        viewModel.startTimer(minutes: 60)
+        let m3 = Double(viewModel.totalDuration / 60)
+        let coins3 = Int(m3 + (m3 * m3 / 100))
+        #expect(coins3 == 96)
+    }
 }
