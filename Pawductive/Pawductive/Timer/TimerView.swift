@@ -14,8 +14,8 @@ struct TimerView: View {
     @State private var viewModel = TimerViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    
     @Environment(\.scenePhase) private var scenePhase
+    @State private var settingsManager = SettingsManager.shared
     
     var body: some View {
         VStack(spacing: 40) {
@@ -48,19 +48,53 @@ struct TimerView: View {
             
             //control buttons
             if viewModel.isRunning {
-                Button(action: {
-                    viewModel.failSession()
-                    dismiss()
-                }) {
-                    Text("Give Up")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.red)
-                        .cornerRadius(12)
+                HStack(spacing: 16) {
+                    if settingsManager.isTimerPauseEnabled {
+                        //if pause toggle enabled have both pause and giveup buttons
+                        Button(action: {
+                            viewModel.failSession()
+                            dismiss()
+                        }) {
+                            Text("Give Up")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.red.opacity(0.9))
+                                .cornerRadius(12)
+                        }
+                        Button(action: {
+                            if viewModel.isPaused {
+                                viewModel.resumeTimer()
+                            } else {
+                                viewModel.pauseTimer()
+                            }
+                        }) {
+                            Text(viewModel.isPaused ? "Resume" : "Pause")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(viewModel.isPaused ? Color.green : Color.yellow)
+                                .cornerRadius(12)
+                        }
+                    } else {
+                        //if pause toggle disabled only give up button
+                        Button(action: {
+                            viewModel.failSession()
+                            dismiss()
+                        }) {
+                            Text("Give Up")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.red)
+                                .cornerRadius(12)
+                        }
+                    }
                 }
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 50)
             } else if viewModel.isCompleted {
                 VStack(spacing: 20) {
                     Text("Task Completed!")
@@ -87,9 +121,9 @@ struct TimerView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
         
-        //detect if user exits app
+        //detect if user exits app while timer not paused
         .onChange(of: scenePhase) { oldValue, newValue in
-            if newValue == .background && viewModel.isRunning {
+            if newValue == .background && viewModel.isRunning && !viewModel.isPaused {
                 viewModel.failSession()
                 dismiss() //back to task queue
             }

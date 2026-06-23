@@ -25,6 +25,7 @@ import SwiftData
         #expect(viewModel.timeRemaining == 0)
         #expect(viewModel.isRunning == false)
         #expect(viewModel.isCompleted == false)
+        #expect(viewModel.isPaused == false)
     }
 
     //test 2: correct seconds calculation on timer start
@@ -36,6 +37,7 @@ import SwiftData
         #expect(viewModel.timeRemaining == 25 * 60)
         #expect(viewModel.isRunning == true)
         #expect(viewModel.isCompleted == false)
+        #expect(viewModel.isPaused == false)
     }
 
     //test 3: failed session resets state
@@ -47,6 +49,7 @@ import SwiftData
         
         #expect(viewModel.isRunning == false)
         #expect(viewModel.timeRemaining == 0)
+        #expect(viewModel.isPaused == false)
     }
 
     //test 4: rewards write accurately to database
@@ -98,5 +101,28 @@ import SwiftData
         let m3 = Double(viewModel.totalDuration / 60)
         let coins3 = Int(m3 + (m3 * m3 / 100))
         #expect(coins3 == 96)
+    }
+    
+    //test 7: pause and resume
+    @Test func testPauseAndResume() {
+        let viewModel = TimerViewModel()
+        
+        viewModel.startTimer(minutes: 25)
+        #expect(viewModel.isRunning == true)
+        #expect(viewModel.isPaused == false)
+        
+        viewModel.pauseTimer()
+        #expect(viewModel.isPaused == true)
+        #expect(viewModel.isRunning == true)
+        
+        viewModel.resumeTimer()
+        #expect(viewModel.isPaused == false)
+        #expect(viewModel.isRunning == true)
+        
+        viewModel.pauseTimer()
+        #expect(viewModel.isPaused == true)
+        viewModel.failSession()
+        #expect(viewModel.isPaused == false)
+        #expect(viewModel.isRunning == false)
     }
 }
