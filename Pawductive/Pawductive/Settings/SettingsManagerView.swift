@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct SettingsManagerView: View {
-    @Bindable private var settings = SettingsManager.shared
+    @State private var settingsManager = SettingsManager.shared
     
     var body: some View {
-        VStack(spacing: 24) {
-            //header
-            HStack {
-                Text("Settings").styleAsMainHeader()
-                Spacer()
-            }
-            .padding(.horizontal)
-            .padding(.top)
-            
-            //settings list
-            List {
-                
+        @Bindable var settingsManager = settingsManager
+        Form {
+            Section("Timer Configuration") {
+                Toggle("Enable Timer Pausing", isOn: $settingsManager.isTimerPauseEnabled)
             }
         }
+        .navigationTitle("Manage Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
 #Preview {
-    SettingsManagerView()
+    NavigationStack {
+        SettingsManagerView()
+    }
 }
