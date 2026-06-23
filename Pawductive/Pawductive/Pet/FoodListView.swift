@@ -19,6 +19,11 @@ struct FoodListView: View {
         pets.first!
     }
     
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
+    }
+    
     @State private var eatTask: Task<Void, Never>?
     
     var currDate: Date
@@ -57,6 +62,14 @@ struct FoodListView: View {
                                 guard pet.state == .eating else { return }
                                 pet.state = .resting
                             }
+                            
+                            missionManager.updateActiveMissions(
+                                missions: DataContainer.dailyMissions,
+                                details: MissionDetails(
+                                    action: "GIVE",
+                                    targetType: "FOOD",
+                                    targetName: food.name),
+                                progress: 1)
                         }
                     }
                 }

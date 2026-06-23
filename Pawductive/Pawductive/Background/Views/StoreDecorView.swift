@@ -11,6 +11,11 @@ import SwiftData
 struct StoreDecorView: View {
     @Environment(\.modelContext) private var context
     
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
+    }
+    
     let storedDecor: StoredDecor
     let cardWidth: CGFloat
     let cardHeight: CGFloat
@@ -18,7 +23,8 @@ struct StoreDecorView: View {
     var body: some View {
         VStack {
             Text(storedDecor.decor.name)
-                .styleAsSubHeader()
+                .font(.headline)
+                .fontDesign(.rounded)
             
             Text("Display \(storedDecor.shownDecors.count) / Store \(storedDecor.numStored)")
                 .font(.caption)
@@ -27,15 +33,24 @@ struct StoreDecorView: View {
             Image(storedDecor.decor.imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: cardHeight * 0.4, height: cardHeight * 0.4)
+                .frame(width: cardWidth * 0.5, height: cardWidth * 0.5)
             
             Button {
                 withAnimation(.bouncy){
                     storedDecor.numStored -= 1
-                    context.insert(ShownDecor(order: storedDecor.background.shownDecors.count,
-                                              storedDecor: storedDecor,
-                                              background: storedDecor.background))
+                    context.insert(
+                        ShownDecor(order: storedDecor.background.shownDecors.count,
+                                   storedDecor: storedDecor,
+                                   background: storedDecor.background))
                 }
+                
+                missionManager.updateActiveMissions(
+                    missions: DataContainer.dailyMissions,
+                    details: MissionDetails(
+                        action: "DISPLAY",
+                        targetType: "DECOR",
+                        targetName: storedDecor.decor.name),
+                    progress: 1)
             } label: {
                 Text("Display Decor")
                     .font(.caption)
@@ -56,6 +71,6 @@ struct StoreDecorView: View {
 #Preview {
     let data = DataContainer()
     let storedDecor = try! data.context.fetch(FetchDescriptor<StoredDecor>()).first!
-    StoreDecorView(storedDecor: storedDecor, cardWidth: 170, cardHeight: 230)
+    StoreDecorView(storedDecor: storedDecor, cardWidth: 150, cardHeight: 180)
         .modelContainer(data.modelContainer)
 }

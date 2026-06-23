@@ -10,9 +10,13 @@ import SwiftData
 
 struct ToyShopView: View {
     @Query private var users: [UserProfile]
-    
     private var user: UserProfile {
         users.first!
+    }
+    
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
     }
     
     func description(_ toy: Toy) -> String {
@@ -44,8 +48,14 @@ struct ToyShopView: View {
                 
                 Button {
                     user.buy(toy: toy)
+                    missionManager.updateActiveMissions(
+                        missions: DataContainer.dailyMissions,
+                        details: MissionDetails(
+                            action: "BUY",
+                            targetType: "TOY",
+                            targetName: toy.name),
+                        progress: 1)
                 } label: {
-                    // Designed by vectorsmarket15 from www.flaticon.com
                     HStack {
                         Text("\(toy.cost)")
                             .fontWeight(.semibold)

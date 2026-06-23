@@ -19,6 +19,11 @@ struct ToyListView: View {
         pets.first!
     }
     
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
+    }
+    
     @State private var playTask: Task<Void, Never>?
     
     var currDate: Date
@@ -57,6 +62,14 @@ struct ToyListView: View {
                                 guard pet.state == .playing else { return }
                                 pet.state = .resting
                             }
+                            
+                            missionManager.updateActiveMissions(
+                                missions: DataContainer.dailyMissions,
+                                details: MissionDetails(
+                                    action: "GIVE",
+                                    targetType: "TOY",
+                                    targetName: toy.name),
+                                progress: 1)
                         }
                     }
                 }

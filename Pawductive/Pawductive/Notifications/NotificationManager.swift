@@ -27,14 +27,6 @@ class NotificationManager {
         self.minutesBeforeStreakExpires = minutesBeforeStreakExpires
     }
     
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(
-            options: [.alert, .badge, .sound]
-        ) { granted, error in
-            print("Granted:", granted)
-        }
-    }
-    
     func scheduleNotifications(pet: Pet, userStats: UserStats) {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
