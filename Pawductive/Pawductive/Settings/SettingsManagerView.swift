@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct SettingsManagerView: View {
+    @Bindable private var settings = SettingsManager.shared
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 24) {
+            //header
+            HStack {
+                Text("Settings").styleAsMainHeader()
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            //settings list
+            List {
+                
+            }
+        }
     }
 }
 
