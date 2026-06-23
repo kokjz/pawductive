@@ -13,6 +13,7 @@ struct ProfileView: View {
     @Query private var statsList: [UserStats]
     
     @State private var showNotificationManager: Bool = false
+    @State private var showSettingsManager: Bool = false
     
     var body: some View {
         VStack(spacing: 24) {
@@ -29,6 +30,15 @@ struct ProfileView: View {
                     }
                     .navigationDestination(isPresented: $showNotificationManager) {
                         NotificationManagerView()
+                    }
+                Image(systemName: "gearshape.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundStyle(.orange)
+                    .onTapGesture {
+                        showSettingsManager = true
+                    }
+                    .navigationDestination(isPresented: $showSettingsManager) {
+                        SettingsManagerView()
                     }
             }
             .padding(.horizontal)
