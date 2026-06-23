@@ -15,7 +15,7 @@ class TimerViewModel {
     var totalDuration: Int = 0
     var isRunning: Bool = false
     var isCompleted: Bool = false
-    
+    var isPaused: Bool = false
     private var timer: Timer?
     
     //initiate timer
@@ -24,10 +24,22 @@ class TimerViewModel {
         self.timeRemaining = self.totalDuration
         self.isRunning = true
         self.isCompleted = false
-        
+        self.isPaused = false
         timer?.invalidate() //stop old timers
         
         //schedule tick timer on main thread
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in self?.tick() }
+    }
+    
+    func pauseTimer() {
+        guard isRunning && !isPaused else { return }
+        timer?.invalidate()
+        self.isPaused = true
+    }
+    
+    func resumeTimer() {
+        guard isRunning && isPaused else { return }
+        self.isPaused = false
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in self?.tick() }
     }
     
@@ -45,6 +57,7 @@ class TimerViewModel {
         timer?.invalidate()
         self.isRunning = false
         self.isCompleted = true
+        self.isPaused = false
     }
     
     //end session success: rewards
@@ -56,6 +69,7 @@ class TimerViewModel {
     func failSession() {
         timer?.invalidate()
         self.isRunning = false
+        self.isPaused = false
         self.timeRemaining = 0
         print("Session failed")
     }
