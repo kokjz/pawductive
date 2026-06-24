@@ -16,8 +16,14 @@ class SettingsManager {
         didSet { UserDefaults.standard.set(isTimerPauseEnabled, forKey: "isTimerPauseEnabled") }
     }
     
+    var gracePeriodSeconds: Int {
+        didSet { UserDefaults.standard.set(gracePeriodSeconds, forKey: "gracePeriodSeconds") }
+    }
+    
     private init() {
-        //set to false by default
+        //timer pause set to false by default
         self.isTimerPauseEnabled = UserDefaults.standard.object(forKey: "isTimerPauseEnabled") as? Bool ?? false
+        //grace period set to 0 by default
+        self.gracePeriodSeconds = UserDefaults.standard.object(forKey: "gracePeriodSeconds") as? Int ?? 0
     }
 }

@@ -92,8 +92,13 @@ class DataContainer {
                 checkAndResetBrokenStreak()
                 print("User profile found, skipping seeding")
                 
-                let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first!
-                missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
+                if let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first {
+                    missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
+                } else {
+                    let missionManager = MissionManager(numActiveMissions: 3)
+                    missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
+                    context.insert(missionManager)
+                }
             }
         } catch {
             fatalError("Could not create model container: \(error)")
