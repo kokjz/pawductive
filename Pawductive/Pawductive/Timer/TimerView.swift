@@ -12,10 +12,11 @@ struct TimerView: View {
     let task: TaskItem
     
     @State private var viewModel = TimerViewModel()
+    @State private var settingsManager = SettingsManager.shared
+    @State private var backgroundTime: Date? = nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
-    @State private var settingsManager = SettingsManager.shared
     
     var body: some View {
         VStack(spacing: 40) {
@@ -121,11 +122,28 @@ struct TimerView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
         
-        //detect if user exits app while timer not paused
         .onChange(of: scenePhase) { oldValue, newValue in
-            if newValue == .background && viewModel.isRunning && !viewModel.isPaused {
-                viewModel.failSession()
-                dismiss() //back to task queue
+            if newValue == .background {
+                //user exit app
+                if viewModel.isRunning && !viewModel.isPaused {
+                    //no explicit pause
+                    viewModel.pauseTimer()
+                    backgroundTime = Date()
+                }
+            } else if newValue == .active {
+                //user return to app
+                if let leaveTime = backgroundTime {
+                    let elapsed = Date().timeIntervalSince(leaveTime)
+                    backgroundTime = nil
+                    if elapsed > Double(settingsManager.gracePeriodSeconds) {
+                        //grace period exceeded
+                        viewModel.failSession()
+                        dismiss()
+                    } else {
+                        //within grace period
+                        viewModel.resumeTimer()
+                    }
+                }
             }
         }
     }
