@@ -18,8 +18,8 @@ struct DecorStoreView: View {
     }
     
     let width: CGFloat
-    let cardWidth: CGFloat = 170
-    let cardHeight: CGFloat = 230
+    let cardWidth: CGFloat = 150
+    let cardHeight: CGFloat = 180
     
     @State private var showDecorShop = false
     
@@ -50,7 +50,7 @@ struct DecorStoreView: View {
             ScrollView(.horizontal) {
                 LazyHGrid(rows: [
                     GridItem(.adaptive(minimum: cardHeight, maximum: cardHeight), spacing: 20)
-                ], spacing: 20) {
+                ], spacing: 10) {
                     ForEach(background.storedDecors.filter({
                         $0.numStored > 0
                     }).sorted(by: {

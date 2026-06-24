@@ -15,6 +15,25 @@ class DataContainer {
         modelContainer.mainContext
     }
     
+    static let dailyMissions = [
+        DailyMission(title: "Finish 3 tasks", requirement: 3, reward: 5, isSpecific: true,
+                     details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Number")),
+        DailyMission(title: "Focus for 15 minutes", requirement: 15, reward: 5, isSpecific: true,
+                     details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Duration")),
+        DailyMission(title: "Buy 3 food", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "BUY", targetType: "FOOD", targetName: "")),
+        DailyMission(title: "Give 3 food", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "GIVE", targetType: "FOOD", targetName: "")),
+        DailyMission(title: "Buy 3 toys", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "BUY", targetType: "TOY", targetName: "")),
+        DailyMission(title: "Give 3 toys", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "GIVE", targetType: "TOY", targetName: "")),
+        DailyMission(title: "Buy 3 decors", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "BUY", targetType: "DECOR", targetName: "")),
+        DailyMission(title: "Display 3 decors", requirement: 3, reward: 5, isSpecific: false,
+                     details: MissionDetails(action: "DISPLAY", targetType: "DECOR", targetName: "")),
+    ]
+    
     init(coins: Int = 800,
          mood: Double = 100,
          energy: Double = 100,
@@ -25,6 +44,8 @@ class DataContainer {
     {
         let schema = Schema([
             Background.self,
+            DailyMission.self,
+            MissionManager.self,
             Modifier.self,
             NotificationManager.self,
             Pet.self,
@@ -49,6 +70,10 @@ class DataContainer {
                 context.insert(UserStats())
                 context.insert(NotificationManager())
                 
+                let missionManager = MissionManager(numActiveMissions: 3)
+                missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
+                context.insert(missionManager)
+                
                 insertBackgrounds()
                 insertStoredDecors()
                 if loadDecorations {
@@ -66,25 +91,28 @@ class DataContainer {
             } else {
                 checkAndResetBrokenStreak()
                 print("User profile found, skipping seeding")
+                
+                let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first!
+                missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
             }
         } catch {
             fatalError("Could not create model container: \(error)")
         }
     }
     
-    func loadFoodInventory(user: UserProfile) {
+    private func loadFoodInventory(user: UserProfile) {
         user.foodInventory[Food.corn.name] = 3
         user.foodInventory[Food.chickenWing.name] = 3
         user.foodInventory[Food.porkBelly.name] = 3
     }
     
-    func loadToyInventory(user: UserProfile) {
+    private func loadToyInventory(user: UserProfile) {
         user.toyInventory[Toy.frisbee.name] = 3
         user.toyInventory[Toy.treeBranch.name] = 3
         user.toyInventory[Toy.rubberDuck.name] = 3
     }
 
-    func insertPetModifiers(_ pet: Pet) {
+    private func insertPetModifiers(_ pet: Pet) {
         let moodModifier =
             Modifier(label: "Pet1", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
         let energyModifier =
@@ -97,7 +125,7 @@ class DataContainer {
         context.insert(energyModifier)
     }
     
-    func insertFoodModifiers() {
+    private func insertFoodModifiers() {
         let costModifier =
             Modifier(label: "Food1", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2)
         let moodModifier =
@@ -116,7 +144,7 @@ class DataContainer {
         context.insert(energyModifier)
     }
     
-    func insertToyModifiers() {
+    private func insertToyModifiers() {
         let costModifier =
             Modifier(label: "Toy1", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2)
         let moodModifier =
@@ -135,7 +163,7 @@ class DataContainer {
         context.insert(energyModifier)
     }
     
-    func insertBackgrounds() {
+    private func insertBackgrounds() {
         let backgrounds = [
             Background(name: "Room", imageName: "room"),
             Background(name: "Yard", imageName: "yard"),
@@ -146,7 +174,7 @@ class DataContainer {
         }
     }
     
-    func insertStoredDecors() {
+    private func insertStoredDecors() {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
         
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
@@ -182,7 +210,7 @@ class DataContainer {
         }
     }
     
-    func loadRoomDecorations() {
+    private func loadRoomDecorations() {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
         
@@ -203,7 +231,7 @@ class DataContainer {
         }
     }
     
-    func createPet(mood: Double, energy: Double, experiencePoints: Int) -> Pet? {
+    private func createPet(mood: Double, energy: Double, experiencePoints: Int) -> Pet? {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return nil }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return nil }
         return Pet(mood: mood, energy: energy, experiencePoints: experiencePoints, background: room)

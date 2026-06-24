@@ -14,6 +14,13 @@ struct PawductiveApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    UNUserNotificationCenter.current().requestAuthorization(
+                        options: [.alert, .badge, .sound]
+                    ) { granted, error in
+                        print("Granted:", granted)
+                    }
+                }
         }
         .modelContainer(DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer)
     }

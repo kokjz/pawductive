@@ -14,6 +14,11 @@ struct ShopDecorView: View {
         users.first!
     }
     
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
+    }
+    
     let storedDecor: StoredDecor
     let cardWidth: CGFloat
     let cardHeight: CGFloat
@@ -38,6 +43,14 @@ struct ShopDecorView: View {
                         user.coins -= storedDecor.decor.cost
                         storedDecor.numStored += 1
                     }
+                    
+                    missionManager.updateActiveMissions(
+                        missions: DataContainer.dailyMissions,
+                        details: MissionDetails(
+                            action: "BUY",
+                            targetType: "DECOR",
+                            targetName: storedDecor.decor.name),
+                        progress: 1)
                 } label: {
                     Text("BUY").frame(maxWidth: .infinity)
                         .font(.caption)

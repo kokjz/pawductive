@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct FoodListView: View {
+struct FoodStoreView: View {
     @Query private var users: [UserProfile]
     private var user: UserProfile {
         users.first!
@@ -17,6 +17,11 @@ struct FoodListView: View {
     @Query private var pets: [Pet]
     private var pet: Pet {
         pets.first!
+    }
+    
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
     }
     
     @State private var eatTask: Task<Void, Never>?
@@ -57,6 +62,14 @@ struct FoodListView: View {
                                 guard pet.state == .eating else { return }
                                 pet.state = .resting
                             }
+                            
+                            missionManager.updateActiveMissions(
+                                missions: DataContainer.dailyMissions,
+                                details: MissionDetails(
+                                    action: "GIVE",
+                                    targetType: "FOOD",
+                                    targetName: food.name),
+                                progress: 1)
                         }
                     }
                 }
@@ -69,20 +82,22 @@ struct FoodListView: View {
             if user.foodInventory.isEmpty {
                 ContentUnavailableView {
                     Label("No More Food...", systemImage: "basket")
+                        .font(.headline)
+                        .imageScale(.small)
                 } description: {
                     Text("Visit the shop to buy more food!")
+                        .font(.subheadline)
                 }
             }
         }
         .listStyle(.plain)
-        .frame(maxHeight: 200)
     }
 }
 
 #Preview {
-    FoodListView(currDate: Date.now)
+    FoodStoreView(currDate: Date.now)
         .modelContainer(DataContainer(loadInventory: false).modelContainer)
     
-    FoodListView(currDate: Date.now)
+    FoodStoreView(currDate: Date.now)
         .modelContainer(DataContainer(mood: 50, energy: 50).modelContainer)
 }

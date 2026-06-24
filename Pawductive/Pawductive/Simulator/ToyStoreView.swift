@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct ToyListView: View {
+struct ToyStoreView: View {
     @Query private var users: [UserProfile]
     private var user: UserProfile {
         users.first!
@@ -17,6 +17,11 @@ struct ToyListView: View {
     @Query private var pets: [Pet]
     private var pet: Pet {
         pets.first!
+    }
+    
+    @Query private var missionManagers: [MissionManager]
+    private var missionManager: MissionManager {
+        missionManagers.first!
     }
     
     @State private var playTask: Task<Void, Never>?
@@ -57,6 +62,14 @@ struct ToyListView: View {
                                 guard pet.state == .playing else { return }
                                 pet.state = .resting
                             }
+                            
+                            missionManager.updateActiveMissions(
+                                missions: DataContainer.dailyMissions,
+                                details: MissionDetails(
+                                    action: "GIVE",
+                                    targetType: "TOY",
+                                    targetName: toy.name),
+                                progress: 1)
                         }
                     }
                 }
@@ -69,19 +82,21 @@ struct ToyListView: View {
             if user.toyInventory.isEmpty {
                 ContentUnavailableView {
                     Label("No More Toys...", systemImage: "basket")
+                        .font(.headline)
+                        .imageScale(.small)
                 } description: {
                     Text("Visit the shop to buy more toys!")
+                        .font(.subheadline)
                 }
             }
         }
         .listStyle(.plain)
-        .frame(maxHeight: 200)
     }
 }
 
 #Preview {
-    ToyListView(currDate: Date.now)
+    ToyStoreView(currDate: Date.now)
         .modelContainer(DataContainer(loadInventory: false).modelContainer)
-    ToyListView(currDate: Date.now)
+    ToyStoreView(currDate: Date.now)
         .modelContainer(DataContainer(mood: 50, energy: 50).modelContainer)
 }

@@ -129,10 +129,10 @@ struct PetSimulatorView: View {
                         pet.update(currDate: currDate)
                     }
                 }
+                .frame(width: geometry.size.width * 0.8 + 10)
                 
                 category.listView(currDate: currDate)
-                
-                Spacer()
+                    .frame(width: geometry.size.width * 0.8 + 10)
             }
             .onAppear{
                 withAnimation {

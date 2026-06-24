@@ -25,9 +25,9 @@ enum ShopCategory: String, CaseIterable {
     func listView(currDate: Date) -> some View {
         switch self {
         case .food:
-            FoodListView(currDate: currDate)
+            FoodStoreView(currDate: currDate)
         case .toy:
-            ToyListView(currDate: currDate)
+            ToyStoreView(currDate: currDate)
         }
     }
 }

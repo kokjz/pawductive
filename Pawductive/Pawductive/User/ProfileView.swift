@@ -44,48 +44,56 @@ struct ProfileView: View {
             .padding(.horizontal)
             .padding(.top)
             
-            if let stats = statsList.first {
-                //stats dashboard
+            ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Statistics")
+                    Text("Daily Missions")
                         .styleAsSubHeader()
-                        .padding(.horizontal)
-                    streakCard(streak: stats.currentStreak)
-                        .padding(.horizontal)
-                    HStack(spacing: 16) {
-                        statCard(
-                            title: "Total Tasks Completed",
-                            value: "\(stats.totalTasksCompleted)",
-                            icon: "checkmark.circle.fill",
-                            color: .green
-                        )
-                        statCard(
-                            title: "Total Minutes Focused",
-                            value: "\(stats.totalMinutesFocused)",
-                            icon: "clock.fill",
-                            color: .blue
-                        )
-                    }
-                    .padding(.horizontal)
+                    DailyMissionsView()
                 }
+                .padding(.horizontal)
                 
-                //achievement list
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Achievements")
-                        .styleAsSubHeader()
-                        .padding(.horizontal)
-                    ScrollView {
+                if let stats = statsList.first {
+                    //stats dashboard
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Statistics")
+                            .styleAsSubHeader()
+                            
+                        streakCard(streak: stats.currentStreak)
+                            
+                        HStack(spacing: 16) {
+                            statCard(
+                                title: "Total Tasks Completed",
+                                value: "\(stats.totalTasksCompleted)",
+                                icon: "checkmark.circle.fill",
+                                color: .green
+                            )
+                            statCard(
+                                title: "Total Minutes Focused",
+                                value: "\(stats.totalMinutesFocused)",
+                                icon: "clock.fill",
+                                color: .blue
+                            )
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding()
+                    
+                    //achievement list
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Achievements")
+                            .styleAsSubHeader()
+                            .padding(.horizontal)
                         VStack(spacing: 12) {
                             ForEach(sortedAchievements(for: stats)) { achievement in
                                 achievementRow(achievement: achievement, stats: stats) }
                         }
                         .padding(.horizontal)
                     }
+                } else { //database empty
+                    ContentUnavailableView("No Stats Available", systemImage: "person.crop.circle.badge.exclamationmark")
                 }
-            } else { //database empty
-                ContentUnavailableView("No Stats Available", systemImage: "person.crop.circle.badge.exclamationmark")
+                Spacer()
             }
-            Spacer()
         }
         .background(Color(.systemGroupedBackground))
     }
@@ -134,6 +142,7 @@ struct ProfileView: View {
             Spacer()
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }

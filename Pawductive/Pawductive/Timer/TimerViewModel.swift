@@ -104,6 +104,22 @@ class TimerViewModel {
             updateStreak(for: stats)
             print("User stats updated success. Tasks: \(stats.totalTasksCompleted), Mins: \(stats.totalMinutesFocused), Coins: \(stats.totalCoinsEarned)")
         }
+        
+        //update daily missions
+        if let missionManager = try? context.fetch(FetchDescriptor<MissionManager>()).first {
+            missionManager.updateActiveMissions(
+                missions: DataContainer.dailyMissions,
+                details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Number"),
+                progress: 1
+            )
+            
+            missionManager.updateActiveMissions(
+                missions: DataContainer.dailyMissions,
+                details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Duration"),
+                progress: Int(minsFocused)
+            )
+        }
+            
         try? context.save()
     }
     

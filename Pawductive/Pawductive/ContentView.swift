@@ -65,9 +65,6 @@ struct ContentView: View {
                 notificationManager.scheduleNotifications(pet: pet, userStats: userStats)
             }
         }
-        .onAppear {
-            notificationManager.requestNotificationPermission()
-        }
     }
 }
 
