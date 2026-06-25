@@ -156,50 +156,84 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 ---
 
 
-## 🏗️ Software Engineering Practices & Architecture
+## 🏗️ Software Engineering Best-Practices & Application Architecture
 
 
 ### 1. Model-View-ViewModel (MVVM)
-The UI is decoupled from the business logic to ensure a testable and maintainable codebase:
-*   **Views:** `ContentView.swift`, `TaskQueueView.swift`, and `TimerView.swift` handle pure UI layouts and transitions.
-*   **ViewModels:** `TimerViewModel.swift` manages the state-driven properties (`timeRemaining`, `isRunning`), completely independent of SwiftUI.
+The UI is decoupled from the business logic to ensure a testable and maintainable codebase. This provides several key advantages, such as decoupling between frontend and backend, greater ease of testing, and reusability.
+
+* **Models:** These `.swift` files represent the raw data structures, persistent database schemas, and static catalogs of the application. Models are pure structures or reference types that hold state, remaining independent of how the UI is rendered. The current list of models include `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `Food`, `Toy`, `Pet`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
+* **Views:** These `.swift` files represent the declarative UI of the application. Built in **SwiftUI**, views are solely responsible for rendering layouts, responding to user interaction, and observing realtime changes in viewmodels, containing no business logic or manual database transaction code. The current list of views include `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
+* **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run asynchronous timers, and coordinate context transactions with the database. The current list of viewmodels include `MissionManager`, `NotificationManager`, `SettingsManager`, `TimerViewModel`, and `DataContainer`.
+
+Additionally, to round up the list of `.swift` files that are part of the main application, `PawductiveApp` serves as the entry point for the application.
 
 
 ### 2. SwiftData Schema & Local Persistence
-Clean database schema to manage user data locally:
-*   `TaskItem`: Tracks task titles, expected durations, completion states, and creation dates.
-*   `UserProfile`: Tracks the user's persistent coin balance and stores the food and toys bought from the shop.
-*   `Pet`: Tracks the mood and energy levels over time.
-*   **Explicit Saving:** To prevent data loss when developers force-kill the app during Xcode simulation, explicit context saving (`try? modelContext.save()`) on database transactions is implemented.
+A clean, relational database schema is used to manage all user, task, pet, and game-economy data locally using **SwiftData**.
+* `TaskItem`: Tracks individual task titles, expected focus durations, completion states, and creation timestamps.
+* `UserProfile`: Tracks the user's active, spendable coin wallet, along with dictionaries storing their food and toy inventories.
+* `Pet`: Tracks the pet's name, age, level progression, cumulative XP, and real-time mood and energy decay.
+* `UserStats`: Tracks global lifetime user progression , including total completed tasks, total focus minutes, lifetime coins earned, and consecutive daily focus streaks.
+* `DailyMission`: Tracks the title, target requirements, active progress, claimed states, and reward amounts of individual daily missions.
+* `MissionManager`: Manages the current active daily missions list, checking calendar dates to trigger daily resets, and randomly drawing new missions from the global catalog.
+* `Modifier`: Tracks unlockable, level-up upgrades for pet decay rates and item efficiencies (e.g., lower store prices, reduced energy/mood decay, increased food calories).
+* `NotificationManager`: Tracks user configurations for local iOS push notifications (such as toggling alerts for low pet stats or expiring daily streaks).
+* `Background`: Represents distinct visual backdrops (e.g., the indoor "Room" or outdoor "Yard") where the pet resides.
+* `StoredDecor`: Represents individual decoration assets owned by the user, linked to a specific background room.
+* `ShownDecor`: Represents active decorations currently placed in the pet's environment, saving their relative coordinate ratios and layout order.
+
+**Explicit Saving:** To prevent data loss when developers force-kill the app during Xcode simulation, explicit context saving (by calling `try? modelContext.save()`) on database transactions is implemented.
 
 
 ### 3. Continuous Integration & Unit Testing
-Implements the modern **Swift Testing** framework to write test suites verifying the core logic. The implemented unit tests ensure the following:
+Implements the modern **Swift Testing** framework to write test suites verifying the core logic. Through various `.swift` test suite files, the following unit tests are implemented and ensure the following:
 
-**Tasks:**
-* Tasks can be saved successfully to the local database.
-* Tasks can be deleted successfully from the local database.
-* Task state can be toggled succesfully from incomplete to complete.
-* Tasks are created in expected time with date tolerance.
+**`PetTests`**
+* _`testCanReceiveFood`_: 
+* _`testReceiveFood`_:
+* _`testCanReceiveToy`_:
+* _`testReceiveToy`_:
+* _`testUpdatePet`_:
 
-**Timer:**
-* Timer starts with clean, empty values.
-* Minutes and seconds are calculated correctly on timer start.
-* Session failure resets the timer state.
-* Rewards are written accurate to the local databse on timer completion.
-* Timers running simultaneously are not allowed.
+**`SettingsManagerTests`**
+* _`testSettingsManagerMemoryAddress`_:
+* _`testSettingsManagerPersistence`_:
 
-**User Model:**
-*   The coins held by the user determine the food and toys the user can buy from the shop.
-*   Coins are deducted when the user spend coins in the shop.
-*   The inventory is updated when the user buys food and toys from the shop or when the user gives food and toys to the pet.
+**`TaskItemTests`**
+* _`testCreateAndSaveTask`_: Tasks can be saved successfully to the local database.
+* _`testDeleteTask`_: Tasks can be deleted successfully from the local database.
+* _`testToggleTaskCompletion`_: Task state can be toggled succesfully from incomplete to complete.
+* _`testTaskItemInitializationDateTolerance`_: Tasks are created in expected time with date tolerance.
 
-**Pet Model:**
-*   The mood and energy levels decay over time according to predefined constants.
-*   The mood and energy levels update when the pet receives food and toys.
+**`TimerViewModelTests`**
+* _`testInitialState`_: Timer starts with clean, empty values.
+* _`testStartTimer`_: Minutes and seconds are calculated correctly on timer start.
+* _`testFailSession`_: Session failure resets the timer state.
+* _`testClaimRewardsCreatesProfileAndAddsCoins`_: Rewards are written accurately to the local databse on timer completion.
+* _`testStartingNewTimerWhileAlreadyRunningOverwritesSuccessfully`_: Timers running simultaneously are not allowed.
+* _`testDynamicCurrGainFormula`_: The correct amount of coins is awarded on completing tasks of various durations based on the ramping quadratic reward formula.
+* _`testPauseAndResume`_: Timer paused and running state is accurately reflected on timer pause, resume, and session failure.
+
+**`UserStatsTests`** hi zirong please update this part
+* _`testUserStatsInit`_:
+* _`testSaveAndUpdate`_:
+* _`testAchievementUnlocks`_:
+* _`testUserStreak`_:
+* _`testLaunchStreakReset`_:
+
+**`UserTests`** this part also
+* _`testCanAfford`_:
+* _`testBuyFood`_:
+* _`testBuyToys`_:
+* _`testGiveFood`_:
+* _`testGiveToy`_:
 
 All above unit tests can be run locally using **⌘ + U** within Xcode.
 
+### 4. Version Control & Branching
+
+TO BE COMPLETED
 
 ---
 
