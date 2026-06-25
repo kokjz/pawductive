@@ -91,9 +91,9 @@ class NotificationManager {
             guard (settings.authorizationStatus == .authorized)
                     || (settings.authorizationStatus == .provisional) else { return }
             
-            guard let date = userStats.lastActiveDate else { return }
-            let components = DateComponents(day: 2, minute: -1 * self.minutesBeforeStreakExpires)
-            guard let futureDate = Calendar.current.date(byAdding: components, to: Calendar.current.startOfDay(for: date)) else { return }
+            guard let expiryDate = userStats.streakExpiryDate() else { return }
+            let components = DateComponents(minute: -1 * self.minutesBeforeStreakExpires)
+            guard let futureDate = Calendar.current.date(byAdding: components, to: expiryDate) else { return }
             
             center.add(self.notification(
                 identifier: "user.streakExpiring",

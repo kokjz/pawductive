@@ -10,13 +10,13 @@ import SwiftData
 
 @Model
 class MissionManager {
-    private var numActiveMissions: Int
-    private var lastActiveOn: Date
+    var numActiveMissions: Int
+    var lastActiveOn: Date
     
     @Relationship
     var activeMissions = [DailyMission]()
     
-    init(numActiveMissions: Int) {
+    init(numActiveMissions: Int = 3) {
         self.numActiveMissions = numActiveMissions
         self.lastActiveOn = Date()
     }

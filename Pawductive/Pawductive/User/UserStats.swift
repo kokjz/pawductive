@@ -36,4 +36,13 @@ final class UserStats {
         self.currentStreak = currentStreak
         self.lastActiveDate = lastActiveDate
     }
+    
+    func streakExpiryDate() -> Date? {
+        guard currentStreak > 0 else { return nil }
+        guard let date = self.lastActiveDate else { return nil }
+        return Calendar.current.date(
+            byAdding: DateComponents(day: 2),
+            to: Calendar.current.startOfDay(for: date)
+        )
+    }
 }

@@ -23,8 +23,6 @@ struct PetTests {
     }
     
     @Test @MainActor func testReceiveFood() async throws {
-        let room = Background(name: "Room", imageName: "room")
-        
         let pet = Pet(mood: 10, energy: 50, background: room)
         
         pet.receive(food: .chickenDrumstick)
@@ -105,5 +103,62 @@ struct PetTests {
         #expect(floor(pet.mood) == 1)
         #expect(pet.energy == 0)
         #expect(pet.ageInDays == 6)
+    }
+    
+    @Test @MainActor func testExperiencePoints() async throws {
+        let pet = Pet(mood: 100, energy: 100, background: room)
+        #expect(pet.totalExperiencePoints == 0)
+        #expect(pet.modifierPoints == 1)
+        #expect(pet.level == 0)
+        #expect(pet.maxMood == 100)
+        #expect(pet.energy == 100)
+        
+        pet.totalExperiencePoints = 3000
+        #expect(pet.totalExperiencePoints == 3000)
+        #expect(pet.modifierPoints == 4)
+        #expect(pet.level == 1)
+        #expect(pet.maxMood == 110)
+        #expect(pet.maxEnergy == 110)
+        
+        pet.totalExperiencePoints = 30000
+        #expect(pet.totalExperiencePoints == 30000)
+        #expect(pet.modifierPoints == 31)
+        #expect(pet.level == 10)
+        #expect(pet.maxMood == 200)
+        #expect(pet.maxEnergy == 200)
+        
+        pet.totalExperiencePoints = 33000
+        #expect(pet.totalExperiencePoints == 33000)
+        #expect(pet.modifierPoints == 34)
+        #expect(pet.level == 11)
+        #expect(pet.maxMood == 200)
+        #expect(pet.maxEnergy == 200)
+        
+        pet.totalExperiencePoints = 36000
+        #expect(pet.totalExperiencePoints == 36000)
+        #expect(pet.modifierPoints == 34)
+        #expect(pet.level == 11)
+        #expect(pet.maxMood == 200)
+        #expect(pet.maxEnergy == 200)
+    }
+    
+    @Test @MainActor func testImageState() async throws {
+        let pet = Pet(mood: 100, energy: 100, background: room)
+        #expect(pet.image == .happy)
+        
+        pet.mood = 75
+        #expect(pet.image == .normal)
+        
+        pet.mood = 25
+        #expect(pet.image == .angry)
+        
+        pet.energy = 25
+        #expect(pet.image == .sleeping)
+        
+        pet.state = .eating
+        #expect(pet.image == .eating)
+        
+        pet.state = .playing
+        #expect(pet.image == .playing)
     }
 }

@@ -40,7 +40,7 @@ class Food: Identifiable {
         return Int(value);
     }
     
-    private init(name: String, value: Double, image: ImageResource) {
+    init(name: String, value: Double, image: ImageResource) {
         self.name = name
         self.value = value
         self.image = image

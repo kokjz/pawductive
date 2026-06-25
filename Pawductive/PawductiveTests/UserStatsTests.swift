@@ -188,4 +188,21 @@ import SwiftData
         }
         try? context2.save()
     }
+    
+    //test 6: verify streak expiry date
+    @Test @MainActor func testStreakExpiryDate() throws {
+        let stats = UserStats()
+        #expect(stats.streakExpiryDate() == nil)
+        
+        stats.lastActiveDate = Date()
+        #expect(stats.streakExpiryDate() == nil)
+        
+        stats.currentStreak = 1
+        let lastActveDate = try #require(stats.lastActiveDate)
+        let expiryDate = Calendar.current.date(
+            byAdding: DateComponents(day: 2),
+            to: Calendar.current.startOfDay(for: lastActveDate)
+        )
+        #expect(stats.streakExpiryDate() == expiryDate)
+    }
 }

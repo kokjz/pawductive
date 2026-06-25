@@ -1,5 +1,5 @@
 //
-//  UserTests.swift
+//  UserProfileTests.swift
 //  PawductiveTests
 //
 //  Created by Lee Zi Rong on 29/5/26.
@@ -8,7 +8,7 @@
 import Testing
 @testable import Pawductive
 
-struct UserTests {
+struct UserProfileTests {
     
     @Test @MainActor func testCanAfford() async throws {
         let user = UserProfile(coins: 100)

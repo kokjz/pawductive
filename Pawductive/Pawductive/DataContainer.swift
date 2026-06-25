@@ -70,7 +70,7 @@ class DataContainer {
                 context.insert(UserStats())
                 context.insert(NotificationManager())
                 
-                let missionManager = MissionManager(numActiveMissions: 3)
+                let missionManager = MissionManager()
                 missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                 context.insert(missionManager)
                 
@@ -95,7 +95,7 @@ class DataContainer {
                 if let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first {
                     missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
                 } else {
-                    let missionManager = MissionManager(numActiveMissions: 3)
+                    let missionManager = MissionManager()
                     missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                     context.insert(missionManager)
                 }
