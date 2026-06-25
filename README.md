@@ -1,7 +1,7 @@
 ## Pawductive 🐾
 > Gamifying productivity, one pet at a time.
 
-A native iOS productivity application developed in Swift.
+A native iOS gamified productivity application developed in Swift.
 
 Built for Orbital 26 by No Animals Were Harmed **(Team 6658).**
 
@@ -23,6 +23,7 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 
 ## 🚀 Milestone 1 Summary: Technical Proof of Concept
 
+WE SHOULD UPDATE THIS SECTION TO MAKE IT A SUMMARY OF WHAT WAS ACHIEVED FOR MILESTONE 2. THERE IS ALREADY DEETAILED INFO ON WHAT WE DID FOR MS1 THAT IS PRESERVED RIGHT BELOW THIS SECTION SO THIS MAY AS WELL BE A "LATEST UPDATES" SECTION
 
 **Successfully implemented:**
 * Core task queue and timer logic
@@ -36,7 +37,7 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 ---
 
 
-## 🛠️ Core Features (Implemented in Milestone 1)
+## 🛠️ Core Features (Milestone 1)
 
 
 ### 1. Task Queue (Feature 1)
@@ -87,7 +88,7 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 
 ---
 
-## 🚀 Milestone 2 Summary: More Feature Implementation
+## 🚀 Expanded Feature Implementation (Milestone 2)
 
 ### 1. Pet
 More new features were added for the pet, most of which were targeted at making the pet and pet room more lively and animated, as well as some new objectives and quality of life features.
@@ -120,9 +121,11 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 * **User notifications:** thanks zirong
 
 ---
-## 🚧 Potential Features (For Future Milestones)
+## 🚧 Future Features (For Milestone 3)
 
 >#### Feedback on this section will be highly appreciated! ❤️
+
+THIS ALL (MOSTLY) NEEDS TO BE WIPED AND REPLACED WITH NEW STUFF
 
 ### 1. Pet (PLEASE ADD WHATEVER RELEVANT FROM HERE TO PREVIOUS SECTION WHEN U CAN)
 * **[DONE] User-interactive animations for pet sprite:** Animated pet appearance to replace the current static sprite. Pet can react to user interaction. (ADDED TO PREVIOUS SECTION, CAN UPDATE/REWRITE IF U WANT)
@@ -189,6 +192,8 @@ A clean, relational database schema is used to manage all user, task, pet, and g
 ### 3. Continuous Integration & Unit Testing
 Implements the modern **Swift Testing** framework to write test suites verifying the core logic. Through various `.swift` test suite files, the following unit tests are implemented and ensure the following:
 
+HI ZIRONG I WILL SETTLE THIS PART. UNLESS U WANT TO DO URS OFC BUT IF NOT ITS OK, FOCUS ON OTHER STUFF IF U CAN
+
 **`PetTests`**
 * _`testCanReceiveFood`_: 
 * _`testReceiveFood`_:
@@ -215,14 +220,14 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 * _`testDynamicCurrGainFormula`_: The correct amount of coins is awarded on completing tasks of various durations based on the ramping quadratic reward formula.
 * _`testPauseAndResume`_: Timer paused and running state is accurately reflected on timer pause, resume, and session failure.
 
-**`UserStatsTests`** hi zirong please update this part
+**`UserStatsTests`**
 * _`testUserStatsInit`_:
 * _`testSaveAndUpdate`_:
 * _`testAchievementUnlocks`_:
 * _`testUserStreak`_:
 * _`testLaunchStreakReset`_:
 
-**`UserTests`** this part also
+**`UserTests`**
 * _`testCanAfford`_:
 * _`testBuyFood`_:
 * _`testBuyToys`_:
@@ -234,6 +239,7 @@ All above unit tests can be run locally using **⌘ + U** within Xcode.
 ### 4. Version Control & Branching
 
 TO BE COMPLETED
+
 
 ---
 
@@ -256,8 +262,9 @@ Requirements: Apple Device with XCode and Simulator
 2. Open pawductive-main/Pawductive/Pawductive.xcodeproj in XCode
 3. Select run destination in XCode as any iOS Simulator
 4. Run the app by pressing the play icon or by pressing **⌘ + R**
-5. Try Pawductive with the Simulator!
+5. Try Pawductive by running it with the Simulator under any iOS device
 
+Alternatively, a pre-built binary in the form of an `.iPA` file can be downloaded from the latest pre-release or release. As this file is unsigned, you will need to sideload it onto any compatible iOS device and complete the signing process yourself. Please check the pre-release or release information for more details.
 
 ---
 
