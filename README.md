@@ -55,35 +55,11 @@ The timer forces users to put their phones down and focus on the task at hand wi
 
 
 ### 3. Pet Simulator (Feature 3)
-Users can rename and manage their pets here. 
-
-**Mood and energy levels**: 
-* Levels range from 0 to 100 and decrease over time
-* Mood reduces to its current value every 24 hours
-* Energy decreases by 20 units every 24 hours
-
-**Pet sprite changes according to mood:**
-|   Mood    | Pet Sprite |
-|:---------:|:----------:|
-|  [0, 25]  |  Unhappy   |
-| [25, 75]  |    Calm    |
-| [75, 100] |   Happy    |
-
-**Food and toys change mood and energy levels:**
-|          |          Mood           |         Energy          |
-|:--------:|:-----------------------:|:-----------------------:|
-| **Food** |   Increases Slightly    | Increases Significantly |
-| **Toys** | Increases Significantly |   Decreases Slightly    |
-
-Users cannot give food when energy is full. Users cannot give toys when mood is full or when the pet does not have enough energy. More expensive toys require a larger amount of energy. 
+The user can rename and interact with their pet over here. The pet has mood and energy levels which decay over time. Mood decays exponentially, energy decays linearly. User can give food and toys to their pet to restore their mood and energy levels. User cannot give food to their pet when energy is full. User cannot give toys to their pet when mood is full or when their pet does not have enough energy.
 
 
 ### 4. Food and Toy Shop (Feature 4)
-User can buy food and toys for their pets here. Food and toys can be bought using the coins earned from the timer. One minute of focus equals to one coin. More expensive items generally restore mood and energy by a larger amount. 
-
-**List of Food:** Corn, Pumpkin, Chicken Egg, Chicken Wing, Chicken Breast, Pork Belly
-
-**List of Toys:** Tree branch, Tennis Ball, Kitchen Towel, Frisbee, Rubber duck
+User can buy food and toys for their pets here. Food and toys can be bought using the coins earned from the timer. More expensive items generally restore mood and energy by a larger amount. 
 
 
 ---
@@ -93,11 +69,14 @@ User can buy food and toys for their pets here. Food and toys can be bought usin
 ### 1. Pet
 More new features were added for the pet, most of which were targeted at making the pet and pet room more lively and animated, as well as some new objectives and quality of life features.
 
-* **User-interactive animations for pet sprite:** The pet now has multiple different sprites that change depending on the pet's energy and mood. A small animation is also played when the user taps on the sprite.
-* hi please fill in the rest thank u zirong u the goat
+* **User-interactive animations for pet sprite:** The pet now has multiple different sprites that change depending on the pet's energy and mood. When the pet is low on energy, the pet will be sleeping. When the pet has sufficient energy, the pet will be happy, normal or angry according to the pet's mood. The eating and playing sprite is shown for 3 seconds when the user gives food and toys to their pet. A small animation is also played when the user taps on the sprite. This shows that the pet loves to receive pets from the user. 
+* **Level system and modifiers:** The pet will gain experience when the user gives the pet food and toys. Expensive food and toys increase experience by a larger amount. Each level requires 3000 experience points. Maximum mood and energy increases when the pet levels up. In addition, the user will receive 3 modifier points which can be used to upgrade modifiers in the modifier shop. Modifiers can reduce the cost of food and toys, increase the amount of mood and energy the pet can gain from food and toys, and reduce the rate at which mood and energy levels decay. Users can mix and match the modifiers as they level up their pet to customize how they increase their pet to max level. 
+* **Simulator background and decorations:** When the user first launches the simulator, they are greeted with an empty room which is the default background. The user can spend their coins in the decoration shop to buy decorations. The user can arrange and layer the decorations to decorate the background according to their preferences. In additon, the user can explore a different set of decorations by changing the simulator background from room to yard. Expensive decorations show that the user has focused for a significant amount of time to earn coins to buy the decorations.  
+* **Quality of life features**: Mood and energy descriptions are displayed over the value bars to help the user understand how food and toys change the mood and energy levels. 
+
 
 ### 2. Shop
-Shop items are now presented in greater detail, with users now able to see each item's precise effect on their pet's mood and energy before they purchase it.
+Shop items are now presented in greater detail, with users now able to see each item's precise effect on their pet's mood and energy before they purchase it. The mood and energy values and the cost of food and toys are updated when the user buys the corresponding modifier from the modifier shop. 
 
 ### 3. Tasks
 A couple of changes and new features were updated with regards to tasks, mainly targeted around a better user experience with regards to completing tasks.
@@ -114,46 +93,33 @@ Some changes were made to the functionality of the task timer, all of which were
 ### 5. Profile
 The biggest change in Milestone 2, we added a brand new Profile tab alongside the already existing tabs of Tasks, Pet, and Shop, making it the 4th tab accessible from the bottom tab bar. The Profile tab contains several pieces of useful information about the user of the application, as well as navigation links to additional view where the user can change their user settings and user notifications.
 
-* **Daily missions:** hi zirong all urs ty
+* **Daily missions:** The user receives 3 missions each day. The missions refresh at midnight. The user can claim coins when they complete the daily missions. Missions include completing tasks, buying food/toys/decors, giving food/toys and displaying decor. Missions details can be modified to require a specific item. Mission requirements can be modified to modify the difficulty. These missions encourage old users to stay consistent and encourage new users to explore features within the app. 
 * **User statistics:** Users can now view their user statistics. This consists of their current daily task streak, as well as their total tasks completed and total minutes focused.
 * **User achievements:** Users now also have achievements that they can view and unlock as they continue to use the application. Users can unlock these achievements and have them display at the top of their achievement list as they continue to complete tasks and accumulate focus minutes.
 * **User settings:** The top right of the Profile tab has a clickable gear icon that functions as a navigation link to the user settings view. Inside the user settings view, there is a toggle option for enabling or disabling the previously-mentioned timer pausing feature. Additionally, there is a click-through navigation link that takes the user to the grace period picker view, where they can use slider wheels for minutes and seconds to granularly adjust their preferred app switch-out grace period.
-* **User notifications:** thanks zirong
+* **User notifications:** The app will request for permission to send notifications when the user first launches the app. After the app receives permission to send notifications, the user can manage the notifications sent by the app tapping on the bell icon. The user can decide if the app should notify the user when the pet is low on mood or energy. In addition, the user can decide when the app should notify the user when their streak is expiring. These notifications are off by default to reduce disruption. 
 
 ---
 ## 🚧 Future Features (For Milestone 3)
 
 >#### Feedback on this section will be highly appreciated! ❤️
 
-THIS ALL (MOSTLY) NEEDS TO BE WIPED AND REPLACED WITH NEW STUFF, THE POINTS BELOW ARE ALL OLD POINTS WHICH WERE MOSTLY IMPLEMENTED IN MS2. PLS CHECK POINT BY POINT TO SEE WHAT STILL NEEDS TO BE ADDED TO THE SECTION ABOVE
+NEED TO POPULATE THIS SECTION WITH PLANS FOR MS3 
 
 ### 1. Pet
-* **[DONE] User-interactive animations for pet sprite:** Animated pet appearance to replace the current static sprite. Pet can react to user interaction. (ADDED TO PREVIOUS SECTION, CAN UPDATE/REWRITE IF U WANT)
-* **[DONE] Customisable pet room:** Customize the background in the pet simulator. Allow users to purchase decorations to customise their pet room. 
-* **[DONE] Variable pet traits:** Pet can develop different traits or personality that impact how their energy / mood is affected by various items.
-* **[DONE] Pet level progression system:** Pet can level up and unlock different traits / abilities that affect their energy / mood and more.
-* **[DONE] Detailed information on pet status:** More detailed information on the pet status beyond two indicator bars for energy / mood (e.g. numerical energy, mood banding).
-* **Pet state pause toggle:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for a period of time.
+
 * **Pet Statistics & Achievements:** Add statistics and achievements for the pet simulator
+* **Pause Pet State Toggle:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for a period of time.
 
 ### 2. Shop
-* **[DONE] Detailed information on shop items:** More detailed information on items in the shop and how they affect energy / mood. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
 
 ### 3. Tasks
-* **Dynamic currency gain:** Instead of the current formula which has a flat reward rate of 1 coin per minute, a different formula can be used to dynamically adjust the amount earned per minute based on the total length of the task. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
-* **[DONE] User task completion streak:** Rewards users for completing tasks daily. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
 
 ### 4. Timer
-* **Customisable app switch-out grace period:** Allows users to adjust the amount of time they can leave the app during a focus timer session without the task failing. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
-* **Customisable app switch-out allowlist:** Allows users to switch out to specific apps without the task failing. (NOT IMPLEMENTING NOW, MIGHT NOT IMPLEMENT EVER, TALK TO ME IF NEED REASON)
-* **Timer pause feature toggle:** Allows users to give themselves the ability to pause the timer as needed and switch out of the app without the task failing. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
 
 ### 5. Others
 
-* **[DONE] User statistics:** Allows users to keep track of various information such as total tasks completed, time spent focusing, coins earned, etc. (ADDED TO PREVIOUS SECTION CAN DELETE WHEN OK)
-* **User daily missions system:** Gives users a set of tasks to complete daily (e.g. complete 1 task, feed the pet, etc.) to incentivise daily usage. (PLEASE ADD TO PREVIOUS SECTION WHEN U CAN)
-* **[DONE] App notifications system:** Allows user to receive notifications to alert them to various situations (e.g. pet energy/mood low, streak ending) while the app is not open.(PLEASE ADD TO PREVIOUS SECTION WHEN U CAN)
-* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, quickstart task, view task list). (IS THIS IMPLEMENTED? IDK)
+* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, quickstart task, view task list). 
 
 
 ---
@@ -192,12 +158,37 @@ A clean, relational database schema is used to manage all user, task, pet, and g
 ### 3. Continuous Integration & Unit Testing
 Implements the modern **Swift Testing** framework to write test suites verifying the core logic. By utilizing isolated, in-memory databases (`isStoredInMemoryOnly: true`) during testing, database saves, deletes, and updates are verified without polluting the physical application files on disk. The current list of `.swift` test suites implement the following unit tests and ensure the following:
 
+**`BackgroundTests`**
+* _`testBuyDecor`_: Coins are deducted and number of stored decor increases
+* _`testSellDecor`_: Coins are refunded and number of stored decor decreases
+* _`testDisplayDecor`_: Increases shown decor, decreases stored decor
+* _`testStoreDecor`_: Increases stored decor, decreases shown decor
+* _`testReorderDecor`_: Selected decor is layered over other decors
+
+**`MissionTests`**
+* _`testUpdateMission`_: Update mission progress when details match
+* _`testResetMission`_: Reset mission progress and reward claim status
+* _`testInitialMissions`_: Correct number and initial state of missions
+* _`testRefreshMissions`_: Old missions are reset, draw new missions
+
+**`ModifierTests`**
+* _`testPetMoodModifier`_: As level increases, mood half life constant increases
+* _`testPetEnergyModifier`_: As level increases, daily energy consumption decreases 
+* _`testFoodCostModifier`_: As level increases, cost of food decreases
+* _`testFoodMoodModifier`_: As level increases, food increases mood by a larger amount
+* _`testFoodEnergyModifier`_: As level increases, food increases energy by a larger amount
+* _`testToyCostModifier`_: As level increases, cost of toys decreases 
+* _`testToyMoodModifier`_ As level increases, toys increase mood by a larger amount
+* _`testToyEnergyModifier`_: As level increases, toys decrease energy by a smaller amount
+
 **`PetTests`**
 * _`testCanReceiveFood`_: Pet can receive food if and only if energy is not full.
 * _`testReceiveFood`_: Pet attributes are updated accurately on receiving food.
 * _`testCanReceiveToy`_: Pet can receive toy if and only if mood is not full and pet has sufficient energy.
 * _`testReceiveToy`_: Pet attributes are updated accurately on receiving toy.
 * _`testUpdatePet`_: Pet attributes update accurately on passage of time.
+* _`testExperiencePoints`_: Modifier points, maximum mood and energy scale with level.
+* _`testImageState`_: Displays correct sprite according to mood, energy and state.
 
 **`SettingsManagerTests`**
 * _`testSettingsManagerMemoryAddress`_: Settings manager memory address is shared.
@@ -218,19 +209,20 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 * _`testDynamicCurrGainFormula`_: The correct amount of coins is awarded on completing tasks of various durations based on the ramping quadratic reward formula.
 * _`testPauseAndResume`_: Timer paused and running state is accurately reflected on timer pause, resume, and session failure.
 
+**`UserProfileTests`**
+* _`testCanAfford`_: User can afford only items that have a price lower or equal to their current coin total.
+* _`testBuyFood`_: Food inventory is updated accurately with purchase of food.
+* _`testBuyToys`_: Toy inventory is updated accurately with purchase of toy.
+* _`testGiveFood`_: Food inventory is updated accurately with usage of food.
+* _`testGiveToy`_: Toy inventory is updated accurately with usage of toy.
+
 **`UserStatsTests`**
 * _`testUserStatsInit`_: User stats initialise with the correct values.
 * _`testSaveAndUpdate`_: User stats save correctly and persist in the database.
 * _`testAchievementUnlocks`_: Achievements are unlocked correctly and in order with changes in user stats.
 * _`testUserStreak`_: User streak maintains correctly, breaks correctly, and does not double-increment.
 * _`testLaunchStreakReset`_: User streak is updated and maintained accurately on app launch.
-
-**`UserTests`**
-* _`testCanAfford`_: User can afford only items that have a price lower or equal to their current coin total.
-* _`testBuyFood`_: Food inventory is updated accurately with purchase of food.
-* _`testBuyToys`_: Toy inventory is updated accurately with purchase of toy.
-* _`testGiveFood`_: Food inventory is updated accurately with usage of food.
-* _`testGiveToy`_: Toy inventory is updated accurately with usage of toy.
+* _`testStreakExpiryDate`_: User streak expiry date is correctly maintained and updated.
 
 All above unit tests can be run locally using **⌘ + U** within Xcode.
 
@@ -275,21 +267,38 @@ Alternatively, a pre-built binary in the form of an `.iPA` file can be downloade
 
 ## 📸 App Screenshots
 
-NEEDS UPDATING
-
 ### Task Queue and Timer
 <img src="https://hackmd.io/_uploads/ryZZvH1efl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 <img src="https://hackmd.io/_uploads/rkWZwBygMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SkWZwrkefx.png" style="width: 30%;">
+<img src="https://hackmd.io/_uploads/SkWZwrkefx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SJu0kpszMe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/Hku0JpjMMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 
 ### Pet Simulator
-<img src="https://hackmd.io/_uploads/HyZbvrJeGg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SJZWPrkxfe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/HyuA1ajGze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/Hy_0Jaozfx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 
+### Background and Modifiers
+<img src="https://hackmd.io/_uploads/SJ_CkTszfe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/H1_AyTizMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/HJ_C16jzMx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
+<img src="https://hackmd.io/_uploads/SJOR1ToMGl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SyuAJTjGMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/rJdAJasMfl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 
 ### Food and Toy Shop
-<img src="https://hackmd.io/_uploads/rkbZPrkgze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/r1WbvBJeMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/BkOA16oGzg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SkdC16oMGx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
+### Daily Missions, Statistics & Achievements
+<img src="https://hackmd.io/_uploads/B1OCkaoMze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/H1dCJasMMe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+
+### Settings & Notifications
+<img src="https://hackmd.io/_uploads/ryuR1pjzfg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/BkORyTszGl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/B1uAJ6sfzl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 
 
 ---
