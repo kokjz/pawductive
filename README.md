@@ -21,6 +21,23 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 ---
 
 
+## User Stories
+
+1. As a student, I want to list down my tasks so that I can remember to finish them.
+2. As a student, I want to receive rewards when I finish my tasks so that I have the motivation to start working on them.
+3. As a student, I want to put my phone away when I am studying so that I can study efficiently.
+4. As a student, I want to know how much time I have spent on the app so that I can know whether the app is effective. 
+5. As a pet lover, I want to own a virtual pet so that I can bring my pet anywhere with my phone. 
+6. As a pet lover, I want to give my virtual pet food and toys so that my virtual pet will love me.
+7. As a pet lover, I want to decorate the area around the pet so that the pet feels comfortable. 
+8. As a gamer, I want to upgrade the simulator so that I can keep the pet happy and well fed. 
+9. As a gamer, I want to earn coins when I discover new features so that I can keep the pet happy and well fed.
+10. As a gamer, I want to unlock achievements so that I can feel proud when I complete difficult tasks. 
+
+
+---
+
+
 ## 🚀 What's New (Milestone 2 Summary)
 
 Building upon Milestone 1's proof-of-concept, the application has been expanded into a more cohesive and extensive prototype. Our development for this milestone focused on deep state integration, greater timer flexibility, and a more personalized and engaging user and pet progression loop.
@@ -33,6 +50,7 @@ Building upon Milestone 1's proof-of-concept, the application has been expanded 
 * **App Notifications:** Local push notification center for users to configure application push notifications that alert users on pending streak expiry or pet status
 
 More detailed information on new feature implementation for Milestone 2 can be found in a dedicated section below.
+
 
 ---
 
@@ -265,6 +283,18 @@ Alternatively, a pre-built binary in the form of an `.iPA` file can be downloade
 ---
 
 
+## 🖼️ Image Credits
+* **Dog Sprites:** Designed by pikisuperstar from [Magnific](https://magnific.com/)
+* **Food Sprites:** Designed by YEET from [itch.io](https://2yeet.itch.io/)
+* **Toy Sprites:** Desgined by Freepik and bsd from [Flaticon](https://flaticon.com/)
+* **Coin Sprite:** Desgined by vectorsmarket15 from [Flaticon](https://flaticon.com/)
+* **Room Sprites:** Room and furniture vectors by [Vecteezy](https://www.vecteezy.com/)
+* **Yard Sprites:** Designed by upklyak from [Magnific](/GzZykolnSNmNIH1x4YF4Xg)
+
+
+---
+
+
 ## 📸 App Screenshots
 
 ### Task Queue and Timer
@@ -299,15 +329,3 @@ Alternatively, a pre-built binary in the form of an `.iPA` file can be downloade
 <img src="https://hackmd.io/_uploads/ryuR1pjzfg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 <img src="https://hackmd.io/_uploads/BkORyTszGl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
 <img src="https://hackmd.io/_uploads/B1uAJ6sfzl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-
-
----
-
-
-## 🖼️ Image Credits
-* **Dog Sprites:** Designed by pikisuperstar from [Magnific](https://magnific.com/)
-* **Food Sprites:** Designed by YEET from [itch.io](https://2yeet.itch.io/)
-* **Toy Sprites:** Desgined by Freepik and bsd from [Flaticon](https://flaticon.com/)
-* **Coin Sprite:** Desgined by vectorsmarket15 from [Flaticon](https://flaticon.com/)
-* **Room Sprites:** Room and furniture vectors by [Vecteezy](https://www.vecteezy.com/)
-* **Yard Sprites:** Designed by upklyak from [Magnific](/GzZykolnSNmNIH1x4YF4Xg)
