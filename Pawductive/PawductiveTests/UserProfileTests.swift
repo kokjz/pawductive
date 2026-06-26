@@ -1,5 +1,5 @@
 //
-//  UserTests.swift
+//  UserProfileTests.swift
 //  PawductiveTests
 //
 //  Created by Lee Zi Rong on 29/5/26.
@@ -8,7 +8,9 @@
 import Testing
 @testable import Pawductive
 
-struct UserTests {
+struct UserProfileTests {
+    let foodCostModifier = Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2)
+    let toyCostModifier = Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2)
     
     @Test @MainActor func testCanAfford() async throws {
         let user = UserProfile(coins: 100)
@@ -21,27 +23,27 @@ struct UserTests {
         let user = UserProfile(coins: 50)
         
         // Spend 30 coins
-        user.buy(food: .chickenDrumstick)
+        user.buy(food: .chickenDrumstick, costModifier: foodCostModifier)
         #expect(user.coins == 20)
         #expect(user.foodInventory[Food.chickenDrumstick.name] == 1)
         
         // Insufficent coins
-        user.buy(food: .chickenDrumstick) // Cost 30 coins
+        user.buy(food: .chickenDrumstick, costModifier: foodCostModifier) // Cost 30 coins
         #expect(user.coins == 20)
         #expect(user.foodInventory[Food.chickenDrumstick.name] == 1)
         
         // Spend 10 coins
-        user.buy(food: .pumpkin)
+        user.buy(food: .pumpkin, costModifier: foodCostModifier)
         #expect(user.coins == 10)
         #expect(user.foodInventory[Food.pumpkin.name] == 1)
         
         // Spend 10 coins
-        user.buy(food: .pumpkin)
+        user.buy(food: .pumpkin, costModifier: foodCostModifier)
         #expect(user.coins == 0)
         #expect(user.foodInventory[Food.pumpkin.name] == 2)
         
         // Insufficient coins
-        user.buy(food: .corn) // Cost 5 coins
+        user.buy(food: .corn, costModifier: foodCostModifier) // Cost 5 coins
         #expect(user.coins == 0)
         #expect(user.foodInventory[Food.corn.name] == nil)
     }
@@ -50,27 +52,27 @@ struct UserTests {
         let user = UserProfile(coins: 100)
         
         // Spend 80 coins
-        user.buy(toy: .rubberDuck)
+        user.buy(toy: .rubberDuck, costModifier: toyCostModifier)
         #expect(user.coins == 20)
         #expect(user.toyInventory[Toy.rubberDuck.name] == 1)
         
         // Insufficient Coins
-        user.buy(toy: .frisbee) // Cost 30 coins
+        user.buy(toy: .frisbee, costModifier: toyCostModifier) // Cost 30 coins
         #expect(user.coins == 20)
         #expect(user.toyInventory[Toy.frisbee.name] == nil)
         
         // Spend 10 coins
-        user.buy(toy: .tennisBall)
+        user.buy(toy: .tennisBall, costModifier: toyCostModifier)
         #expect(user.coins == 10)
         #expect(user.toyInventory[Toy.tennisBall.name] == 1)
         
         // Spend 10 coins
-        user.buy(toy: .tennisBall)
+        user.buy(toy: .tennisBall, costModifier: toyCostModifier)
         #expect(user.coins == 0)
         #expect(user.toyInventory[Toy.tennisBall.name] == 2)
         
         // Insufficient coins
-        user.buy(toy: .treeBranch) // Cost 5 coins
+        user.buy(toy: .treeBranch, costModifier: toyCostModifier) // Cost 5 coins
         #expect(user.coins == 0)
         #expect(user.toyInventory[Toy.treeBranch.name] == nil)
     }

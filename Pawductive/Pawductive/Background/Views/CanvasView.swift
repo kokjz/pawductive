@@ -61,13 +61,7 @@ struct CanvasView: View {
                                     dragStartX = shownDecor.relativeX
                                     dragStartY = shownDecor.relativeY
                                     
-                                    for decor in background.shownDecors {
-                                        if decor.order > shownDecor.order {
-                                            decor.order -= 1
-                                        }
-                                    }
-                                    
-                                    shownDecor.order = background.shownDecors.count - 1
+                                    background.sendToFront(shownDecor: shownDecor)
                                 }
                                 
                                 shownDecor.relativeX = dragStartX! + value.translation.width / width
@@ -82,8 +76,7 @@ struct CanvasView: View {
                     )
                     .onTapGesture {
                         withAnimation {
-                            shownDecor.storedDecor.numStored += 1
-                            context.delete(shownDecor)
+                            shownDecor.store(context: context)
                         }
                     }
             }

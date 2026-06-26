@@ -26,15 +26,15 @@ class UserProfile {
         return self.coins >= cost
     }
     
-    func buy(food: Food) {
-        guard canAfford(cost: food.cost) else { return }
-        self.coins -= food.cost
+    func buy(food: Food, costModifier: Modifier?) {
+        guard canAfford(cost: food.cost(costModifier: costModifier)) else { return }
+        self.coins -= food.cost(costModifier: costModifier)
         foodInventory[food.name, default: 0] += 1
     }
     
-    func buy(toy: Toy) {
-        guard canAfford(cost: toy.cost) else { return }
-        self.coins -= toy.cost
+    func buy(toy: Toy, costModifier: Modifier?) {
+        guard canAfford(cost: toy.cost(costModifier: costModifier)) else { return }
+        self.coins -= toy.cost(costModifier: costModifier)
         toyInventory[toy.name, default: 0] += 1
     }
     
@@ -54,5 +54,17 @@ class UserProfile {
         } else {
             toyInventory[toy.name] = count - 1
         }
+    }
+    
+    func buy(storedDecor: StoredDecor) {
+        guard canAfford(cost: storedDecor.decor.cost) else { return }
+        self.coins -= storedDecor.decor.cost
+        storedDecor.numStored += 1
+    }
+    
+    func sell(storedDecor: StoredDecor) {
+        guard storedDecor.hasStored() else { return }
+        self.coins += storedDecor.decor.cost
+        storedDecor.numStored -= 1
     }
 }

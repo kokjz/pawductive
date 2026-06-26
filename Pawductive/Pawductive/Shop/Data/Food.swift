@@ -16,31 +16,31 @@ class Food: Identifiable {
     var value: Double
     var image: ImageResource
     
-    var costModifier: Modifier?
-    var cost: Int {
+    func cost(costModifier: Modifier?) -> Int {
         guard let costModifier else { return Int(value) }
+        guard costModifier.label == "food.cost" else { return Int(value) }
         return Int(Double(value) * (1.0 - Double(costModifier.level) * 0.2))
     }
     
-    var moodModifier: Modifier?
-    var moodEffects: Double {
+    func moodEffects(moodModifier: Modifier?) -> Double {
         guard let moodModifier else { return value / 5.0 }
+        guard moodModifier.label == "food.mood" else { return value / 5.0 }
         let levelRatio = Double(moodModifier.level) / Double(moodModifier.maxLevel)
         return (value / 5.0) * (1.0 + levelRatio * 1.0)
     }
     
-    var energyModifier: Modifier?
-    var energyEffects: Double {
+    func energyEffects(energyModifier: Modifier?) -> Double {
         guard let energyModifier else { return value }
+        guard energyModifier.label == "food.energy" else { return value }
         let levelRatio = Double(energyModifier.level) / Double(energyModifier.maxLevel)
         return value * (1.0 + levelRatio * 1.0)
     }
     
     var experiencePoints: Int {
-        return Int(value);
+        return Int(value)
     }
     
-    private init(name: String, value: Double, image: ImageResource) {
+    init(name: String, value: Double, image: ImageResource) {
         self.name = name
         self.value = value
         self.image = image

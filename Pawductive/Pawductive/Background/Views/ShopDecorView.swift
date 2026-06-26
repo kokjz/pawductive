@@ -40,8 +40,7 @@ struct ShopDecorView: View {
             HStack {
                 Button {
                     withAnimation(.bouncy){
-                        user.coins -= storedDecor.decor.cost
-                        storedDecor.numStored += 1
+                        user.buy(storedDecor: storedDecor)
                     }
                     
                     missionManager.updateActiveMissions(
@@ -57,14 +56,13 @@ struct ShopDecorView: View {
                         .fontWeight(.bold)
                         .fontDesign(.rounded)
                 }
-                .disabled(user.coins < storedDecor.decor.cost)
+                .disabled(!user.canAfford(cost: storedDecor.decor.cost))
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
                 
                 Button {
                     withAnimation(.bouncy) {
-                        user.coins += storedDecor.decor.cost
-                        storedDecor.numStored -= 1
+                        user.sell(storedDecor: storedDecor)
                     }
                 } label: {
                     Text("SELL").frame(maxWidth: .infinity)
@@ -72,7 +70,7 @@ struct ShopDecorView: View {
                         .fontWeight(.bold)
                         .fontDesign(.rounded)
                 }
-                .disabled(storedDecor.numStored <= 0)
+                .disabled(!storedDecor.hasStored())
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
             }

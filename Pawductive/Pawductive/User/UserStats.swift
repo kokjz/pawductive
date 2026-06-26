@@ -29,11 +29,20 @@ final class UserStats {
         currentStreak: Int = 0,
         lastActiveDate: Date? = nil
     ) {
-        self.id = UUID()
+        self.id = id
         self.totalTasksCompleted = totalTasksCompleted
         self.totalMinutesFocused = totalMinutesFocused
         self.totalCoinsEarned = totalCoinsEarned
         self.currentStreak = currentStreak
         self.lastActiveDate = lastActiveDate
+    }
+    
+    func streakExpiryDate() -> Date? {
+        guard currentStreak > 0 else { return nil }
+        guard let date = self.lastActiveDate else { return nil }
+        return Calendar.current.date(
+            byAdding: DateComponents(day: 2),
+            to: Calendar.current.startOfDay(for: date)
+        )
     }
 }

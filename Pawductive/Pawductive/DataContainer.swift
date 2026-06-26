@@ -15,24 +15,26 @@ class DataContainer {
         modelContainer.mainContext
     }
     
-    static let dailyMissions = [
-        DailyMission(title: "Finish 3 tasks", requirement: 3, reward: 5, isSpecific: true,
-                     details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Number")),
-        DailyMission(title: "Focus for 15 minutes", requirement: 15, reward: 5, isSpecific: true,
-                     details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Duration")),
-        DailyMission(title: "Buy 3 food", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "BUY", targetType: "FOOD", targetName: "")),
-        DailyMission(title: "Give 3 food", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "GIVE", targetType: "FOOD", targetName: "")),
-        DailyMission(title: "Buy 3 toys", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "BUY", targetType: "TOY", targetName: "")),
-        DailyMission(title: "Give 3 toys", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "GIVE", targetType: "TOY", targetName: "")),
-        DailyMission(title: "Buy 3 decors", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "BUY", targetType: "DECOR", targetName: "")),
-        DailyMission(title: "Display 3 decors", requirement: 3, reward: 5, isSpecific: false,
-                     details: MissionDetails(action: "DISPLAY", targetType: "DECOR", targetName: "")),
-    ]
+    static var dailyMissions: [DailyMission] {
+        return [
+            DailyMission(title: "Finish 3 tasks", requirement: 3, reward: 5, isSpecific: true,
+                         details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Number")),
+            DailyMission(title: "Focus for 15 minutes", requirement: 15, reward: 5, isSpecific: true,
+                         details: MissionDetails(action: "DO", targetType: "TASK", targetName: "Duration")),
+            DailyMission(title: "Buy 3 food", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "BUY", targetType: "FOOD", targetName: "")),
+            DailyMission(title: "Give 3 food", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "GIVE", targetType: "FOOD", targetName: "")),
+            DailyMission(title: "Buy 3 toys", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "BUY", targetType: "TOY", targetName: "")),
+            DailyMission(title: "Give 3 toys", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "GIVE", targetType: "TOY", targetName: "")),
+            DailyMission(title: "Buy 3 decors", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "BUY", targetType: "DECOR", targetName: "")),
+            DailyMission(title: "Display 3 decors", requirement: 3, reward: 5, isSpecific: false,
+                         details: MissionDetails(action: "DISPLAY", targetType: "DECOR", targetName: "")),
+        ]
+    }
     
     init(coins: Int = 800,
          mood: Double = 100,
@@ -68,11 +70,11 @@ class DataContainer {
                 }
                 context.insert(user)
                 context.insert(UserStats())
-                context.insert(NotificationManager())
                 
-                let missionManager = MissionManager(numActiveMissions: 3)
+                let missionManager = MissionManager()
                 missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                 context.insert(missionManager)
+                context.insert(NotificationManager())
                 
                 insertBackgrounds()
                 insertStoredDecors()
@@ -80,12 +82,8 @@ class DataContainer {
                     loadRoomDecorations()
                 }
                 
-                let pet = createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!
-                insertPetModifiers(pet)
-                context.insert(pet)
-                
-                insertFoodModifiers()
-                insertToyModifiers()
+                insertModifiers()
+                context.insert(createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!)
                 try context.save()
                 print("Database empty, seed default user and pet success")
             } else {
@@ -95,7 +93,7 @@ class DataContainer {
                 if let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first {
                     missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
                 } else {
-                    let missionManager = MissionManager(numActiveMissions: 3)
+                    let missionManager = MissionManager()
                     missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                     context.insert(missionManager)
                 }
@@ -116,56 +114,22 @@ class DataContainer {
         user.toyInventory[Toy.treeBranch.name] = 3
         user.toyInventory[Toy.rubberDuck.name] = 3
     }
-
-    private func insertPetModifiers(_ pet: Pet) {
-        let moodModifier =
-            Modifier(label: "Pet1", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
-        let energyModifier =
-            Modifier(label: "Pet2", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5)
-        
-        pet.moodDecayModifier = moodModifier
-        pet.energyDecayModifier = energyModifier
-        
-        context.insert(moodModifier)
-        context.insert(energyModifier)
-    }
     
-    private func insertFoodModifiers() {
-        let costModifier =
-            Modifier(label: "Food1", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2)
-        let moodModifier =
-            Modifier(label: "Food2", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
-        let energyModifier =
-            Modifier(label: "Food3", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5)
-        
-        for food in Food.allFoods {
-            food.costModifier = costModifier
-            food.moodModifier = moodModifier
-            food.energyModifier = energyModifier
+    private func insertModifiers() {
+        let modifiers = [
+            Modifier(label: "pet.mood", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5),
+            Modifier(label: "pet.energy", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5),
+            Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2),
+            Modifier(label: "food.mood", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "food.energy", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2),
+            Modifier(label: "toy.mood", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "toy.energy", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5),
+        ]
+            
+        for modifier in modifiers {
+            context.insert(modifier)
         }
-        
-        context.insert(costModifier)
-        context.insert(moodModifier)
-        context.insert(energyModifier)
-    }
-    
-    private func insertToyModifiers() {
-        let costModifier =
-            Modifier(label: "Toy1", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2)
-        let moodModifier =
-            Modifier(label: "Toy2", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
-        let energyModifier =
-            Modifier(label: "Toy3", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5)
-        
-        for toy in Toy.allToys {
-            toy.costModifier = costModifier
-            toy.moodModifier = moodModifier
-            toy.energyModifier = energyModifier
-        }
-        
-        context.insert(costModifier)
-        context.insert(moodModifier)
-        context.insert(energyModifier)
     }
     
     private func insertBackgrounds() {
@@ -184,12 +148,12 @@ class DataContainer {
         
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
         let storedRoomDecors = [
-            StoredDecor(decor: Decor(name: "Vase", imageName: "vase", relativeHeight: 0.3, cost: 75), background: room),
             StoredDecor(decor: Decor(name: "Cabinet", imageName: "cabinet", relativeHeight: 0.5, cost: 200), background: room),
             StoredDecor(decor: Decor(name: "Clock", imageName: "clock", relativeHeight: 0.2, cost: 100), background: room),
             StoredDecor(decor: Decor(name: "Mirror", imageName: "mirror", relativeHeight: 0.2, cost: 150), background: room),
             StoredDecor(decor: Decor(name: "Plant", imageName: "plant", relativeHeight: 0.2, cost: 50), background: room),
             StoredDecor(decor: Decor(name: "Sofa", imageName: "sofa", relativeHeight: 0.35, cost: 300), background: room),
+            StoredDecor(decor: Decor(name: "Vase", imageName: "vase", relativeHeight: 0.3, cost: 75), background: room),
             StoredDecor(decor: Decor(name: "Window", imageName: "window", relativeHeight: 0.5, cost: 250), background: room),
         ]
         for storedDecor in storedRoomDecors {

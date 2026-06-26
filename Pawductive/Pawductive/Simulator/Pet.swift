@@ -33,9 +33,9 @@ class Pet {
         }
     }
     
-    var moodDecayModifier: Modifier?
-    var moodHalfLife: Double {
+    func moodHalfLife(moodDecayModifier: Modifier?) -> Double {
         guard let moodDecayModifier else { return 1 }
+        guard moodDecayModifier.label == "pet.mood" else { return 1 }
         let levelRatio = Double(moodDecayModifier.level) / Double(moodDecayModifier.maxLevel)
         return 1.0 + levelRatio * 1.0
     }
@@ -56,9 +56,9 @@ class Pet {
         }
     }
     
-    var energyDecayModifier: Modifier?
-    var dailyEnergyConsumption: Double {
+    func dailyEnergyConsumption(energyDecayModifier: Modifier?) -> Double {
         guard let energyDecayModifier else { return 0.2 * maxEnergy }
+        guard energyDecayModifier.label == "pet.energy" else { return 0.2 * maxEnergy }
         let levelRatio = Double(energyDecayModifier.level) / Double(energyDecayModifier.maxLevel)
         return (0.2 * maxEnergy) * (1.0 - levelRatio * 0.5)
     }
@@ -123,57 +123,57 @@ class Pet {
         return self.energy < maxEnergy
     }
     
-    func receive(food: Food) {
+    func receive(food: Food, moodModifier: Modifier?, energyModifier: Modifier?) {
         guard canReceive(food: food) else { return }
-        self.mood = min(self.mood + food.moodEffects, maxMood)
-        self.energy = min(self.energy + food.energyEffects, maxEnergy)
+        self.mood = min(self.mood + food.moodEffects(moodModifier: moodModifier), maxMood)
+        self.energy = min(self.energy + food.energyEffects(energyModifier: energyModifier), maxEnergy)
         self.totalExperiencePoints += food.experiencePoints
     }
     
-    func canReceive(toy: Toy) -> Bool {
-        return self.mood < maxMood && self.energy + toy.energyEffects >= 0
+    func canReceive(toy: Toy, energyModifier: Modifier?) -> Bool {
+        return self.mood < maxMood && self.energy + toy.energyEffects(energyModifier: energyModifier) >= 0
     }
     
-    func receive(toy: Toy) {
-        guard canReceive(toy: toy) else { return }
-        self.mood = min(self.mood + toy.moodEffects, maxMood)
-        self.energy = self.energy + toy.energyEffects
+    func receive(toy: Toy, moodModifier: Modifier?, energyModifier: Modifier?) {
+        guard canReceive(toy: toy, energyModifier: energyModifier) else { return }
+        self.mood = min(self.mood + toy.moodEffects(moodModifier: moodModifier), maxMood)
+        self.energy = self.energy + toy.energyEffects(energyModifier: energyModifier)
         self.totalExperiencePoints += toy.experiencePoints
     }
     
-    func update(currDate: Date) {
+    func update(currDate: Date, moodDecayModifier: Modifier?, energyDecayModifier: Modifier?) {
         guard currDate >= lastUpdatedOn else { return }
-        self.updateMood(currDate)
-        self.updateEnergy(currDate)
+        self.updateMood(currDate, moodDecayModifier)
+        self.updateEnergy(currDate, energyDecayModifier)
         self.updateAge(currDate)
         lastUpdatedOn = currDate
     }
     
-    private func updateMood(_ currDate: Date) {
+    private func updateMood(_ currDate: Date, _ moodDecayModifier: Modifier?) {
         let daysPassed: Double = (currDate).timeIntervalSince(lastUpdatedOn) / (24 * 3600.0)
-        self.mood = mood / pow(2.0, daysPassed / moodHalfLife)
+        self.mood = mood / pow(2.0, daysPassed / moodHalfLife(moodDecayModifier: moodDecayModifier))
     }
 
-    private func updateEnergy(_ currDate: Date) {
+    private func updateEnergy(_ currDate: Date, _ energyDecayModifier: Modifier?) {
         let daysPassed: Double = (currDate).timeIntervalSince(lastUpdatedOn) / (24 * 3600.0)
-        self.energy = max(0, energy - dailyEnergyConsumption * daysPassed)
+        self.energy = max(0, energy - dailyEnergyConsumption(energyDecayModifier: energyDecayModifier) * daysPassed)
     }
     
     private func updateAge(_ currDate: Date) {
         self.ageInDays = Calendar.current.dateComponents([.day], from: createdOn, to: currDate).day ?? 0
     }
     
-    func lowMoodFutureDate() -> Date? {
+    func lowMoodFutureDate(moodDecayModifier: Modifier?) -> Date? {
         let lowMood = 0.25 * maxMood
         guard self.mood > lowMood else { return nil }
-        let daysToLowMood = moodHalfLife * log2(self.mood / lowMood)
+        let daysToLowMood = moodHalfLife(moodDecayModifier: moodDecayModifier) * log2(self.mood / lowMood)
         return self.lastUpdatedOn.addingTimeInterval(daysToLowMood * 24 * 60 * 60)
     }
     
-    func lowEnergyFutureDate() -> Date? {
+    func lowEnergyFutureDate(energyDecayModifier: Modifier?) -> Date? {
         let lowEnergy = 0.25 * maxEnergy
         guard self.energy > lowEnergy else { return nil }
-        let daysToLowEnergy = (self.energy - lowEnergy) / dailyEnergyConsumption
+        let daysToLowEnergy = (self.energy - lowEnergy) / dailyEnergyConsumption(energyDecayModifier: energyDecayModifier)
         return self.lastUpdatedOn.addingTimeInterval(daysToLowEnergy * 24 * 60 * 60)
     }
 }

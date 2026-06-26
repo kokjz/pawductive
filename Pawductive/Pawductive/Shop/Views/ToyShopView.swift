@@ -19,9 +19,20 @@ struct ToyShopView: View {
         missionManagers.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var costModifier: Modifier? {
+        modifiers.first(where: { $0.label == "toy.cost" })
+    }
+    private var moodModifier: Modifier? {
+        modifiers.first(where: { $0.label == "toy.mood" })
+    }
+    private var energyModifier: Modifier? {
+        modifiers.first(where: { $0.label == "toy.energy" })
+    }
+    
     func description(_ toy: Toy) -> String {
-        let mood = "Mood +" + String(format: "%.1f", toy.moodEffects)
-        let energy = "Energy " + String(format: "%.1f", toy.energyEffects)
+        let mood = "Mood +" + String(format: "%.1f", toy.moodEffects(moodModifier: moodModifier))
+        let energy = "Energy " + String(format: "%.1f", toy.energyEffects(energyModifier: energyModifier))
         return "\(mood), \(energy)"
     }
     
@@ -47,7 +58,7 @@ struct ToyShopView: View {
                 Spacer()
                 
                 Button {
-                    user.buy(toy: toy)
+                    user.buy(toy: toy, costModifier: costModifier)
                     missionManager.updateActiveMissions(
                         missions: DataContainer.dailyMissions,
                         details: MissionDetails(
@@ -57,7 +68,7 @@ struct ToyShopView: View {
                         progress: 1)
                 } label: {
                     HStack {
-                        Text("\(toy.cost)")
+                        Text("\(toy.cost(costModifier: costModifier))")
                             .fontWeight(.semibold)
                         Image(.coin)
                             .resizable()
@@ -67,8 +78,8 @@ struct ToyShopView: View {
                     .frame(minWidth: 65, alignment: .trailing)
                 }
                 .buttonStyle(.bordered)
-                .disabled(!user.canAfford(cost: toy.cost))
-                .opacity(!user.canAfford(cost: toy.cost) ? 0.5 : 1)
+                .disabled(!user.canAfford(cost: toy.cost(costModifier: costModifier)))
+                .opacity(!user.canAfford(cost: toy.cost(costModifier: costModifier)) ? 0.5 : 1)
             }
         }
         .listStyle(.plain)

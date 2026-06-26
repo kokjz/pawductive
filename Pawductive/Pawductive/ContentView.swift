@@ -26,6 +26,14 @@ struct ContentView: View {
         userStatsList.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var moodDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.mood" })
+    }
+    private var energyDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.energy" })
+    }
+    
     var body: some View {
         //tab view at bottom of screen
         TabView {
@@ -62,7 +70,12 @@ struct ContentView: View {
         .accentColor(.orange)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {
-                notificationManager.scheduleNotifications(pet: pet, userStats: userStats)
+                notificationManager.scheduleNotifications(
+                    userStats: userStats,
+                    pet: pet,
+                    moodDecayModifier: moodDecayModifier,
+                    energyDecayModifier: energyDecayModifier
+                )
             }
         }
     }
@@ -70,5 +83,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(DataContainer().modelContainer)
+        .modelContainer(DataContainer(experiencePoints: 33000).modelContainer)
 }
