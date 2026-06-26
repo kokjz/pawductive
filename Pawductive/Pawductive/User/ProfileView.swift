@@ -149,7 +149,7 @@ struct ProfileView: View {
     
     //achievement row component
     private func achievementRow(achievement: Achievement, stats: UserStats) -> some View {
-        let unlocked = achievement.isunlocked(stats: stats)
+        let unlocked = achievement.isUnlocked(stats: stats)
         return HStack(spacing: 16) {
             ZStack {
                 Circle()
@@ -177,8 +177,8 @@ struct ProfileView: View {
     //achievement sort by completion
     private func sortedAchievements(for stats: UserStats) -> [Achievement] {
         Achievement.allCases.sorted { a, b in
-            let aUnlocked = a.isunlocked(stats: stats)
-            let bUnlocked = b.isunlocked(stats: stats)
+            let aUnlocked = a.isUnlocked(stats: stats)
+            let bUnlocked = b.isUnlocked(stats: stats)
             if aUnlocked == bUnlocked {
                 let aIndex = Achievement.allCases.firstIndex(of: a) ?? 0
                 let bIndex = Achievement.allCases.firstIndex(of: b) ?? 0

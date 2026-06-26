@@ -43,7 +43,7 @@ enum Achievement: String, CaseIterable, Identifiable {
     }
     
     //unlock eval logic
-    func isunlocked(stats: UserStats) -> Bool {
+    func isUnlocked(stats: UserStats) -> Bool {
         switch self {
         case.OneTaskAchievement: return stats.totalTasksCompleted >= 1
         case.FiveTasksAchievement: return stats.totalTasksCompleted >= 5

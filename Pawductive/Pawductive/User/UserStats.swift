@@ -29,7 +29,7 @@ final class UserStats {
         currentStreak: Int = 0,
         lastActiveDate: Date? = nil
     ) {
-        self.id = UUID()
+        self.id = id
         self.totalTasksCompleted = totalTasksCompleted
         self.totalMinutesFocused = totalMinutesFocused
         self.totalCoinsEarned = totalCoinsEarned
