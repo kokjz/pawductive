@@ -37,11 +37,7 @@ struct StoreDecorView: View {
             
             Button {
                 withAnimation(.bouncy){
-                    storedDecor.numStored -= 1
-                    context.insert(
-                        ShownDecor(order: storedDecor.background.shownDecors.count,
-                                   storedDecor: storedDecor,
-                                   background: storedDecor.background))
+                    storedDecor.display(context: context)
                 }
                 
                 missionManager.updateActiveMissions(
@@ -57,7 +53,7 @@ struct StoreDecorView: View {
                     .fontWeight(.medium)
                     .fontDesign(.rounded)
             }
-            .disabled(storedDecor.numStored <= 0)
+            .disabled(!storedDecor.hasStored())
             .buttonStyle(.borderedProminent)
             .tint(.orange)
         }

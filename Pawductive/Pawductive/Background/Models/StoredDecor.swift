@@ -23,4 +23,21 @@ class StoredDecor {
         self.numStored = numStored
         self.background = background
     }
+    
+    func hasStored() -> Bool {
+        return self.numStored > 0
+    }
+    
+    func display(context: ModelContext) {
+        guard self.hasStored() else { return }
+        self.numStored -= 1
+        context.insert(
+            ShownDecor(
+                order: self.background.shownDecors.count,
+                storedDecor: self,
+                background: self.background
+            )
+        )
+        try? context.save()
+    }
 }

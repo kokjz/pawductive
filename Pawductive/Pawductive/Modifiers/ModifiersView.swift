@@ -48,19 +48,19 @@ struct ModifiersView: View {
 
             List {
                 Section("Pets") {
-                    ForEach(modifiers.filter({ m in m.label.contains("Pet") })) { modifier in
+                    ForEach(modifiers.filter({ m in m.label.contains("pet") })) { modifier in
                         ModifierView(modifier: modifier, canLevelUp: canLevelUp(modifier))
                     }
                 }
                 
                 Section("Food") {
-                    ForEach(modifiers.filter({ m in m.label.contains("Food") })) { modifier in
+                    ForEach(modifiers.filter({ m in m.label.contains("food") })) { modifier in
                         ModifierView(modifier: modifier, canLevelUp: canLevelUp(modifier))
                     }
                 }
                 
                 Section("Toys") {
-                    ForEach(modifiers.filter({ m in m.label.contains("Toy") })) { modifier in
+                    ForEach(modifiers.filter({ m in m.label.contains("toy") })) { modifier in
                         ModifierView(modifier: modifier, canLevelUp: canLevelUp(modifier))
                     }
                 }

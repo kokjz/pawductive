@@ -14,6 +14,14 @@ struct PetSimulatorView: View {
         pets.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var moodDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.mood" })
+    }
+    private var energyDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.energy" })
+    }
+    
     @State private var category: ShopCategory = .food
     @State private var animatePet = false
     @State private var showModifiers = false
@@ -126,7 +134,7 @@ struct PetSimulatorView: View {
                 .pickerStyle(.segmented)
                 .onChange(of: category) {
                     withAnimation {
-                        pet.update(currDate: currDate)
+                        pet.update(currDate: currDate, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
                     }
                 }
                 .frame(width: geometry.size.width * 0.8 + 10)
@@ -136,7 +144,7 @@ struct PetSimulatorView: View {
             }
             .onAppear{
                 withAnimation {
-                    pet.update(currDate: currDate)
+                    pet.update(currDate: currDate, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
                 }
             }
             .padding()

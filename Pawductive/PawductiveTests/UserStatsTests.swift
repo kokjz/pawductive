@@ -194,9 +194,11 @@ import SwiftData
         let stats = UserStats()
         #expect(stats.streakExpiryDate() == nil)
         
+        // Streak is 0
         stats.lastActiveDate = Date()
         #expect(stats.streakExpiryDate() == nil)
         
+        // Streak is not 0
         stats.currentStreak = 1
         let lastActveDate = try #require(stats.lastActiveDate)
         let expiryDate = Calendar.current.date(

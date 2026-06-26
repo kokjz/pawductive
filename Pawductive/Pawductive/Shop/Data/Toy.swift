@@ -17,28 +17,28 @@ class Toy: Identifiable {
     var value: Double
     var image: ImageResource
     
-    var costModifier: Modifier?
-    var cost: Int {
+    func cost(costModifier: Modifier?) -> Int {
         guard let costModifier else { return Int(value) }
+        guard costModifier.label == "toy.cost" else { return Int(value) }
         return Int(Double(value) * (1.0 - Double(costModifier.level) * 0.2))
     }
     
-    var moodModifier: Modifier?
-    var moodEffects: Double {
+    func moodEffects(moodModifier: Modifier?) -> Double {
         guard let moodModifier else { return value }
+        guard moodModifier.label == "toy.mood" else { return value }
         let levelRatio = Double(moodModifier.level) / Double(moodModifier.maxLevel)
         return value * (1.0 + levelRatio * 1.0)
     }
     
-    var energyModifier: Modifier?
-    var energyEffects: Double {
+    func energyEffects(energyModifier: Modifier?) -> Double {
         guard let energyModifier else { return -1 * (value / 5.0) }
+        guard energyModifier.label == "toy.energy" else { return -1 * (value / 5.0) }
         let levelRatio = Double(energyModifier.level) / Double(energyModifier.maxLevel)
         return -1 * (value / 5.0) * (1.0 - levelRatio * 0.5)
     }
     
     var experiencePoints: Int {
-        return Int(value);
+        return Int(value)
     }
     
     init(name: String, value: Double, image: ImageResource) {

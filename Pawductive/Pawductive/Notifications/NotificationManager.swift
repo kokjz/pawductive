@@ -27,16 +27,16 @@ class NotificationManager {
         self.minutesBeforeStreakExpires = minutesBeforeStreakExpires
     }
     
-    func scheduleNotifications(pet: Pet, userStats: UserStats) {
+    func scheduleNotifications(userStats: UserStats, pet: Pet, moodDecayModifier: Modifier?, energyDecayModifier: Modifier?) {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         
         if showLowMoodNotification {
-            scheduleLowMoodNotification(pet: pet)
+            scheduleLowMoodNotification(pet: pet, moodDecayModifier: moodDecayModifier)
         }
         
         if showLowEnergyNotification {
-            scheduleLowEnergyNotification(pet: pet)
+            scheduleLowEnergyNotification(pet: pet, energyDecayModifier: energyDecayModifier)
         }
         
         if showStreakExpiringNotification {
@@ -44,14 +44,14 @@ class NotificationManager {
         }
     }
     
-    private func scheduleLowMoodNotification(pet: Pet) {
+    private func scheduleLowMoodNotification(pet: Pet, moodDecayModifier: Modifier?) {
         let center = UNUserNotificationCenter.current()
         
         center.getNotificationSettings { settings in
             guard (settings.authorizationStatus == .authorized)
                     || (settings.authorizationStatus == .provisional) else { return }
             
-            guard let futureDate = pet.lowMoodFutureDate() else { return }
+            guard let futureDate = pet.lowMoodFutureDate(moodDecayModifier: moodDecayModifier) else { return }
             
             center.add(self.notification(
                 identifier: "pet.lowMood",
@@ -64,14 +64,14 @@ class NotificationManager {
         }
     }
     
-    private func scheduleLowEnergyNotification(pet: Pet) {
+    private func scheduleLowEnergyNotification(pet: Pet, energyDecayModifier: Modifier?) {
         let center = UNUserNotificationCenter.current()
         
         center.getNotificationSettings { settings in
             guard (settings.authorizationStatus == .authorized)
                     || (settings.authorizationStatus == .provisional) else { return }
             
-            guard let futureDate = pet.lowEnergyFutureDate() else { return }
+            guard let futureDate = pet.lowEnergyFutureDate(energyDecayModifier: energyDecayModifier) else { return }
             
             center.add(self.notification(
                 identifier: "pet.lowEnergy",

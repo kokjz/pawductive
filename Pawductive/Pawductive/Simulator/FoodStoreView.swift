@@ -24,6 +24,20 @@ struct FoodStoreView: View {
         missionManagers.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var moodDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.mood" })
+    }
+    private var energyDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.energy" })
+    }
+    private var moodModifier: Modifier? {
+        modifiers.first(where: { $0.label == "food.mood" })
+    }
+    private var energyModifier: Modifier? {
+        modifiers.first(where: { $0.label == "food.energy" })
+    }
+    
     @State private var eatTask: Task<Void, Never>?
     
     var currDate: Date
@@ -49,9 +63,9 @@ struct FoodStoreView: View {
                 
                 Button("Give") {
                     withAnimation {
-                        pet.update(currDate: currDate)
+                        pet.update(currDate: currDate, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
                         if pet.canReceive(food: food) {
-                            pet.receive(food: food)
+                            pet.receive(food: food, moodModifier: moodModifier, energyModifier: energyModifier)
                             user.give(food: food)
                             
                             eatTask?.cancel()

@@ -24,6 +24,20 @@ struct ToyStoreView: View {
         missionManagers.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var moodDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.mood" })
+    }
+    private var energyDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.energy" })
+    }
+    private var moodModifier: Modifier? {
+        modifiers.first(where: { $0.label == "toy.mood" })
+    }
+    private var energyModifier: Modifier? {
+        modifiers.first(where: { $0.label == "toy.energy" })
+    }
+    
     @State private var playTask: Task<Void, Never>?
     
     var currDate: Date
@@ -49,9 +63,9 @@ struct ToyStoreView: View {
                 
                 Button("Give") {
                     withAnimation {
-                        pet.update(currDate: currDate)
-                        if pet.canReceive(toy: toy) {
-                            pet.receive(toy: toy)
+                        pet.update(currDate: currDate, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
+                        if pet.canReceive(toy: toy, energyModifier: energyModifier) {
+                            pet.receive(toy: toy, moodModifier: moodModifier, energyModifier: energyModifier)
                             user.give(toy: toy)
                             
                             playTask?.cancel()
@@ -75,7 +89,7 @@ struct ToyStoreView: View {
                 }
                 .fontWeight(.bold)
                 .buttonStyle(.borderedProminent)
-                .disabled(!pet.canReceive(toy: toy))
+                .disabled(!pet.canReceive(toy: toy, energyModifier: energyModifier))
             }
         }
         .overlay {

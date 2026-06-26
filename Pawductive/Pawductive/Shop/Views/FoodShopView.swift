@@ -19,9 +19,20 @@ struct FoodShopView: View {
         missionManagers.first!
     }
     
+    @Query private var modifiers: [Modifier]
+    private var costModifier: Modifier? {
+        modifiers.first(where: { $0.label == "food.cost" })
+    }
+    private var moodModifier: Modifier? {
+        modifiers.first(where: { $0.label == "food.mood" })
+    }
+    private var energyModifier: Modifier? {
+        modifiers.first(where: { $0.label == "food.energy" })
+    }
+    
     func description(_ food: Food) -> String {
-        let mood = "Mood +" + String(format: "%.1f", food.moodEffects)
-        let energy = "Energy +" + String(format: "%.1f", food.energyEffects)
+        let mood = "Mood +" + String(format: "%.1f", food.moodEffects(moodModifier: moodModifier))
+        let energy = "Energy +" + String(format: "%.1f", food.energyEffects(energyModifier: energyModifier))
         return "\(mood), \(energy)"
     }
     
@@ -47,7 +58,7 @@ struct FoodShopView: View {
                 Spacer()
                 
                 Button {
-                    user.buy(food: food)
+                    user.buy(food: food, costModifier: costModifier)
                     missionManager.updateActiveMissions(
                         missions: DataContainer.dailyMissions,
                         details: MissionDetails(
@@ -57,7 +68,7 @@ struct FoodShopView: View {
                         progress: 1)
                 } label: {
                     HStack {
-                        Text("\(food.cost)")
+                        Text("\(food.cost(costModifier: costModifier))")
                             .fontWeight(.semibold)
                         Image(.coin)
                             .resizable()
@@ -67,8 +78,8 @@ struct FoodShopView: View {
                     .frame(minWidth: 65, alignment: .trailing)
                 }
                 .buttonStyle(.bordered)
-                .disabled(!user.canAfford(cost: food.cost))
-                .opacity(!user.canAfford(cost: food.cost) ? 0.5 : 1)
+                .disabled(!user.canAfford(cost: food.cost(costModifier: costModifier)))
+                .opacity(!user.canAfford(cost: food.cost(costModifier: costModifier)) ? 0.5 : 1)
             }
         }
         .listStyle(.plain)

@@ -26,4 +26,10 @@ class ShownDecor {
         self.storedDecor = storedDecor
         self.background = background
     }
+    
+    func store(context: ModelContext) {
+        self.storedDecor.numStored += 1
+        context.delete(self)
+        try? context.save()
+    }
 }

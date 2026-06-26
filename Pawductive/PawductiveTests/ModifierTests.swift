@@ -13,142 +13,128 @@ struct ModifierTests {
     let room = Background(name: "Room", imageName: "room")
 
     @Test @MainActor func testPetMoodModifier() async throws {
+        let moodDecayModifier = Modifier(label: "pet.mood", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
         let pet = Pet(background: room)
-        let moodDecayModifier = Modifier(label: "Pet1", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
+        #expect(pet.moodHalfLife(moodDecayModifier: moodDecayModifier) == 1)
         
-        pet.moodDecayModifier = moodDecayModifier
-        #expect(pet.moodHalfLife == 1)
         
-        var lowMoodFutureDate = try #require(pet.lowMoodFutureDate())
+        var lowMoodFutureDate = try #require(pet.lowMoodFutureDate(moodDecayModifier: moodDecayModifier))
         var futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 1.0 * 2)
         #expect(abs(lowMoodFutureDate.timeIntervalSince(futureDate)) < 1)
         
         
         moodDecayModifier.level = 1
-        #expect(pet.moodHalfLife == 1.2)
+        #expect(pet.moodHalfLife(moodDecayModifier: moodDecayModifier) == 1.2)
         
-        lowMoodFutureDate = try #require(pet.lowMoodFutureDate())
+        lowMoodFutureDate = try #require(pet.lowMoodFutureDate(moodDecayModifier: moodDecayModifier))
         futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 1.2 * 2)
         #expect(abs(lowMoodFutureDate.timeIntervalSince(futureDate)) < 1)
         
         
         moodDecayModifier.level = 5
-        #expect(pet.moodHalfLife == 2)
+        #expect(pet.moodHalfLife(moodDecayModifier: moodDecayModifier) == 2)
         
-        lowMoodFutureDate = try #require(pet.lowMoodFutureDate())
+        lowMoodFutureDate = try #require(pet.lowMoodFutureDate(moodDecayModifier: moodDecayModifier))
         futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 2.0 * 2)
         #expect(abs(lowMoodFutureDate.timeIntervalSince(futureDate)) < 1)
     }
     
     @Test @MainActor func testPetEnergyModifier() async throws {
+        let energyDecayModifier = Modifier(label: "pet.energy", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5)
         let pet = Pet(background: room)
-        let energyDecayModifier = Modifier(label: "Pet1", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5)
+        #expect(pet.dailyEnergyConsumption(energyDecayModifier: energyDecayModifier) == 20)
         
-        pet.energyDecayModifier = energyDecayModifier
-        #expect(pet.dailyEnergyConsumption == 20)
-        
-        var lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate())
+        var lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate(energyDecayModifier: energyDecayModifier))
         var futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 75 / 20.0)
         #expect(abs(lowEnergyFutureDate.timeIntervalSince(futureDate)) < 1)
         
         
         energyDecayModifier.level = 1
-        #expect(pet.dailyEnergyConsumption == 18)
+        #expect(pet.dailyEnergyConsumption(energyDecayModifier: energyDecayModifier) == 18)
         
-        lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate())
+        lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate(energyDecayModifier: energyDecayModifier))
         futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 75 / 18.0)
         #expect(abs(lowEnergyFutureDate.timeIntervalSince(futureDate)) < 1)
         
         
         energyDecayModifier.level = 5
-        #expect(pet.dailyEnergyConsumption == 10)
+        #expect(pet.dailyEnergyConsumption(energyDecayModifier: energyDecayModifier) == 10)
         
-        lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate())
+        lowEnergyFutureDate = try #require(pet.lowEnergyFutureDate(energyDecayModifier: energyDecayModifier))
         futureDate = pet.createdOn.addingTimeInterval(60 * 60 * 24 * 75 / 10.0)
         #expect(abs(lowEnergyFutureDate.timeIntervalSince(futureDate)) < 1)
     }
     
     @Test @MainActor func testFoodCostModifier() async throws {
+        let foodCostModifier = Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2)
         let porkBelly = Food(name: "Pork Belly", value: 50, image: .porkBelly)
-        let costModifier = Modifier(label: "Food1", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2)
+        #expect(porkBelly.cost(costModifier: foodCostModifier) == 50)
         
-        porkBelly.costModifier = costModifier
-        #expect(porkBelly.cost == 50)
+        foodCostModifier.level = 1
+        #expect(porkBelly.cost(costModifier: foodCostModifier) == 40)
         
-        costModifier.level = 1
-        #expect(porkBelly.cost == 40)
-        
-        costModifier.level = 2
-        #expect(porkBelly.cost == 30)
+        foodCostModifier.level = 2
+        #expect(porkBelly.cost(costModifier: foodCostModifier) == 30)
     }
     
     @Test @MainActor func testFoodMoodModifier() async throws {
+        let foodMoodModifier = Modifier(label: "food.mood", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
         let porkBelly = Food(name: "Pork Belly", value: 50, image: .porkBelly)
-        let moodModifier = Modifier(label: "Food2", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
+        #expect(porkBelly.moodEffects(moodModifier: foodMoodModifier) == 10)
         
-        porkBelly.moodModifier = moodModifier
-        #expect(porkBelly.moodEffects == 10)
+        foodMoodModifier.level = 1
+        #expect(porkBelly.moodEffects(moodModifier: foodMoodModifier) == 12)
         
-        moodModifier.level = 1
-        #expect(porkBelly.moodEffects == 12)
-        
-        moodModifier.level = 5
-        #expect(porkBelly.moodEffects == 20)
+        foodMoodModifier.level = 5
+        #expect(porkBelly.moodEffects(moodModifier: foodMoodModifier) == 20)
     }
     
     @Test @MainActor func testFoodEnergyModifier() async throws {
+        let foodEnergyModifier = Modifier(label: "food.energy", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5)
         let porkBelly = Food(name: "Pork Belly", value: 50, image: .porkBelly)
-        let energyModifier = Modifier(label: "Food3", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5)
+        #expect(porkBelly.energyEffects(energyModifier: foodEnergyModifier) == 50)
         
-        porkBelly.energyModifier = energyModifier
-        #expect(porkBelly.energyEffects == 50)
+        foodEnergyModifier.level = 1
+        #expect(porkBelly.energyEffects(energyModifier: foodEnergyModifier) == 60)
         
-        energyModifier.level = 1
-        #expect(porkBelly.energyEffects == 60)
-        
-        energyModifier.level = 5
-        #expect(porkBelly.energyEffects == 100)
+        foodEnergyModifier.level = 5
+        #expect(porkBelly.energyEffects(energyModifier: foodEnergyModifier) == 100)
     }
     
     @Test @MainActor func testToyCostModifier() async throws {
+        let toyCostModifier = Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2)
         let rubberDuck = Toy(name: "Rubber Duck", value: 80, image: .rubberDuck)
-        let costModifier = Modifier(label: "Toy1", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2)
+
+        #expect(rubberDuck.cost(costModifier: toyCostModifier) == 80)
         
-        rubberDuck.costModifier = costModifier
-        #expect(rubberDuck.cost == 80)
+        toyCostModifier.level = 1
+        #expect(rubberDuck.cost(costModifier: toyCostModifier) == 64)
         
-        costModifier.level = 1
-        #expect(rubberDuck.cost == 64)
-        
-        costModifier.level = 2
-        #expect(rubberDuck.cost == 48)
+        toyCostModifier.level = 2
+        #expect(rubberDuck.cost(costModifier: toyCostModifier) == 48)
     }
     
     @Test @MainActor func testToyMoodModifier() async throws {
+        let toyMoodModifier = Modifier(label: "toy.mood", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
         let rubberDuck = Toy(name: "Rubber Duck", value: 80, image: .rubberDuck)
-        let moodModifier = Modifier(label: "Toy2", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5)
+        #expect(rubberDuck.moodEffects(moodModifier: toyMoodModifier) == 80)
         
-        rubberDuck.moodModifier = moodModifier
-        #expect(rubberDuck.moodEffects == 80)
+        toyMoodModifier.level = 1
+        #expect(rubberDuck.moodEffects(moodModifier: toyMoodModifier) == 96)
         
-        moodModifier.level = 1
-        #expect(rubberDuck.moodEffects == 96)
-        
-        moodModifier.level = 5
-        #expect(rubberDuck.moodEffects == 160)
+        toyMoodModifier.level = 5
+        #expect(rubberDuck.moodEffects(moodModifier: toyMoodModifier) == 160)
     }
     
     @Test @MainActor func testToyEnergyModifier() async throws {
+        let toyEnergyModifier = Modifier(label: "toy.energy", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5)
         let rubberDuck = Toy(name: "Rubber Duck", value: 80, image: .rubberDuck)
-        let energyModifier = Modifier(label: "Toy3", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5)
+        #expect(rubberDuck.energyEffects(energyModifier: toyEnergyModifier) == -16)
         
-        rubberDuck.energyModifier = energyModifier
-        #expect(rubberDuck.energyEffects == -16)
+        toyEnergyModifier.level = 1
+        #expect(rubberDuck.energyEffects(energyModifier: toyEnergyModifier) == -14.4)
         
-        energyModifier.level = 1
-        #expect(rubberDuck.energyEffects == -14.4)
-        
-        energyModifier.level = 5
-        #expect(rubberDuck.energyEffects == -8)
+        toyEnergyModifier.level = 5
+        #expect(rubberDuck.energyEffects(energyModifier: toyEnergyModifier) == -8)
     }
 }
