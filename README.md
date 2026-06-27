@@ -38,6 +38,168 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 ---
 
 
+## User Flow
+### Earn Coins
+```mermaid
+flowchart LR
+    START([START])
+    ifTaskExists{Task exists?}
+    createTask[Create task]
+    startTask[Start task]
+    finishTask[Finish task]
+    claimRewards[Claim rewards]
+    END([END])
+    
+    START --> ifTaskExists
+    ifTaskExists --> |Yes| startTask 
+    ifTaskExists --> |No| createTask
+    createTask --> startTask
+    startTask --> finishTask
+    finishTask --> claimRewards
+    claimRewards --> END
+```
+
+### Buy Food/Toys
+```mermaid
+flowchart LR
+    START([START])
+    openShop[Open food/toy shop]
+    canAfford{Can afford food/toy?}
+    earnCoins[Earn coins]
+    buyItem[Buy food/toy]
+    END([END])
+    
+    START --> openShop
+    openShop --> canAfford
+    canAfford --> |Yes| buyItem
+    canAfford --> |No| earnCoins
+    earnCoins --> openShop
+    buyItem --> END
+```
+
+### Give Food/Toys
+```mermaid
+flowchart LR
+    START([START])
+    openSimulator[Open simulator]
+    isMoodLow{Is mood low?}
+    hasToy{Has toy?}
+    giveToy[Give toy]
+    buyToy[Buy toy]
+    isEnergyLow{Is energy low?}
+    hasFood{Has food?}
+    giveFood[Give food]
+    buyFood[Buy food]
+    END([END])
+    
+    START --> openSimulator
+    openSimulator --> isMoodLow
+    isMoodLow --> |Yes| hasToy
+    hasToy --> |Yes| giveToy
+    giveToy --> isMoodLow
+    hasToy --> |No| buyToy
+    buyToy --> openSimulator
+    isMoodLow --> |No| isEnergyLow
+    isEnergyLow --> |Yes| hasFood
+    hasFood --> |Yes| giveFood
+    giveFood --> isEnergyLow
+    hasFood --> |No| buyFood
+    buyFood --> openSimulator
+    isEnergyLow --> |No| END
+```
+
+### Buy/Sell Decor
+```mermaid
+flowchart LR
+    START([START])
+    openShop[Open decor shop]
+    canAfford{Can afford decor?}
+    buyDecor[Buy decor]
+    hasDecor{Has extra decor}
+    sellDecor[Sell decor]
+    earnCoins[Earn coins]
+    END([END])
+    
+    START --> openShop
+    openShop --> canAfford
+    canAfford --> |Yes| buyDecor
+    canAfford --> |No| hasDecor
+    hasDecor --> |Yes| sellDecor
+    sellDecor --> canAfford
+    hasDecor --> |No| earnCoins
+    earnCoins --> openShop
+    buyDecor --> END
+```
+
+### Change Background
+```mermaid
+flowchart LR
+    START([START])
+    openEditor[Edit background]
+    likeBackground{Like current background?}
+    pickBackground[Pick another background]
+    hasDecor{Has decorations on display?}
+    willRemoveDecor{Remove decorations from display?}
+    removeDecor[Tap to store decorations]
+    willAddDecor{Add decorations to display?}
+    buyDecor[Buy decorations]
+    displayDecor[Display decorations]
+    arrangeDecor[Arrange decorations]
+    END([END])
+    
+    START --> openEditor
+    openEditor --> likeBackground
+    likeBackground --> |No| pickBackground
+    pickBackground --> likeBackground
+    likeBackground --> |Yes| hasDecor
+    hasDecor --> |Yes| willRemoveDecor
+    willRemoveDecor --> |Yes| removeDecor
+    removeDecor --> willAddDecor
+    willRemoveDecor --> |No| willAddDecor
+    hasDecor --> |No| willAddDecor
+    willAddDecor --> |Yes| buyDecor
+    buyDecor --> displayDecor
+    displayDecor --> arrangeDecor
+    arrangeDecor --> END
+    willAddDecor --> |No| END
+```
+
+### Earn Modifier Points
+```mermaid
+flowchart LR
+    START([START])
+    openSimulator[Open simulator]
+    giveItems[Give food and toys]
+    levelUp{Did pet level up?}
+    END([END])
+
+    START --> openSimulator
+    openSimulator --> giveItems
+    giveItems --> levelUp
+    levelUp --> |No| giveItems
+    levelUp --> |Yes| END
+```
+
+### Buy Modifiers
+```mermaid
+flowchart LR
+    START([START])
+    openModiferShop[Open modifier shop]
+    hasModifierPoints{Has modifier points?}
+    earnModifierPoints[Earn modifier points]
+    buyModifiers[Buy modifiers]
+    END([END])
+
+    START --> openModiferShop
+    openModiferShop --> hasModifierPoints
+    hasModifierPoints --> |Yes| buyModifiers
+    hasModifierPoints --> |No| earnModifierPoints
+    earnModifierPoints --> openModiferShop
+    buyModifiers --> END
+```
+---
+
+
 ## 🚀 What's New (Milestone 2 Summary)
 
 Building upon Milestone 1's proof-of-concept, the application has been expanded into a more cohesive and extensive prototype. Our development for this milestone focused on deep state integration, greater timer flexibility, and a more personalized and engaging user and pet progression loop.
