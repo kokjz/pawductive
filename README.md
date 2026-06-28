@@ -28,7 +28,7 @@ Pets are widely loved yet expensive in real life, so we thought of creating a ga
 3. As a student, I want to put my phone away when I am studying so that I can study efficiently.
 4. As a student, I want to know how much time I have spent on the app so that I can know whether the app is effective. 
 5. As a pet lover, I want to own a virtual pet so that I can bring my pet anywhere with my phone. 
-6. As a pet lover, I want to give my virtual pet food and toys so that my virtual pet will love me.
+6. As a pet lover, I want to give my virtual pet food and toys so that my virtual pet is happy.
 7. As a pet lover, I want to decorate the area around the pet so that the pet feels comfortable. 
 8. As a gamer, I want to upgrade the simulator so that I can keep the pet happy and well fed. 
 9. As a gamer, I want to earn coins when I discover new features so that I can keep the pet happy and well fed.
@@ -280,26 +280,36 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 * **User notifications:** The app will request for permission to send notifications when the user first launches the app. After the app receives permission to send notifications, the user can manage the notifications sent by the app tapping on the bell icon. The user can decide if the app should notify the user when the pet is low on mood or energy. In addition, the user can decide when the app should notify the user when their streak is expiring. These notifications are off by default to reduce disruption. 
 
 ---
-## 🚧 Future Features (For Milestone 3)
+
+
+## 🚧 Potential Future Features (For Milestone 3)
 
 >#### Feedback on this section will be highly appreciated! ❤️
 
-NEED TO POPULATE THIS SECTION WITH PLANS FOR MS3 
-
 ### 1. Pet
 
-* **Pet Statistics & Achievements:** Add statistics and achievements for the pet simulator
-* **Pause Pet State Toggle:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for a period of time.
+* **Pet statistics & achievements:** Add statistics and achievements for the pet simulator
+* **Pet hibernation:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for an extended period of time.
+* **Pet accessories:** Allows users to purchase accessories that their pet can wear.
 
 ### 2. Shop
+* **Rotating discounts:** Shop items go on special sales, either at random or on daily rotations, to further incentivise users to maintain consistency and introduce more in-game financial planning.
 
 ### 3. Tasks
+* **Streak-based coin multiplier:** A new multiplier that rewards users more the longer their current streak to add on to the current existing multiplier that rewards users proportionately more for longer tasks.
+* **Dedicated task creation screen:** A new view for users to create tasks on a dedicated screen instead of doing it from the top of the task list screen, potentially also giving users more customisation options at task creation.
+* **Task categorisation:** Allow users to tag their created tasks with categories. Users can make use of default categories, or create/edit custom categories from their user settings.
+* **Task order organisation:** Allow users to drag and reorganise the order of the tasks on their task list. 
 
 ### 4. Timer
+* **Ambient audio:** Allows users to pick ambient white noise to be played on their timer screen, such as lofi music, rain, or other noise that helps the user focus.
 
 ### 5. Others
 
-* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, quickstart task, view task list). 
+* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, view task list, quickstart top task on list).
+* **Statistics dashboard:** Detailed dashboard in a separate view where users can see more data and insights about their usage statistics, such as their time spent on different categories of tasks.
+* **Share sheets / activity view:** Allow users to easily snapshot and share key activity information and their pet to other locations (e.g. to their friends on social media) through iOS built-in share sheet (Activity View).
+* **App-wide themes:** Allows users to customise app-wide visual themes from their user settings.
 
 
 ---
