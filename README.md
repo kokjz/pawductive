@@ -293,7 +293,9 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 * **Pet accessories:** Allows users to purchase accessories that their pet can wear.
 
 ### 2. Shop
-* **Rotating discounts:** Shop items go on special sales, either at random or on daily rotations, to further incentivise users to maintain consistency and introduce more in-game financial planning.
+* **Rotating discounts:** Shop items go on special sales, either at random or on daily rotations, to further incentivise users to maintain consistency and introduce more in-game financial planning. 
+* **Dynamic pricing:** To encourage the user to buy different food and toys, prices increase when the user purchases too many copies of the same item within a short span of time.
+* **Gacha system 💸:** User will spend a fixed amount of coins to buy items. Items have different rarity. User will receive a random item. Certain items may go on rate-ups with higher chances to obtain them on random rotation.
 
 ### 3. Tasks
 * **Streak-based coin multiplier:** A new multiplier that rewards users more the longer their current streak to add on to the current existing multiplier that rewards users proportionately more for longer tasks.
@@ -306,6 +308,7 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 
 ### 5. Others
 
+* **Login rewards:** Users receive coins/items when they open the app daily/weekly. Encourage the user to open the app to claim rewards. 
 * **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, view task list, quickstart top task on list).
 * **Statistics dashboard:** Detailed dashboard in a separate view where users can see more data and insights about their usage statistics, such as their time spent on different categories of tasks.
 * **Share sheets / activity view:** Allow users to easily snapshot and share key activity information and their pet to other locations (e.g. to their friends on social media) through iOS built-in share sheet (Activity View).
@@ -321,9 +324,9 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 ### 1. Model-View-ViewModel (MVVM)
 The UI is decoupled from the business logic to ensure a testable and maintainable codebase. This provides several key advantages, such as decoupling between frontend and backend, greater ease of testing, and reusability.
 
-* **Models:** These `.swift` files represent the raw data structures, persistent database schemas, and static catalogs of the application. Models are pure structures or reference types that hold state, remaining independent of how the UI is rendered. The current list of models include `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `Food`, `Toy`, `Pet`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
-* **Views:** These `.swift` files represent the declarative UI of the application. Built in **SwiftUI**, views are solely responsible for rendering layouts, responding to user interaction, and observing realtime changes in viewmodels, containing no business logic or manual database transaction code. The current list of views include `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
-* **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run asynchronous timers, and coordinate context transactions with the database. The current list of viewmodels include `MissionManager`, `NotificationManager`, `SettingsManager`, `TimerViewModel`, and `DataContainer`.
+* **Models:** These `.swift` files represent the raw data structures and database schemas of the application. Models are pure structures or reference types that hold state and are independent of the UI. The current list of models include `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `Food`, `Toy`, `Pet`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
+* **Views:** These `.swift` files represent the declarative UI of the application. Views are solely responsible for rendering layouts, responding to user interactions, and observing realtime changes in viewmodels. The current list of views include `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
+* **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run async timers, and coordinate context transactions with the databases. The current list of viewmodels include `MissionManager`, `NotificationManager`, `SettingsManager`, `TimerViewModel`, and `DataContainer`.
 
 Additionally, to round up the list of `.swift` files that are part of the main application, `PawductiveApp` serves as the entry point for the application.
 
@@ -333,7 +336,7 @@ A clean, relational database schema is used to manage all user, task, pet, and g
 * `TaskItem`: Tracks individual task titles, expected focus durations, completion states, and creation timestamps.
 * `UserProfile`: Tracks the user's active, spendable coin wallet, along with dictionaries storing their food and toy inventories.
 * `Pet`: Tracks the pet's name, age, level progression, cumulative XP, and real-time mood and energy decay.
-* `UserStats`: Tracks global lifetime user progression , including total completed tasks, total focus minutes, lifetime coins earned, and consecutive daily focus streaks.
+* `UserStats`: Tracks global lifetime user progression, including total completed tasks, total focus minutes, lifetime coins earned, and consecutive daily focus streaks.
 * `DailyMission`: Tracks the title, target requirements, active progress, claimed states, and reward amounts of individual daily missions.
 * `MissionManager`: Manages the current active daily missions list, checking calendar dates to trigger daily resets, and randomly drawing new missions from the global catalog.
 * `Modifier`: Tracks unlockable, level-up upgrades for pet decay rates and item efficiencies (e.g., lower store prices, reduced energy/mood decay, increased food calories).
