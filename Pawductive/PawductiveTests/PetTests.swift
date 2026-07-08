@@ -122,29 +122,29 @@ struct PetTests {
         #expect(pet.maxMood == 100)
         #expect(pet.energy == 100)
         
-        pet.totalExperiencePoints = 3000
-        #expect(pet.totalExperiencePoints == 3000)
+        pet.totalExperiencePoints = 248
+        #expect(pet.totalExperiencePoints == 248)
         #expect(pet.modifierPoints == 4)
         #expect(pet.level == 1)
         #expect(pet.maxMood == 110)
         #expect(pet.maxEnergy == 110)
         
-        pet.totalExperiencePoints = 30000
-        #expect(pet.totalExperiencePoints == 30000)
+        pet.totalExperiencePoints = 24794
+        #expect(pet.totalExperiencePoints == 24794)
         #expect(pet.modifierPoints == 31)
         #expect(pet.level == 10)
         #expect(pet.maxMood == 200)
         #expect(pet.maxEnergy == 200)
         
-        pet.totalExperiencePoints = 33000
-        #expect(pet.totalExperiencePoints == 33000)
+        pet.totalExperiencePoints = 30000
+        #expect(pet.totalExperiencePoints == 30000)
         #expect(pet.modifierPoints == 34)
         #expect(pet.level == 11)
         #expect(pet.maxMood == 200)
         #expect(pet.maxEnergy == 200)
         
-        pet.totalExperiencePoints = 36000
-        #expect(pet.totalExperiencePoints == 36000)
+        pet.totalExperiencePoints = 35703
+        #expect(pet.totalExperiencePoints == 35703)
         #expect(pet.modifierPoints == 34)
         #expect(pet.level == 11)
         #expect(pet.maxMood == 200)

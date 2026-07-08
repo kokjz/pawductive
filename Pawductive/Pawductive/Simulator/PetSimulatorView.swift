@@ -103,7 +103,7 @@ struct PetSimulatorView: View {
                 ZStack {
                     ValueBarView(fillRatio: pet.currentProgress, width: geometry.size.width * 0.80 + 10)
                         .foregroundStyle(.blue)
-                    Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.experiencePointsPerLevel) XP)")")
+                    Text("\(pet.level == pet.maxLevel ? "MAX LEVEL" : "Level \(pet.level) (\(pet.currentExperiencePoints) / \(pet.pointsToNextLevel) XP)")")
                         .font(.headline)
                         .foregroundStyle(.white)
                 }
@@ -158,5 +158,5 @@ struct PetSimulatorView: View {
     NavigationStack {
         PetSimulatorView()
     }
-    .modelContainer(DataContainer(mood: 150, energy: 150, experiencePoints: 15000).modelContainer)
+    .modelContainer(DataContainer(mood: 100, energy: 100, experiencePoints: 999).modelContainer)
 }

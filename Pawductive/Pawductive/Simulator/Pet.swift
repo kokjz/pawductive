@@ -63,19 +63,29 @@ class Pet {
         return (0.2 * maxEnergy) * (1.0 - levelRatio * 0.5)
     }
     
-    var level: Int {
-        let trueLevel = totalExperiencePoints / experiencePointsPerLevel
-        return trueLevel > maxLevel ? maxLevel : trueLevel
-    }
     var maxLevel: Int = 11
-    var currentProgress: Double {
-        Double(currentExperiencePoints) / Double(experiencePointsPerLevel)
+    var maxExperiencePoints: Double = 30000
+    var levelCoefficient: Double {
+        maxExperiencePoints / pow(Double(maxLevel), 2)
     }
     
     var totalExperiencePoints: Int
-    var experiencePointsPerLevel: Int = 3000
+    var level: Int {
+        let currentLevel = Int(sqrt(Double(totalExperiencePoints) / levelCoefficient))
+        return currentLevel > maxLevel ? maxLevel : currentLevel
+    }
+    func experiencePointsAt(_ level: Int) -> Int {
+        return Int(ceil(levelCoefficient * pow(Double(level), 2)))
+    }
     var currentExperiencePoints: Int {
-        level == maxLevel ? experiencePointsPerLevel : totalExperiencePoints - experiencePointsPerLevel * level
+        return totalExperiencePoints - experiencePointsAt(level)
+    }
+    var pointsToNextLevel: Int {
+        return experiencePointsAt(level + 1) - experiencePointsAt(level)
+    }
+    var currentProgress: Double {
+        guard level < maxLevel else { return 1.0 }
+        return Double(currentExperiencePoints) / Double(pointsToNextLevel)
     }
     
     var modifierPoints: Int {
