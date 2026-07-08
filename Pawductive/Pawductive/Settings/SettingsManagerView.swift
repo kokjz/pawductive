@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsManagerView: View {
     @State private var settingsManager = SettingsManager.shared
+    @State private var showHibernationAlert: Bool = false
+    @Query private var pets: [Pet]
+    private var pet: Pet {
+        return pets.first!
+    }
     
     var body: some View {
         @Bindable var settingsManager = settingsManager
+        @Bindable var pet = pet
         Form {
             Section("Timer Configuration") {
                 Toggle("Enable Timer Pausing", isOn: $settingsManager.isTimerPauseEnabled)
@@ -22,6 +29,23 @@ struct SettingsManagerView: View {
                         Text(formatGracePeriod(settingsManager.gracePeriodSeconds)).foregroundColor(.secondary)
                     }
                 }
+            }
+            
+            Section("Simulator Settings") {
+                Toggle("Enable Hibernation", isOn: $pet.isHibernating)
+                    .onChange(of: pet.isHibernating) { oldValue, newValue in
+                        if !oldValue && newValue {
+                            showHibernationAlert = true
+                        }
+                    }
+            }
+            .alert("Pet Hibernation Alert", isPresented: $showHibernationAlert) {
+                Button("Cancel", role: .cancel) {
+                    pet.isHibernating = false
+                }
+                Button("Confirm") {}
+            } message: {
+                Text("Mood and energy levels will not decay. Press confirm if you wish to proceed.")
             }
         }
         .navigationTitle("Manage Settings")
@@ -41,4 +65,5 @@ struct SettingsManagerView: View {
     NavigationStack {
         SettingsManagerView()
     }
+    .modelContainer(DataContainer().modelContainer)
 }
