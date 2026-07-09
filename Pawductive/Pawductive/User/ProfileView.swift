@@ -46,11 +46,19 @@ struct ProfileView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
+                    Text("Daily Rewards")
+                        .styleAsSubHeader()
+                    DailyRewardView()
+                }
+                .padding(.horizontal)
+                
+                VStack(alignment: .leading, spacing: 12) {
                     Text("Daily Missions")
                         .styleAsSubHeader()
                     DailyMissionsView()
                 }
                 .padding(.horizontal)
+                .padding(.top)
                 
                 if let stats = statsList.first {
                     //stats dashboard
@@ -76,19 +84,20 @@ struct ProfileView: View {
                         }
                         .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.top)
                     
                     //achievement list
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Achievements")
                             .styleAsSubHeader()
-                            .padding(.horizontal)
                         VStack(spacing: 12) {
                             ForEach(sortedAchievements(for: stats)) { achievement in
                                 achievementRow(achievement: achievement, stats: stats) }
                         }
-                        .padding(.horizontal)
                     }
+                    .padding(.horizontal)
+                    .padding(.top)
                 } else { //database empty
                     ContentUnavailableView("No Stats Available", systemImage: "person.crop.circle.badge.exclamationmark")
                 }
