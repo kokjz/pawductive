@@ -112,6 +112,23 @@ struct PetTests {
         #expect(floor(pet.mood) == 1)
         #expect(pet.energy == 0)
         #expect(pet.ageInDays == 6)
+        
+        pet.mood = 100
+        pet.energy = 100
+        
+        pet.isHibernating = true
+        let afterSevenDays = Calendar.current.date(byAdding: .day, value: 7, to: pet.createdOn)
+        pet.update(currDate: afterSevenDays!, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
+        #expect(pet.mood == 100)
+        #expect(pet.energy == 100)
+        #expect(pet.ageInDays == 7)
+        
+        pet.isHibernating = false
+        let afterEightDays = Calendar.current.date(byAdding: .day, value: 8, to: pet.createdOn)
+        pet.update(currDate: afterEightDays!, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
+        #expect(pet.mood.rounded() == 50)
+        #expect(pet.energy.rounded() == 80)
+        #expect(pet.ageInDays == 8)
     }
     
     @Test @MainActor func testExperiencePoints() async throws {
