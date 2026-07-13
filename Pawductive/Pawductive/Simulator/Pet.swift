@@ -32,7 +32,6 @@ class Pet {
         default: return ""
         }
     }
-    
     func moodHalfLife(moodDecayModifier: Modifier?) -> Double {
         guard let moodDecayModifier else { return 1 }
         guard moodDecayModifier.label == "pet.mood" else { return 1 }
@@ -55,7 +54,6 @@ class Pet {
         default: return ""
         }
     }
-    
     func dailyEnergyConsumption(energyDecayModifier: Modifier?) -> Double {
         guard let energyDecayModifier else { return 0.2 * maxEnergy }
         guard energyDecayModifier.label == "pet.energy" else { return 0.2 * maxEnergy }
@@ -96,6 +94,21 @@ class Pet {
     
     var isHibernating: Bool = false
     
+    var totalFoodReceived: Int = 0
+    var totalToysReceived: Int = 0
+    var highMoodSince: Date?
+    func highMoodStreak(now: Date) -> Int {
+        guard let highMoodSince else { return 0 }
+        return Calendar.current.dateComponents([.day], from: highMoodSince, to: now).day!
+    }
+    var maxHighMoodStreak: Int = 0
+    var highEnergySince: Date?
+    func highEnergyStreak(now: Date) -> Int {
+        guard let highEnergySince else { return 0 }
+        return Calendar.current.dateComponents([.day], from: highEnergySince, to: now).day!
+    }
+    var maxHighEnergyStreak: Int = 0
+    
     init(name: String = "DOG", mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0, background: Background) {
         self.name = name
         self.mood = mood
@@ -106,6 +119,8 @@ class Pet {
         self.ageInDays = 0
         self.createdOn = Date.now
         self.lastUpdatedOn = Date.now
+        self.highMoodSince = (mood > maxMood * 0.25) ? Date.now : nil
+        self.highEnergySince = (energy > maxEnergy * 0.25) ? Date.now : nil
     }
 
     var state = PetState.resting
@@ -140,6 +155,7 @@ class Pet {
         self.mood = min(self.mood + food.moodEffects(moodModifier: moodModifier), maxMood)
         self.energy = min(self.energy + food.energyEffects(energyModifier: energyModifier), maxEnergy)
         self.totalExperiencePoints += food.experiencePoints
+        self.totalFoodReceived += 1
     }
     
     func canReceive(toy: Toy, energyModifier: Modifier?) -> Bool {
@@ -151,6 +167,7 @@ class Pet {
         self.mood = min(self.mood + toy.moodEffects(moodModifier: moodModifier), maxMood)
         self.energy = self.energy + toy.energyEffects(energyModifier: energyModifier)
         self.totalExperiencePoints += toy.experiencePoints
+        self.totalToysReceived += 1
     }
     
     func update(currDate: Date, moodDecayModifier: Modifier?, energyDecayModifier: Modifier?) {
@@ -160,6 +177,21 @@ class Pet {
             self.updateEnergy(currDate, energyDecayModifier)
         }
         self.updateAge(currDate)
+        
+        if self.mood <= maxMood * 0.25 {
+            highMoodSince = nil
+        } else if highMoodSince == nil {
+            highMoodSince = currDate
+        }
+        maxHighMoodStreak = max(maxHighMoodStreak, highMoodStreak(now: currDate))
+        
+        if self.energy <= maxEnergy * 0.25 {
+            highEnergySince = nil
+        } else if highEnergySince == nil {
+            highEnergySince = currDate
+        }
+        maxHighEnergyStreak = max(maxHighEnergyStreak, highEnergyStreak(now: currDate))
+        
         lastUpdatedOn = currDate
     }
     

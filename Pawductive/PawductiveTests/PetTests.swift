@@ -187,4 +187,72 @@ struct PetTests {
         pet.state = .playing
         #expect(pet.image == .playing)
     }
+    
+    @Test @MainActor func testFoodStatistics() async throws {
+        let pet = Pet(mood: 100, energy: 0, background: Background(name: "Room", imageName: "room"))
+        #expect(pet.totalFoodReceived == 0)
+        
+        pet.receive(food: Food.chickenDrumstick, moodModifier: nil, energyModifier: nil)
+        #expect(pet.totalFoodReceived == 1)
+    }
+    
+    @Test @MainActor func testToyStatistics() async throws {
+        let pet = Pet(mood: 0, energy: 100, background: Background(name: "Room", imageName: "room"))
+        #expect(pet.totalToysReceived == 0)
+
+        pet.receive(toy: Toy.frisbee, moodModifier: nil, energyModifier: nil)
+        #expect(pet.totalToysReceived == 1)
+    }
+    
+    @Test @MainActor func testMoodStreak() async throws {
+        var pet = Pet(mood: 25, energy: 100, background: Background(name: "Room", imageName: "room"))
+        #expect(pet.highMoodSince == nil)
+        
+        pet = Pet(mood: 26, energy: 100, background: Background(name: "Room", imageName: "room"))
+        let highMoodSince: Date = try #require(pet.highMoodSince)
+        #expect(pet.highMoodStreak(now: pet.lastUpdatedOn) == 0)
+        #expect(pet.maxHighMoodStreak == 0)
+        
+        // Mood stays above threshold
+        pet.mood = 100
+        pet.update(currDate: highMoodSince.addingTimeInterval(24 * 3600 * 1), moodDecayModifier: nil, energyDecayModifier: nil)
+        #expect(pet.mood > 25)
+        #expect(pet.highMoodSince == highMoodSince)
+        #expect(pet.highMoodStreak(now: pet.lastUpdatedOn) == 1)
+        #expect(pet.maxHighMoodStreak == 1)
+        
+        // Mood drops below threshold
+        pet.mood = 25
+        pet.update(currDate: highMoodSince.addingTimeInterval(24 * 3600 * 2), moodDecayModifier: nil, energyDecayModifier: nil)
+        #expect(pet.mood <= 25)
+        #expect(pet.highMoodSince == nil)
+        #expect(pet.highMoodStreak(now: pet.lastUpdatedOn) == 0)
+        #expect(pet.maxHighMoodStreak == 1)
+    }
+    
+    @Test @MainActor func testEnergyStreak() async throws {
+        var pet = Pet(mood: 100, energy: 25, background: Background(name: "Room", imageName: "room"))
+        #expect(pet.highEnergySince == nil)
+        
+        pet = Pet(mood: 100, energy: 26, background: Background(name: "Room", imageName: "room"))
+        let highEnergySince: Date = try #require(pet.highEnergySince)
+        #expect(pet.highEnergyStreak(now: pet.lastUpdatedOn) == 0)
+        #expect(pet.maxHighEnergyStreak == 0)
+        
+        // Energy stays above threshold
+        pet.energy = 100
+        pet.update(currDate: highEnergySince.addingTimeInterval(24 * 3600 * 1), moodDecayModifier: nil, energyDecayModifier: nil)
+        #expect(pet.energy > 25)
+        #expect(pet.highEnergySince == highEnergySince)
+        #expect(pet.highEnergyStreak(now: pet.lastUpdatedOn) == 1)
+        #expect(pet.maxHighEnergyStreak == 1)
+        
+        // Energy drops below threshold
+        pet.energy = 25
+        pet.update(currDate: highEnergySince.addingTimeInterval(24 * 3600 * 2), moodDecayModifier: nil, energyDecayModifier: nil)
+        #expect(pet.energy <= 25)
+        #expect(pet.highEnergySince == nil)
+        #expect(pet.highEnergyStreak(now: pet.lastUpdatedOn) == 0)
+        #expect(pet.maxHighEnergyStreak == 1)
+    }
 }

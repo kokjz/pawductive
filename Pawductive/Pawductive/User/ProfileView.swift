@@ -11,9 +11,23 @@ import SwiftData
 struct ProfileView: View {
     //fetch stats from db
     @Query private var statsList: [UserStats]
+    @Query private var pets: [Pet]
+    
+    @Query private var modifiers: [Modifier]
+    private var moodDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.mood" })
+    }
+    private var energyDecayModifier: Modifier? {
+        modifiers.first(where: { $0.label == "pet.energy" })
+    }
     
     @State private var showNotificationManager: Bool = false
     @State private var showSettingsManager: Bool = false
+    
+    var now: Date {
+        return Date()
+//            .addingTimeInterval(24 * 3600 * 5) // FOR TESTING ONLY
+    }
     
     var body: some View {
         VStack(spacing: 24) {
@@ -60,10 +74,10 @@ struct ProfileView: View {
                 .padding(.horizontal)
                 .padding(.top)
                 
-                if let stats = statsList.first {
-                    //stats dashboard
+                if let stats = statsList.first, let pet = pets.first {
+                    //user statistics
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Statistics")
+                        Text("User Statistics")
                             .styleAsSubHeader()
                             
                         streakCard(streak: stats.currentStreak)
@@ -87,13 +101,61 @@ struct ProfileView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     
+                    //pet statistics
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Pet Statistics")
+                            .styleAsSubHeader()
+                        
+                        HStack(spacing: 16) {
+                            statCard(
+                                title: "Total Food Received",
+                                value: "\(pet.totalFoodReceived)",
+                                icon: "fork.knife.circle.fill",
+                                color: .yellow
+                            )
+                            statCard(
+                                title: "Total Toys Received",
+                                value: "\(pet.totalToysReceived)",
+                                icon: "baseball.fill",
+                                color: .yellow
+                            )
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                        
+                        HStack(spacing: 16) {
+                            statCard(
+                                title: "High Mood Streak",
+                                value: "\(pet.highMoodStreak(now: now))",
+                                icon: "face.smiling.inverse",
+                                color: .orange
+                            )
+                            statCard(
+                                title: "High Energy Streak",
+                                value: "\(pet.highEnergyStreak(now: now))",
+                                icon: "bolt.circle.fill",
+                                color: .orange
+                            )
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .onAppear {
+                        pet.update(
+                            currDate: now,
+                            moodDecayModifier: moodDecayModifier,
+                            energyDecayModifier: energyDecayModifier
+                        )
+                    }
+                    .padding(.horizontal)
+                    .padding(.top)
+                    
                     //achievement list
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Achievements")
                             .styleAsSubHeader()
                         VStack(spacing: 12) {
-                            ForEach(sortedAchievements(for: stats)) { achievement in
-                                achievementRow(achievement: achievement, stats: stats) }
+                            ForEach(sortedAchievements(stats: stats, pet: pet)) { achievement in
+                                achievementRow(achievement: achievement, stats: stats, pet: pet)
+                            }
                         }
                     }
                     .padding(.horizontal)
@@ -157,8 +219,8 @@ struct ProfileView: View {
     }
     
     //achievement row component
-    private func achievementRow(achievement: Achievement, stats: UserStats) -> some View {
-        let unlocked = achievement.isUnlocked(stats: stats)
+    private func achievementRow(achievement: Achievement, stats: UserStats, pet: Pet) -> some View {
+        let unlocked = achievement.isUnlocked(stats: stats, pet: pet)
         return HStack(spacing: 16) {
             ZStack {
                 Circle()
@@ -184,10 +246,10 @@ struct ProfileView: View {
     }
     
     //achievement sort by completion
-    private func sortedAchievements(for stats: UserStats) -> [Achievement] {
+    private func sortedAchievements(stats: UserStats, pet: Pet) -> [Achievement] {
         Achievement.allCases.sorted { a, b in
-            let aUnlocked = a.isUnlocked(stats: stats)
-            let bUnlocked = b.isUnlocked(stats: stats)
+            let aUnlocked = a.isUnlocked(stats: stats, pet: pet)
+            let bUnlocked = b.isUnlocked(stats: stats, pet: pet)
             if aUnlocked == bUnlocked {
                 let aIndex = Achievement.allCases.firstIndex(of: a) ?? 0
                 let bIndex = Achievement.allCases.firstIndex(of: b) ?? 0
