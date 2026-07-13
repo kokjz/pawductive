@@ -112,6 +112,23 @@ struct PetTests {
         #expect(floor(pet.mood) == 1)
         #expect(pet.energy == 0)
         #expect(pet.ageInDays == 6)
+        
+        pet.mood = 100
+        pet.energy = 100
+        
+        pet.isHibernating = true
+        let afterSevenDays = Calendar.current.date(byAdding: .day, value: 7, to: pet.createdOn)
+        pet.update(currDate: afterSevenDays!, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
+        #expect(pet.mood == 100)
+        #expect(pet.energy == 100)
+        #expect(pet.ageInDays == 7)
+        
+        pet.isHibernating = false
+        let afterEightDays = Calendar.current.date(byAdding: .day, value: 8, to: pet.createdOn)
+        pet.update(currDate: afterEightDays!, moodDecayModifier: moodDecayModifier, energyDecayModifier: energyDecayModifier)
+        #expect(pet.mood.rounded() == 50)
+        #expect(pet.energy.rounded() == 80)
+        #expect(pet.ageInDays == 8)
     }
     
     @Test @MainActor func testExperiencePoints() async throws {
@@ -122,29 +139,29 @@ struct PetTests {
         #expect(pet.maxMood == 100)
         #expect(pet.energy == 100)
         
-        pet.totalExperiencePoints = 3000
-        #expect(pet.totalExperiencePoints == 3000)
+        pet.totalExperiencePoints = 248
+        #expect(pet.totalExperiencePoints == 248)
         #expect(pet.modifierPoints == 4)
         #expect(pet.level == 1)
         #expect(pet.maxMood == 110)
         #expect(pet.maxEnergy == 110)
         
-        pet.totalExperiencePoints = 30000
-        #expect(pet.totalExperiencePoints == 30000)
+        pet.totalExperiencePoints = 24794
+        #expect(pet.totalExperiencePoints == 24794)
         #expect(pet.modifierPoints == 31)
         #expect(pet.level == 10)
         #expect(pet.maxMood == 200)
         #expect(pet.maxEnergy == 200)
         
-        pet.totalExperiencePoints = 33000
-        #expect(pet.totalExperiencePoints == 33000)
+        pet.totalExperiencePoints = 30000
+        #expect(pet.totalExperiencePoints == 30000)
         #expect(pet.modifierPoints == 34)
         #expect(pet.level == 11)
         #expect(pet.maxMood == 200)
         #expect(pet.maxEnergy == 200)
         
-        pet.totalExperiencePoints = 36000
-        #expect(pet.totalExperiencePoints == 36000)
+        pet.totalExperiencePoints = 35703
+        #expect(pet.totalExperiencePoints == 35703)
         #expect(pet.modifierPoints == 34)
         #expect(pet.level == 11)
         #expect(pet.maxMood == 200)

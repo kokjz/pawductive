@@ -63,19 +63,29 @@ class Pet {
         return (0.2 * maxEnergy) * (1.0 - levelRatio * 0.5)
     }
     
-    var level: Int {
-        let trueLevel = totalExperiencePoints / experiencePointsPerLevel
-        return trueLevel > maxLevel ? maxLevel : trueLevel
-    }
     var maxLevel: Int = 11
-    var currentProgress: Double {
-        Double(currentExperiencePoints) / Double(experiencePointsPerLevel)
+    var maxExperiencePoints: Double = 30000
+    var levelCoefficient: Double {
+        maxExperiencePoints / pow(Double(maxLevel), 2)
     }
     
     var totalExperiencePoints: Int
-    var experiencePointsPerLevel: Int = 3000
+    var level: Int {
+        let currentLevel = Int(sqrt(Double(totalExperiencePoints) / levelCoefficient))
+        return currentLevel > maxLevel ? maxLevel : currentLevel
+    }
+    func experiencePointsAt(_ level: Int) -> Int {
+        return Int(ceil(levelCoefficient * pow(Double(level), 2)))
+    }
     var currentExperiencePoints: Int {
-        level == maxLevel ? experiencePointsPerLevel : totalExperiencePoints - experiencePointsPerLevel * level
+        return totalExperiencePoints - experiencePointsAt(level)
+    }
+    var pointsToNextLevel: Int {
+        return experiencePointsAt(level + 1) - experiencePointsAt(level)
+    }
+    var currentProgress: Double {
+        guard level < maxLevel else { return 1.0 }
+        return Double(currentExperiencePoints) / Double(pointsToNextLevel)
     }
     
     var modifierPoints: Int {
@@ -83,6 +93,8 @@ class Pet {
     }
     
     @Relationship var background: Background
+    
+    var isHibernating: Bool = false
     
     init(name: String = "DOG", mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0, background: Background) {
         self.name = name
@@ -143,8 +155,10 @@ class Pet {
     
     func update(currDate: Date, moodDecayModifier: Modifier?, energyDecayModifier: Modifier?) {
         guard currDate >= lastUpdatedOn else { return }
-        self.updateMood(currDate, moodDecayModifier)
-        self.updateEnergy(currDate, energyDecayModifier)
+        if !isHibernating {
+            self.updateMood(currDate, moodDecayModifier)
+            self.updateEnergy(currDate, energyDecayModifier)
+        }
         self.updateAge(currDate)
         lastUpdatedOn = currDate
     }
@@ -165,14 +179,14 @@ class Pet {
     
     func lowMoodFutureDate(moodDecayModifier: Modifier?) -> Date? {
         let lowMood = 0.25 * maxMood
-        guard self.mood > lowMood else { return nil }
+        guard self.mood > lowMood && !isHibernating else { return nil }
         let daysToLowMood = moodHalfLife(moodDecayModifier: moodDecayModifier) * log2(self.mood / lowMood)
         return self.lastUpdatedOn.addingTimeInterval(daysToLowMood * 24 * 60 * 60)
     }
     
     func lowEnergyFutureDate(energyDecayModifier: Modifier?) -> Date? {
         let lowEnergy = 0.25 * maxEnergy
-        guard self.energy > lowEnergy else { return nil }
+        guard self.energy > lowEnergy && !isHibernating else { return nil }
         let daysToLowEnergy = (self.energy - lowEnergy) / dailyEnergyConsumption(energyDecayModifier: energyDecayModifier)
         return self.lastUpdatedOn.addingTimeInterval(daysToLowEnergy * 24 * 60 * 60)
     }
