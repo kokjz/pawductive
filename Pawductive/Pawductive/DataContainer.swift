@@ -47,6 +47,7 @@ class DataContainer {
         let schema = Schema([
             Background.self,
             DailyMission.self,
+            DailyReward.self,
             MissionManager.self,
             Modifier.self,
             NotificationManager.self,
@@ -71,6 +72,7 @@ class DataContainer {
                 context.insert(user)
                 context.insert(UserStats())
                 
+                context.insert(DailyReward())
                 let missionManager = MissionManager()
                 missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                 context.insert(missionManager)
