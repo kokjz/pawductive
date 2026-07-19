@@ -6,7 +6,20 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		870AC0FB300CB33700536C21 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87260C91300B5B1500757D29 /* WidgetKit.framework */; };
+		870AC0FC300CB33700536C21 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87260C93300B5B1500757D29 /* SwiftUI.framework */; };
+		870AC107300CB33800536C21 /* PawductiveWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 870AC0FA300CB33700536C21 /* PawductiveWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		870AC105300CB33800536C21 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F652EAFE2FB9D7E600DF4DD6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 870AC0F9300CB33700536C21;
+			remoteInfo = PawductiveWidgetsExtension;
+		};
 		F652EB162FB9D7E700DF4DD6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F652EAFE2FB9D7E600DF4DD6 /* Project object */;
@@ -23,15 +36,61 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		87260CA0300B5B1600757D29 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				870AC107300CB33800536C21 /* PawductiveWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		870AC0FA300CB33700536C21 /* PawductiveWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PawductiveWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		870AC13E300D3E5800536C21 /* PawductiveWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PawductiveWidgetsExtension.entitlements; sourceTree = "<group>"; };
+		87260C91300B5B1500757D29 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		87260C93300B5B1500757D29 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		F652EB062FB9D7E600DF4DD6 /* Pawductive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pawductive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F652EB152FB9D7E700DF4DD6 /* PawductiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PawductiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F652EB1F2FB9D7E700DF4DD6 /* PawductiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PawductiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		870AC108300CB33800536C21 /* Exceptions for "PawductiveWidgets" folder in "PawductiveWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */;
+		};
+		870AC13D300CB37900536C21 /* Exceptions for "Pawductive" folder in "PawductiveWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PawductiveApp.swift,
+			);
+			target = 870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		870AC0FD300CB33700536C21 /* PawductiveWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				870AC108300CB33800536C21 /* Exceptions for "PawductiveWidgets" folder in "PawductiveWidgetsExtension" target */,
+			);
+			path = PawductiveWidgets;
+			sourceTree = "<group>";
+		};
 		F652EB082FB9D7E600DF4DD6 /* Pawductive */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				870AC13D300CB37900536C21 /* Exceptions for "Pawductive" folder in "PawductiveWidgetsExtension" target */,
+			);
 			path = Pawductive;
 			sourceTree = "<group>";
 		};
@@ -48,6 +107,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		870AC0F7300CB33700536C21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				870AC0FC300CB33700536C21 /* SwiftUI.framework in Frameworks */,
+				870AC0FB300CB33700536C21 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F652EB032FB9D7E600DF4DD6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,11 +140,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		87260C90300B5B1500757D29 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87260C91300B5B1500757D29 /* WidgetKit.framework */,
+				87260C93300B5B1500757D29 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F652EAFD2FB9D7E600DF4DD6 = {
 			isa = PBXGroup;
 			children = (
+				870AC13E300D3E5800536C21 /* PawductiveWidgetsExtension.entitlements */,
 				F652EB182FB9D7E700DF4DD6 /* PawductiveTests */,
 				F652EB222FB9D7E700DF4DD6 /* PawductiveUITests */,
+				870AC0FD300CB33700536C21 /* PawductiveWidgets */,
+				87260C90300B5B1500757D29 /* Frameworks */,
 				F652EB072FB9D7E600DF4DD6 /* Products */,
 				F652EB082FB9D7E600DF4DD6 /* Pawductive */,
 			);
@@ -88,6 +168,7 @@
 				F652EB062FB9D7E600DF4DD6 /* Pawductive.app */,
 				F652EB152FB9D7E700DF4DD6 /* PawductiveTests.xctest */,
 				F652EB1F2FB9D7E700DF4DD6 /* PawductiveUITests.xctest */,
+				870AC0FA300CB33700536C21 /* PawductiveWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +176,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 870AC109300CB33800536C21 /* Build configuration list for PBXNativeTarget "PawductiveWidgetsExtension" */;
+			buildPhases = (
+				870AC0F6300CB33700536C21 /* Sources */,
+				870AC0F7300CB33700536C21 /* Frameworks */,
+				870AC0F8300CB33700536C21 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				870AC0FD300CB33700536C21 /* PawductiveWidgets */,
+				F652EB082FB9D7E600DF4DD6 /* Pawductive */,
+			);
+			name = PawductiveWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = PawductiveWidgetsExtension;
+			productReference = 870AC0FA300CB33700536C21 /* PawductiveWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		F652EB052FB9D7E600DF4DD6 /* Pawductive */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F652EB292FB9D7E700DF4DD6 /* Build configuration list for PBXNativeTarget "Pawductive" */;
@@ -102,10 +206,12 @@
 				F652EB022FB9D7E600DF4DD6 /* Sources */,
 				F652EB032FB9D7E600DF4DD6 /* Frameworks */,
 				F652EB042FB9D7E600DF4DD6 /* Resources */,
+				87260CA0300B5B1600757D29 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				870AC106300CB33800536C21 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F652EB082FB9D7E600DF4DD6 /* Pawductive */,
@@ -173,6 +279,9 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
+					870AC0F9300CB33700536C21 = {
+						CreatedOnToolsVersion = 26.5;
+					};
 					F652EB052FB9D7E600DF4DD6 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -204,11 +313,19 @@
 				F652EB052FB9D7E600DF4DD6 /* Pawductive */,
 				F652EB142FB9D7E700DF4DD6 /* PawductiveTests */,
 				F652EB1E2FB9D7E700DF4DD6 /* PawductiveUITests */,
+				870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		870AC0F8300CB33700536C21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F652EB042FB9D7E600DF4DD6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,6 +350,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		870AC0F6300CB33700536C21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F652EB022FB9D7E600DF4DD6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +381,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		870AC106300CB33800536C21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */;
+			targetProxy = 870AC105300CB33800536C21 /* PBXContainerItemProxy */;
+		};
 		F652EB172FB9D7E700DF4DD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F652EB052FB9D7E600DF4DD6 /* Pawductive */;
@@ -270,6 +399,68 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		870AC10A300CB33800536C21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PawductiveWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G2U6XXLCBU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PawductiveWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PawductiveWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.NoAnimalsWereHarmed.Pawductive.PawductiveWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		870AC10B300CB33800536C21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PawductiveWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G2U6XXLCBU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PawductiveWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PawductiveWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.NoAnimalsWereHarmed.Pawductive.PawductiveWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		F652EB272FB9D7E700DF4DD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -396,9 +587,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pawductive/Pawductive.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 866KFY4F92;
+				DEVELOPMENT_TEAM = G2U6XXLCBU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -429,9 +621,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Pawductive/Pawductive.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 866KFY4F92;
+				DEVELOPMENT_TEAM = G2U6XXLCBU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -545,6 +738,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		870AC109300CB33800536C21 /* Build configuration list for PBXNativeTarget "PawductiveWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				870AC10A300CB33800536C21 /* Debug */,
+				870AC10B300CB33800536C21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F652EB012FB9D7E600DF4DD6 /* Build configuration list for PBXProject "Pawductive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

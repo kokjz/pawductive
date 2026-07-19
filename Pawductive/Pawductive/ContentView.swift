@@ -5,6 +5,7 @@
 //  Created by Kok Jun Zhe on 21/5/26.
 //
 
+import WidgetKit
 import SwiftUI
 import SwiftData
 
@@ -76,6 +77,7 @@ struct ContentView: View {
                     moodDecayModifier: moodDecayModifier,
                     energyDecayModifier: energyDecayModifier
                 )
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }

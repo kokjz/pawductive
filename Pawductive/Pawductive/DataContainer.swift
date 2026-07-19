@@ -8,7 +8,14 @@
 import Foundation
 import SwiftData
 
+@MainActor
 class DataContainer {
+    static let sharedContainer = DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer
+    
+    static var sharedContext: ModelContext {
+        sharedContainer.mainContext
+    }
+    
     let modelContainer: ModelContainer
     
     var context: ModelContext {

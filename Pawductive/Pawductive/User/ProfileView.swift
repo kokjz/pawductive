@@ -12,6 +12,10 @@ struct ProfileView: View {
     //fetch stats from db
     @Query private var statsList: [UserStats]
     @Query private var pets: [Pet]
+    @Query private var users: [UserProfile]
+    private var user: UserProfile {
+        users.first!
+    }
     
     @Query private var modifiers: [Modifier]
     private var moodDecayModifier: Modifier? {
@@ -160,6 +164,23 @@ struct ProfileView: View {
                     }
                     .padding(.horizontal)
                     .padding(.top)
+                    
+//                    // CHEATS (FOR TESTING)
+//                    HStack {
+//                        Button() {
+//                            user.coins += 999
+//                        } label: {
+//                            Text("FREE COINS").frame(width: 150)
+//                        }
+//                        .buttonStyle(.borderedProminent)
+//                        Button {
+//                            pet.totalExperiencePoints += 999
+//                        } label: {
+//                            Text("INCREASE XP").frame(width: 150)
+//                        }
+//                        .buttonStyle(.borderedProminent)
+//                    }
+//                    .padding()
                 } else { //database empty
                     ContentUnavailableView("No Stats Available", systemImage: "person.crop.circle.badge.exclamationmark")
                 }
