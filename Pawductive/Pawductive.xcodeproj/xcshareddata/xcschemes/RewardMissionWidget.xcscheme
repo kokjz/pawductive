@@ -69,19 +69,10 @@
             ReferencedContainer = "container:Pawductive.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F652EB052FB9D7E600DF4DD6"
-            BuildableName = "Pawductive.app"
-            BlueprintName = "Pawductive"
-            ReferencedContainer = "container:Pawductive.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCWidgetKind"
-            value = ""
+            value = "RewardMissionWidget"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
@@ -91,7 +82,7 @@
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "_XCWidgetFamily"
-            value = "systemSmall"
+            value = "systemLarge"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

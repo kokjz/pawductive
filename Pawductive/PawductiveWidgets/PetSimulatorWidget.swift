@@ -9,38 +9,40 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 
-struct Provider: @MainActor TimelineProvider {
-    func placeholder(in context: Context) -> PetSimulatorEntry {
-        PetSimulatorEntry(date: Date())
+struct PetSimulatorProvider: @MainActor TimelineProvider {
+    @MainActor func placeholder(in context: Context) -> PetSimulatorEntry {
+        PetSimulatorEntry(date: Date(), modelContainer: DataContainer().modelContainer)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (PetSimulatorEntry) -> ()) {
-        let entry = PetSimulatorEntry(date: Date())
+    @MainActor func getSnapshot(in context: Context, completion: @escaping (PetSimulatorEntry) -> ()) {
+        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
+        let entry = PetSimulatorEntry(date: Date(), modelContainer: modelContainer)
         completion(entry)
     }
     
     // Updates widget every hour
     @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
         var entries: [PetSimulatorEntry] = []
         
-        let moodDecayModifier = try? DataContainer.sharedContext.fetch(
+        let moodDecayModifier = try? modelContainer.mainContext.fetch(
             FetchDescriptor<Modifier>(predicate: #Predicate { $0.label == "pet.mood" })
         ).first
         
-        let energyDecayModifier = try? DataContainer.sharedContext.fetch(
+        let energyDecayModifier = try? modelContainer.mainContext.fetch(
             FetchDescriptor<Modifier>(predicate: #Predicate { $0.label == "pet.energy" })
         ).first
         
-        if let pet = try? DataContainer.sharedContext.fetch(FetchDescriptor<Pet>()).first {
+        if let pet = try? modelContainer.mainContext.fetch(FetchDescriptor<Pet>()).first {
             pet.update(
                 currDate: Date(),
                 moodDecayModifier: moodDecayModifier,
                 energyDecayModifier: energyDecayModifier
             )
-            try? DataContainer.sharedContext.save()
+            try? modelContainer.mainContext.save()
         }
         
-        entries.append(PetSimulatorEntry(date: Date()))
+        entries.append(PetSimulatorEntry(date: Date(), modelContainer: modelContainer))
         let timeline = Timeline(entries: entries, policy: .after(Date().advanced(by: 3600)))
         completion(timeline)
     }
@@ -48,10 +50,11 @@ struct Provider: @MainActor TimelineProvider {
 
 struct PetSimulatorEntry: TimelineEntry {
     let date: Date
+    let modelContainer: ModelContainer
 }
 
 struct PetSimulatorEntryView: View {
-    var entry: Provider.Entry
+    var entry: PetSimulatorEntry
     
     @Query private var pets: [Pet]
     private var pet: Pet {
@@ -65,6 +68,8 @@ struct PetSimulatorEntryView: View {
     private var energyDecayModifier: Modifier? {
         modifiers.first(where: { $0.label == "pet.energy" })
     }
+    
+    @Environment(\.widgetRenderingMode) private var widgetMode
 
     var body: some View {
         ZStack {
@@ -87,7 +92,10 @@ struct PetSimulatorEntryView: View {
                     .opacity(0.9)
                 Text("Mood: " + pet.moodDescription)
                     .font(.caption)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .foregroundStyle(.white)
+                    .blendMode(widgetMode == .fullColor ? .normal : .destinationOut)
             }
             .padding(.top, height * 0.05)
             
@@ -98,13 +106,17 @@ struct PetSimulatorEntryView: View {
                     .opacity(0.9)
                 Text("Energy: " + String(format: "%.0f", pet.energy))
                     .font(.caption)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .foregroundStyle(.white)
+                    .blendMode(widgetMode == .fullColor ? .normal : .destinationOut)
             }
             
             Spacer()
 
             Image(pet.image)
                 .resizable()
+                .widgetAccentedRenderingMode(.fullColor)
                 .scaledToFit()
                 .frame(width: width * 0.25, height: width * 0.25, alignment: .bottom)
                 .padding(.bottom)
@@ -116,18 +128,14 @@ struct PetSimulatorWidget: Widget {
     let kind: String = "PetSimulatorWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        StaticConfiguration(kind: kind, provider: PetSimulatorProvider()) { entry in
             PetSimulatorEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
-                .modelContainer(DataContainer.sharedContainer)
-//                // FOR TESTING ONLY
-//                .modelContainer(
-//                    DataContainer(loadDecorations: true, inMemory: true).modelContainer
-//                )
                 .widgetURL(URL(string: "pawductive://pet"))
+                .modelContainer(entry.modelContainer)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Pet Simulator")
+        .description("Monitor your pet in your home screen")
         .supportedFamilies([.systemSmall])
         .contentMarginsDisabled()
     }
@@ -136,6 +144,6 @@ struct PetSimulatorWidget: Widget {
 #Preview(as: .systemSmall) {
     PetSimulatorWidget()
 } timeline: {
-    PetSimulatorEntry(date: Date())
+    PetSimulatorEntry(date: Date(), modelContainer: DataContainer().modelContainer)
 }
 

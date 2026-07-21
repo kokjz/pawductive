@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 23/6/26.
 //
 
+import WidgetKit
 import SwiftData
 import SwiftUI
 
@@ -19,6 +20,8 @@ struct DailyMissionsView: View {
         users.first!
     }
     
+    @Environment(\.widgetRenderingMode) private var widgetMode
+
     var body: some View {
         ForEach(missionManager.activeMissions.sorted(by: { m1, m2 in
             m1.title < m2.title
@@ -26,31 +29,34 @@ struct DailyMissionsView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(mission.title)
-                        .font(.headline)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
                         .fontDesign(.rounded)
                     Text("Progress: \(min(mission.progress, mission.requirement)) / \(mission.requirement)")
-                        .font(.subheadline)
+                        .font(.caption)
                         .fontDesign(.rounded)
                     Text("Reward: \(mission.reward) coins")
-                        .font(.subheadline)
+                        .font(.caption)
                         .fontDesign(.rounded)
-                        .fontWeight(.medium)
                 }
                 
                 Spacer()
                 
-                Button {
+                Button(mission.claimed ? "Claimed" : "Claim") {
                     user.coins += mission.reward
                     mission.claimed = true
-                } label: {
-                    Text(mission.claimed ? "Claimed" : "Claim")
                 }
-                .buttonStyle(.borderedProminent)
+                .fontWeight(.semibold)
+                .buttonStyle(.bordered)
                 .disabled(mission.claimed || mission.progress < mission.requirement)
             }
-            .padding()
-            .background(Color(.systemBackground))
+            .padding(.vertical, 10)
+            .padding(.horizontal, 12)
+            .background(Color(.systemBackground).opacity(widgetMode == .fullColor ? 1 : 0.2))
             .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+        .onAppear {
+            missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
         }
     }
 }

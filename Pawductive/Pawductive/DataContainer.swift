@@ -10,16 +10,103 @@ import SwiftData
 
 @MainActor
 class DataContainer {
-    static let sharedContainer = DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer
-    
-    static var sharedContext: ModelContext {
-        sharedContainer.mainContext
-    }
-    
     let modelContainer: ModelContainer
     
     var context: ModelContext {
         modelContainer.mainContext
+    }
+    
+    static func createModelContainer(inMemory: Bool = true) -> ModelContainer? {
+        let schema = Schema([
+            Background.self, DailyMission.self, DailyReward.self, MissionManager.self,
+            Modifier.self, NotificationManager.self, Pet.self, ShownDecor.self,
+            StoredDecor.self, TaskItem.self, UserProfile.self, UserStats.self
+        ])
+        
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
+        return try? ModelContainer(for: schema, configurations: [modelConfiguration])
+    }
+    
+    init(coins: Int = 999, mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0,
+         loadInventory: Bool = true, loadDecorations: Bool = true, inMemory: Bool = true) {
+        if let modelContainer = DataContainer.createModelContainer(inMemory: inMemory) {
+            self.modelContainer = modelContainer
+        } else {
+            fatalError("Could not create model container")
+        }
+        
+        if (try? context.fetch(FetchDescriptor<UserProfile>()).isEmpty) ?? true {
+            let user = UserProfile(coins: coins)
+            if loadInventory {
+                loadFoodInventory(user: user)
+                loadToyInventory(user: user)
+            }
+            context.insert(user)
+        }
+        if (try? context.fetch(FetchDescriptor<UserStats>()).isEmpty) ?? true {
+            context.insert(UserStats())
+        } else {
+            checkAndResetBrokenStreak()
+        }
+        if (try? context.fetch(FetchDescriptor<DailyReward>()).isEmpty) ?? true {
+            context.insert(DailyReward())
+        }
+        if (try? context.fetch(FetchDescriptor<MissionManager>()).isEmpty) ?? true {
+            let missionManager = MissionManager()
+            missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
+            context.insert(missionManager)
+        }
+        if (try? context.fetch(FetchDescriptor<NotificationManager>()).isEmpty) ?? true {
+            context.insert(NotificationManager())
+        }
+        if (try? context.fetch(FetchDescriptor<Background>()).isEmpty) ?? true {
+            insertBackgrounds()
+        }
+        if (try? context.fetch(FetchDescriptor<StoredDecor>()).isEmpty) ?? true {
+            insertStoredDecors()
+            if loadDecorations {
+                loadRoomDecorations()
+            }
+        }
+        if (try? context.fetch(FetchDescriptor<Modifier>()).isEmpty) ?? true {
+            insertModifiers()
+        }
+        if (try? context.fetch(FetchDescriptor<Pet>()).isEmpty) ?? true {
+            context.insert(createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!)
+        }
+        
+        try? context.save()
+    }
+    
+    private func loadFoodInventory(user: UserProfile) {
+        user.foodInventory[Food.corn.name] = 3
+        user.foodInventory[Food.chickenWing.name] = 3
+        user.foodInventory[Food.porkBelly.name] = 3
+    }
+    
+    private func loadToyInventory(user: UserProfile) {
+        user.toyInventory[Toy.frisbee.name] = 3
+        user.toyInventory[Toy.treeBranch.name] = 3
+        user.toyInventory[Toy.rubberDuck.name] = 3
+    }
+    
+    private func checkAndResetBrokenStreak() {
+        let statsDescriptor = FetchDescriptor<UserStats>()
+        if let statsList = try? context.fetch(statsDescriptor), let stats = statsList.first {
+            if let lastActive = stats.lastActiveDate {
+                let calendar = Calendar.current
+                let lastActiveMidnight = calendar.startOfDay(for: lastActive)
+                let todayMidnight = calendar.startOfDay(for: Date())
+                let components = calendar.dateComponents([.day], from: lastActiveMidnight, to: todayMidnight)
+                if let daysBetween = components.day, daysBetween > 1 { //streak broken
+                    stats.currentStreak = 0
+                    try? context.save()
+                    print("Broken streak detected on launch, reset to 0")
+                } else { //streak still active
+                    print("Streak still active on launch, current streak: \(stats.currentStreak)")
+                }
+            }
+        }
     }
     
     static var dailyMissions: [DailyMission] {
@@ -41,104 +128,6 @@ class DataContainer {
             DailyMission(title: "Display 3 decors", requirement: 3, reward: 5, isSpecific: false,
                          details: MissionDetails(action: "DISPLAY", targetType: "DECOR", targetName: "")),
         ]
-    }
-    
-    init(coins: Int = 800,
-         mood: Double = 100,
-         energy: Double = 100,
-         experiencePoints: Int = 0,
-         loadInventory: Bool = true,
-         loadDecorations: Bool = true,
-         inMemory: Bool = true)
-    {
-        let schema = Schema([
-            Background.self,
-            DailyMission.self,
-            DailyReward.self,
-            MissionManager.self,
-            Modifier.self,
-            NotificationManager.self,
-            Pet.self,
-            ShownDecor.self,
-            StoredDecor.self,
-            TaskItem.self,
-            UserProfile.self,
-            UserStats.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
-        do {
-            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            let descriptor = FetchDescriptor<UserProfile>()
-            let existingUsers = try? context.fetch(descriptor)
-            if existingUsers?.isEmpty ?? true {
-                let user = UserProfile(coins: coins)
-                if loadInventory {
-                    loadFoodInventory(user: user)
-                    loadToyInventory(user: user)
-                }
-                context.insert(user)
-                context.insert(UserStats())
-                
-                context.insert(DailyReward())
-                let missionManager = MissionManager()
-                missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
-                context.insert(missionManager)
-                context.insert(NotificationManager())
-                
-                insertBackgrounds()
-                insertStoredDecors()
-                if loadDecorations {
-                    loadRoomDecorations()
-                }
-                
-                insertModifiers()
-                context.insert(createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!)
-                try context.save()
-                print("Database empty, seed default user and pet success")
-            } else {
-                checkAndResetBrokenStreak()
-                print("User profile found, skipping seeding")
-                
-                if let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first {
-                    missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
-                } else {
-                    let missionManager = MissionManager()
-                    missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
-                    context.insert(missionManager)
-                }
-            }
-        } catch {
-            fatalError("Could not create model container: \(error)")
-        }
-    }
-    
-    private func loadFoodInventory(user: UserProfile) {
-        user.foodInventory[Food.corn.name] = 3
-        user.foodInventory[Food.chickenWing.name] = 3
-        user.foodInventory[Food.porkBelly.name] = 3
-    }
-    
-    private func loadToyInventory(user: UserProfile) {
-        user.toyInventory[Toy.frisbee.name] = 3
-        user.toyInventory[Toy.treeBranch.name] = 3
-        user.toyInventory[Toy.rubberDuck.name] = 3
-    }
-    
-    private func insertModifiers() {
-        let modifiers = [
-            Modifier(label: "pet.mood", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5),
-            Modifier(label: "pet.energy", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5),
-            Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2),
-            Modifier(label: "food.mood", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "food.energy", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2),
-            Modifier(label: "toy.mood", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "toy.energy", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5),
-        ]
-            
-        for modifier in modifiers {
-            context.insert(modifier)
-        }
     }
     
     private func insertBackgrounds() {
@@ -209,29 +198,26 @@ class DataContainer {
         }
     }
     
+    private func insertModifiers() {
+        let modifiers = [
+            Modifier(label: "pet.mood", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5),
+            Modifier(label: "pet.energy", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5),
+            Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2),
+            Modifier(label: "food.mood", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "food.energy", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2),
+            Modifier(label: "toy.mood", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
+            Modifier(label: "toy.energy", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5),
+        ]
+            
+        for modifier in modifiers {
+            context.insert(modifier)
+        }
+    }
+    
     private func createPet(mood: Double, energy: Double, experiencePoints: Int) -> Pet? {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return nil }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return nil }
         return Pet(mood: mood, energy: energy, experiencePoints: experiencePoints, background: room)
-    }
-    
-    //check user streak validity on launch
-    private func checkAndResetBrokenStreak() {
-        let statsDescriptor = FetchDescriptor<UserStats>()
-        if let statsList = try? context.fetch(statsDescriptor), let stats = statsList.first {
-            if let lastActive = stats.lastActiveDate {
-                let calendar = Calendar.current
-                let lastActiveMidnight = calendar.startOfDay(for: lastActive)
-                let todayMidnight = calendar.startOfDay(for: Date())
-                let components = calendar.dateComponents([.day], from: lastActiveMidnight, to: todayMidnight)
-                if let daysBetween = components.day, daysBetween > 1 { //streak broken
-                    stats.currentStreak = 0
-                    try? context.save()
-                    print("Broken streak detected on launch, reset to 0")
-                } else { //streak still active
-                    print("Streak still active on launch, current streak: \(stats.currentStreak)")
-                }
-            }
-        }
     }
 }

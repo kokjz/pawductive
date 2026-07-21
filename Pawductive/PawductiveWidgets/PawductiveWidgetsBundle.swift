@@ -12,5 +12,6 @@ import SwiftUI
 struct PawductiveWidgetsBundle: WidgetBundle {
     var body: some Widget {
         PetSimulatorWidget()
+        RewardMissionWidget()
     }
 }
