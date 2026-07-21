@@ -78,8 +78,19 @@ class TimerViewModel {
     @MainActor private func calculateReward(context: ModelContext) {
         //new formula, ramps up coin gain rate per extra min spent
         let minsFocused = Double(totalDuration / 60)
-        let coinsEarned = Int(minsFocused + (minsFocused * minsFocused / 100.0))
+        var coinsEarned = Int(minsFocused + (minsFocused * minsFocused / 100.0))
         print("Earned \(coinsEarned) coins")
+        
+        //fetch user stats for streak, calculate streak bonus
+        let statsDescriptor = FetchDescriptor<UserStats>()
+        let statsList = try? context.fetch(statsDescriptor)
+        let stats = statsList?.first
+        if let stats = stats {
+            let streakMultiplier = 1.0 + min(0.5, Double(stats.currentStreak) * 0.02)
+            let finalCoins = Int(Double(coinsEarned) * streakMultiplier)
+            coinsEarned = finalCoins
+            print("Earned \(coinsEarned) coins (multiplied by \(streakMultiplier) streak bonus)")
+        }
         
         //fetch user profile
         let descriptor = FetchDescriptor<UserProfile>()
@@ -95,8 +106,7 @@ class TimerViewModel {
         }
         
         //update user stats
-        let statsDescriptor = FetchDescriptor<UserStats>()
-        if let statsList = try? context.fetch(statsDescriptor), let stats = statsList.first {
+        if let stats = stats {
             stats.totalTasksCompleted += 1
             let minutesFocused = totalDuration / 60
             stats.totalMinutesFocused += minutesFocused
