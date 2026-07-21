@@ -61,7 +61,7 @@ class TimerViewModel {
     }
     
     //end session success: rewards
-    func claimRewards(context: ModelContext) {
+    @MainActor func claimRewards(context: ModelContext) {
         calculateReward(context: context)
     }
     
@@ -75,7 +75,7 @@ class TimerViewModel {
     }
     
     //coin calculation
-    private func calculateReward(context: ModelContext) {
+    @MainActor private func calculateReward(context: ModelContext) {
         //new formula, ramps up coin gain rate per extra min spent
         let minsFocused = Double(totalDuration / 60)
         let coinsEarned = Int(minsFocused + (minsFocused * minsFocused / 100.0))

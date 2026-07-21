@@ -5,8 +5,13 @@
 //  Created by Kok Jun Zhe on 21/5/26.
 //
 
+import WidgetKit
 import SwiftUI
 import SwiftData
+
+enum TabKind: Hashable {
+    case tasks, pet, shop, profile
+}
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -34,9 +39,11 @@ struct ContentView: View {
         modifiers.first(where: { $0.label == "pet.energy" })
     }
     
+    @State private var selectedTab: TabKind = .tasks
+    
     var body: some View {
         //tab view at bottom of screen
-        TabView {
+        TabView(selection: $selectedTab) {
             //tab 1: task queue and timer
             NavigationStack {
                 TaskQueueView()
@@ -44,6 +51,7 @@ struct ContentView: View {
             .tabItem {
                 Label("Tasks", systemImage: "checklist")
             }
+            .tag(TabKind.tasks)
             
             //tab 2: pet simulator
             NavigationStack {
@@ -52,12 +60,14 @@ struct ContentView: View {
             .tabItem{
                 Label("Pet", systemImage: "pawprint.circle.fill")
             }
+            .tag(TabKind.pet)
             
             //tab 3: shop view
             ShopView()
                 .tabItem {
                     Label("Shop", systemImage: "bag.fill")
                 }
+                .tag(TabKind.shop)
             
             //tab 4: profile view
             NavigationStack {
@@ -66,6 +76,7 @@ struct ContentView: View {
             .tabItem {
                 Label("Profile", systemImage: "person.circle.fill")
             }
+            .tag(TabKind.profile)
         }
         .accentColor(.orange)
         .onChange(of: scenePhase) { oldPhase, newPhase in
@@ -76,7 +87,30 @@ struct ContentView: View {
                     moodDecayModifier: moodDecayModifier,
                     energyDecayModifier: energyDecayModifier
                 )
+                WidgetCenter.shared.reloadAllTimelines()
             }
+        }
+        .onOpenURL { url in
+            guard let tab = url.tabKind else { return }
+            self.selectedTab = tab
+        }
+    }
+}
+
+extension URL {
+    var isDeepLink: Bool {
+        return scheme == "pawductive"
+    }
+    
+    var tabKind: TabKind? {
+        guard isDeepLink else { return nil }
+        
+        switch host {
+        case "tasks": return .tasks
+        case "pet": return .pet
+        case "shop": return .shop
+        case "profile": return .profile
+        default: return nil
         }
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 17/6/26.
 //
 
+import WidgetKit
 import SwiftData
 import SwiftUI
 
@@ -32,6 +33,7 @@ struct CanvasView: View {
         ZStack {
             Image(background.imageName)
                 .resizable()
+                .widgetAccentedRenderingMode(.fullColor)
                 .scaledToFill()
                 .frame(width: width, height: height)
                 .clipped()
@@ -51,6 +53,7 @@ struct CanvasView: View {
 
                 Image(shownDecor.storedDecor.decor.imageName)
                     .resizable()
+                    .widgetAccentedRenderingMode(.fullColor)
                     .scaledToFit()
                     .frame(height: shownDecor.storedDecor.decor.relativeHeight * height)
                     .position(x: shownDecor.relativeX * width, y: shownDecor.relativeY * height)
@@ -87,22 +90,6 @@ struct CanvasView: View {
 }
 
 #Preview {
-    let data = DataContainer()
-    let background: Background = {
-        let background = try! data.context.fetch(FetchDescriptor<Pet>()).first!.background
-
-        let storedDecors = try! data.context
-            .fetch(FetchDescriptor<StoredDecor>())
-            .filter({ $0.background == background })
-            .sorted(by: { $0.decor.name < $1.decor.name })
-
-        storedDecors.forEach {
-            data.context.insert(ShownDecor(order: $0.background.shownDecors.count,
-                                           storedDecor: $0,
-                                           background: $0.background))
-        }
-        
-        return background
-    }()
-    CanvasView(width: 400 * 0.9, height: 400 * 0.9).modelContainer(data.modelContainer)
+    CanvasView(width: 400 * 0.9, height: 400 * 0.9)
+        .modelContainer(DataContainer(loadDecorations: true).modelContainer)
 }
