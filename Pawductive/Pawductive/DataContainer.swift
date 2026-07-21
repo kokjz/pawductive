@@ -10,8 +10,22 @@ import SwiftData
 
 @MainActor
 class DataContainer {
+    static let appSchema = Schema([
+        Background.self,
+        DailyMission.self,
+        DailyReward.self,
+        MissionManager.self,
+        Modifier.self,
+        NotificationManager.self,
+        Pet.self,
+        ShownDecor.self,
+        StoredDecor.self,
+        TaskCategory.self,
+        TaskItem.self,
+        UserProfile.self,
+        UserStats.self
+    ])
     static let sharedContainer = DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer
-    
     static var sharedContext: ModelContext {
         sharedContainer.mainContext
     }
@@ -49,26 +63,11 @@ class DataContainer {
          experiencePoints: Int = 0,
          loadInventory: Bool = true,
          loadDecorations: Bool = true,
-         inMemory: Bool = true)
-    {
-        let schema = Schema([
-            Background.self,
-            DailyMission.self,
-            DailyReward.self,
-            MissionManager.self,
-            Modifier.self,
-            NotificationManager.self,
-            Pet.self,
-            ShownDecor.self,
-            StoredDecor.self,
-            TaskCategory.self,
-            TaskItem.self,
-            UserProfile.self,
-            UserStats.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
+         inMemory: Bool = true) {
+
+        let modelConfiguration = ModelConfiguration(schema: DataContainer.appSchema, isStoredInMemoryOnly: inMemory)
         do {
-            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            modelContainer = try ModelContainer(for: DataContainer.appSchema, configurations: [modelConfiguration])
             let descriptor = FetchDescriptor<UserProfile>()
             let existingUsers = try? context.fetch(descriptor)
             if existingUsers?.isEmpty ?? true {
@@ -79,8 +78,6 @@ class DataContainer {
                 }
                 context.insert(user)
                 context.insert(UserStats())
-                
-                insertDefaultCategories()
                 
                 context.insert(DailyReward())
                 let missionManager = MissionManager()
@@ -109,6 +106,13 @@ class DataContainer {
                     missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
                     context.insert(missionManager)
                 }
+            }
+            
+            let categoryDescriptor = FetchDescriptor<TaskCategory>()
+            let existingCategories = try? context.fetch(categoryDescriptor)
+            if existingCategories?.isEmpty ?? true {
+                insertDefaultCategories()
+                try? context.save()
             }
         } catch {
             fatalError("Could not create model container: \(error)")

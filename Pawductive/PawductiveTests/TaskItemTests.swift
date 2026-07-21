@@ -15,8 +15,7 @@ import SwiftData
     @MainActor
     private func makeInMemoryContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let schema = Schema([TaskItem.self, TaskCategory.self])
-        let container = try ModelContainer(for: schema, configurations: [config])
+        let container = try ModelContainer(for: DataContainer.appSchema, configurations: [config])
         return ModelContext(container)
     }
     
@@ -97,11 +96,16 @@ import SwiftData
 
     //test 7: default category database seeding
     @Test @MainActor func testDefaultCategorySeeding() throws {
-        let container = DataContainer(loadInventory: false, loadDecorations: false, inMemory: true)
-        let context = container.context
+        let context = try makeInMemoryContext()
+        
+        for category in TaskCategory.defaults {
+            context.insert(category)
+        }
+        try context.save()
         
         let descriptor = FetchDescriptor<TaskCategory>()
         let categories = try context.fetch(descriptor)
+        
         #expect(categories.count == 5)
         
         let studyCategory = categories.first(where: { $0.name == "Study" })

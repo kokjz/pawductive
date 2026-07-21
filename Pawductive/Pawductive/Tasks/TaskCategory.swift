@@ -20,11 +20,13 @@ final class TaskCategory {
         self.iconName = iconName
     }
     
-    static var defaults: [TaskCategory] = [
-        TaskCategory(name: "Study", iconName: "book.fill"),
-        TaskCategory(name: "Work", iconName: "briefcase.fill"),
-        TaskCategory(name: "Fitness", iconName: "figure.run"),
-        TaskCategory(name: "Leisure", iconName: "gamecontroller.fill"),
-        TaskCategory(name: "General", iconName: "folder.fill")
-    ]
+    static var defaults: [TaskCategory] {
+        [
+            TaskCategory(name: "Study", iconName: "book.fill"),
+            TaskCategory(name: "Work", iconName: "briefcase.fill"),
+            TaskCategory(name: "Fitness", iconName: "figure.run"),
+            TaskCategory(name: "Leisure", iconName: "gamecontroller.fill"),
+            TaskCategory(name: "General", iconName: "folder.fill")
+        ]
+    }
 }
