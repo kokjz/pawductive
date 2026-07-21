@@ -14,7 +14,13 @@ import SwiftData
     @MainActor
     private func makeInMemoryContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: UserProfile.self, configurations: config)
+        let schema = Schema([
+            UserProfile.self,
+            UserStats.self,
+            MissionManager.self,
+            DailyMission.self
+        ])
+        let container = try ModelContainer(for: schema, configurations: [config])
         return ModelContext(container)
     }
 
@@ -124,5 +130,37 @@ import SwiftData
         viewModel.failSession()
         #expect(viewModel.isPaused == false)
         #expect(viewModel.isRunning == false)
+    }
+    
+    //test 8: streak-based coin multiplier
+    @Test @MainActor func testStreakBasedCoinMultiplier() throws {
+        let context = try makeInMemoryContext()
+        let viewModel = TimerViewModel()
+        
+        //10 day streak
+        let stats = UserStats()
+        stats.currentStreak = 10
+        context.insert(stats)
+        try context.save()
+        viewModel.startTimer(minutes: 60)
+        viewModel.claimRewards(context: context)
+        let profileDescriptor = FetchDescriptor<UserProfile>()
+        let profiles = try context.fetch(profileDescriptor)
+        #expect(profiles.count == 1)
+        #expect(profiles.first?.coins == 215)
+        #expect(stats.totalCoinsEarned == 115)
+        if let firstProfile = profiles.first {
+            context.delete(firstProfile)
+            try context.save()
+        }
+        
+        //30 day streak (should be capped at 50%)
+        stats.currentStreak = 30
+        try context.save()
+        viewModel.startTimer(minutes: 60)
+        viewModel.claimRewards(context: context)
+        let updatedProfiles = try context.fetch(profileDescriptor)
+        #expect(updatedProfiles.first?.coins == 244)
+        #expect(stats.totalCoinsEarned == 115 + 144)
     }
 }
