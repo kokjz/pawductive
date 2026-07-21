@@ -61,6 +61,7 @@ class DataContainer {
             Pet.self,
             ShownDecor.self,
             StoredDecor.self,
+            TaskCategory.self,
             TaskItem.self,
             UserProfile.self,
             UserStats.self
@@ -78,6 +79,8 @@ class DataContainer {
                 }
                 context.insert(user)
                 context.insert(UserStats())
+                
+                insertDefaultCategories()
                 
                 context.insert(DailyReward())
                 let missionManager = MissionManager()
@@ -186,6 +189,13 @@ class DataContainer {
         for storedDecor in storedYardDecors {
             context.insert(storedDecor)
         }
+    }
+    
+    private func insertDefaultCategories() {
+        for category in TaskCategory.defaults {
+            context.insert(category)
+        }
+        print("Seed default task categories success")
     }
     
     private func loadRoomDecorations() {
