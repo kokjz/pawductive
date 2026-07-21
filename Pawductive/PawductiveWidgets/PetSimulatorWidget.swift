@@ -124,6 +124,7 @@ struct PetSimulatorWidget: Widget {
 //                .modelContainer(
 //                    DataContainer(loadDecorations: true, inMemory: true).modelContainer
 //                )
+                .widgetURL(URL(string: "pawductive://pet"))
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")

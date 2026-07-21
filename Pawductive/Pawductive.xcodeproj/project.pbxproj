@@ -71,9 +71,17 @@
 		870AC13D300CB37900536C21 /* Exceptions for "Pawductive" folder in "PawductiveWidgetsExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Info.plist,
 				PawductiveApp.swift,
 			);
 			target = 870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */;
+		};
+		870AC140300F1D5800536C21 /* Exceptions for "Pawductive" folder in "Pawductive" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F652EB052FB9D7E600DF4DD6 /* Pawductive */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -89,6 +97,7 @@
 		F652EB082FB9D7E600DF4DD6 /* Pawductive */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				870AC140300F1D5800536C21 /* Exceptions for "Pawductive" folder in "Pawductive" target */,
 				870AC13D300CB37900536C21 /* Exceptions for "Pawductive" folder in "PawductiveWidgetsExtension" target */,
 			);
 			path = Pawductive;
@@ -593,6 +602,7 @@
 				DEVELOPMENT_TEAM = G2U6XXLCBU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pawductive/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -627,6 +637,7 @@
 				DEVELOPMENT_TEAM = G2U6XXLCBU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pawductive/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
