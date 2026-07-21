@@ -20,7 +20,7 @@ final class TaskCategory {
         self.iconName = iconName
     }
     
-    static let defaults: [TaskCategory] = [
+    static var defaults: [TaskCategory] = [
         TaskCategory(name: "Study", iconName: "book.fill"),
         TaskCategory(name: "Work", iconName: "briefcase.fill"),
         TaskCategory(name: "Fitness", iconName: "figure.run"),
