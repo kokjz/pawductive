@@ -15,29 +15,62 @@ struct TaskCreationView: View {
     @Query(sort: \TaskCategory.name) private var categories: [TaskCategory]
     
     @State private var title: String = ""
-    @State private var durationInMinutes: Int = 25
+    @State private var selectedHours: Int = 0
+    @State private var selectedMinutes: Int = 30
     @State private var selectedCategoryName: String = "General"
+    
+    private var totalDurationInMinutes: Int {
+        (selectedHours * 60) + selectedMinutes
+    }
     
     var body: some View {
         NavigationStack {
             Form {
                 //task title input
-                Section(header: Text("Task Details")) {
-                    TextField("What do you need to focus on?", text: $title)
+                Section(header: Text("Task Name")) {
+                    TextField("What's next?", text: $title)
                         .font(.headline)
                         .padding(.vertical, 4)
                 }
                 
-                //task duration stepper
+                //task duration wheel picker
                 Section(header: Text("Duration")) {
-                    Stepper(value: $durationInMinutes, in: 1...120, step: 5) {
-                        HStack {
-                            Image(systemName: "clock.fill")
-                                .foregroundColor(.orange)
-                            Text("\(durationInMinutes) minutes")
-                                .font(.headline)
+                    HStack {
+                        Spacer()
+                        
+                        //hrs
+                        HStack(spacing: 0) {
+                            Picker("Hours", selection: $selectedHours) {
+                                ForEach(0...23, id: \.self) { hour in
+                                    Text("\(hour)").tag(hour)
+                                }
+                            }
+                            .pickerStyle(.wheel)
+                            .frame(width: 70)
+                            
+                            Text("hours")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                         }
+                        Spacer()
+                        
+                        //mins
+                        HStack(spacing: 0) {
+                            Picker("Minutes", selection: $selectedMinutes) {
+                                ForEach(0...59, id: \.self) { minute in
+                                    Text("\(minute)").tag(minute)
+                                }
+                            }
+                            .pickerStyle(.wheel)
+                            .frame(width: 70)
+                            
+                            Text("min")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
                     }
+                    .frame(height: 200)
                 }
                 
                 //category picker
@@ -74,7 +107,7 @@ struct TaskCreationView: View {
                         saveTask()
                     }
                     .bold()
-                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || totalDurationInMinutes == 0)
                 }
             }
             .onAppear {
@@ -88,7 +121,7 @@ struct TaskCreationView: View {
     private func saveTask() {
         let newTask = TaskItem(
             title: title.trimmingCharacters(in: .whitespaces),
-            expectedDurationInMinutes: durationInMinutes,
+            expectedDurationInMinutes: totalDurationInMinutes,
             categoryName: selectedCategoryName
         )
         modelContext.insert(newTask)
