@@ -110,6 +110,6 @@ import SwiftData
         
         let studyCategory = categories.first(where: { $0.name == "Study" })
         #expect(studyCategory != nil)
-        #expect(studyCategory?.iconName == "book.fill")
+        #expect(studyCategory?.iconName == "📚")
     }
 }

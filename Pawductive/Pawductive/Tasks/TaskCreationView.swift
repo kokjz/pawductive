@@ -84,14 +84,10 @@ struct TaskCreationView: View {
                     } else {
                         Picker("Select Category", selection: $selectedCategoryName) {
                             ForEach(categories) { category in
-                                HStack {
-                                    if UIImage(systemName: category.iconName) != nil {
-                                        Image(systemName: category.iconName)
-                                            .frame(width: 28, height: 28, alignment: .center)
-                                    } else {
-                                        Text(category.iconName)
-                                            .frame(width: 28, height: 28, alignment: .center)
-                                    }
+                                HStack(spacing: 12) {
+                                    Text(category.iconName)
+                                        .font(.title3)
+                                        .frame(width: 28, height: 28, alignment: .center)
                                     Text(category.name)
                                 }
                                 .tag(category.name)

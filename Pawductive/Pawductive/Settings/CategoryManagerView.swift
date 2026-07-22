@@ -66,17 +66,9 @@ struct CategoryManagerView: View {
                 } else {
                     ForEach(categories) { category in
                         HStack(spacing: 12) {
-                            Group {
-                                if UIImage(systemName: category.iconName) != nil {
-                                    Image(systemName: category.iconName)
-                                        .foregroundColor(.orange)
-                                } else {
-                                    Text(category.iconName)
-                                }
-                            }
-                            .font(.title3)
-                            .frame(width: 28, height: 28, alignment: .center)
-                            
+                            Text(category.iconName)
+                                .font(.title3)
+                                .frame(width: 28, height: 28, alignment: .center)
                             Text(category.name)
                                 .font(.headline)
                             
