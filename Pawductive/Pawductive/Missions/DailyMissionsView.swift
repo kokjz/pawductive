@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 23/6/26.
 //
 
+import AppIntents
 import WidgetKit
 import SwiftData
 import SwiftUI
@@ -21,6 +22,7 @@ struct DailyMissionsView: View {
     }
     
     @Environment(\.widgetRenderingMode) private var widgetMode
+    @Environment(\.modelContext) private var context
 
     var body: some View {
         ForEach(missionManager.activeMissions.sorted(by: { m1, m2 in
@@ -42,13 +44,13 @@ struct DailyMissionsView: View {
                 
                 Spacer()
                 
-                Button(mission.claimed ? "Claimed" : "Claim") {
-                    user.coins += mission.reward
-                    mission.claimed = true
+                Button(intent: ClaimMissionIntent(missionTitle: mission.title, modelContainer: context.container)) {
+                    Text(mission.claimed ? "Claimed" : "Claim")
                 }
                 .fontWeight(.semibold)
                 .buttonStyle(.bordered)
                 .disabled(mission.claimed || mission.progress < mission.requirement)
+                .animation(.default, value: mission.claimed)
             }
             .padding(.vertical, 10)
             .padding(.horizontal, 12)

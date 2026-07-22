@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 9/7/26.
 //
 
+import AppIntents
 import WidgetKit
 import SwiftData
 import SwiftUI
@@ -21,6 +22,7 @@ struct DailyRewardView: View {
     }
     
     @Environment(\.widgetRenderingMode) private var widgetMode
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         HStack {
@@ -40,13 +42,14 @@ struct DailyRewardView: View {
             }
             
             Spacer()
-            
-            Button(dailyReward.claimed ? "Claimed" : "Claim") {
-                dailyReward.claimReward(user: user)
+
+            Button(intent: ClaimRewardIntent(modelContainer: context.container)) {
+                Text(dailyReward.claimed ? "Claimed" : "Claim")
             }
             .fontWeight(.semibold)
             .buttonStyle(.bordered)
             .disabled(dailyReward.claimed)
+            .animation(.default, value: dailyReward.claimed)
         }
         .onAppear {
             dailyReward.update()

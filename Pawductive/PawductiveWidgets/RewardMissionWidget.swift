@@ -10,19 +10,24 @@ import SwiftUI
 import SwiftData
 
 struct RewardMissionProvider: @MainActor TimelineProvider {
+    @MainActor var dataContainer: DataContainer {
+        DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false)
+    }
+    
     @MainActor func placeholder(in context: Context) -> RewardMissionEntry {
-        RewardMissionEntry(date: Date(), modelContainer: DataContainer().modelContainer)
+        let modelContainer = dataContainer.modelContainer
+        return RewardMissionEntry(date: Date(), modelContainer: modelContainer)
     }
 
     @MainActor func getSnapshot(in context: Context, completion: @escaping (RewardMissionEntry) -> ()) {
-        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
+        let modelContainer = dataContainer.modelContainer
         let entry = RewardMissionEntry(date: Date(), modelContainer: modelContainer)
         completion(entry)
     }
     
     // Updates widget at the start of each day
     @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<RewardMissionEntry>) -> ()) {
-        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
+        let modelContainer = dataContainer.modelContainer
         var entries: [RewardMissionEntry] = []
         entries.append(RewardMissionEntry(date: Date(), modelContainer: modelContainer))
         
@@ -32,6 +37,7 @@ struct RewardMissionProvider: @MainActor TimelineProvider {
         if let missionManager = try? modelContainer.mainContext.fetch(FetchDescriptor<MissionManager>()).first {
             missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
         }
+        try? modelContainer.mainContext.save()
         
         guard let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) else { return }
         let timeline = Timeline(entries: entries, policy: .after(tomorrow))

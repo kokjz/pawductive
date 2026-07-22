@@ -10,19 +10,24 @@ import SwiftUI
 import SwiftData
 
 struct PetSimulatorProvider: @MainActor TimelineProvider {
+    @MainActor var dataContainer: DataContainer {
+        DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false)
+    }
+    
     @MainActor func placeholder(in context: Context) -> PetSimulatorEntry {
-        PetSimulatorEntry(date: Date(), modelContainer: DataContainer().modelContainer)
+        let modelContainer = dataContainer.modelContainer
+        return PetSimulatorEntry(date: Date(), modelContainer: modelContainer)
     }
 
     @MainActor func getSnapshot(in context: Context, completion: @escaping (PetSimulatorEntry) -> ()) {
-        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
+        let modelContainer = dataContainer.modelContainer
         let entry = PetSimulatorEntry(date: Date(), modelContainer: modelContainer)
         completion(entry)
     }
     
     // Updates widget every hour
     @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        guard let modelContainer = DataContainer.createModelContainer(inMemory: false) else { return }
+        let modelContainer = dataContainer.modelContainer
         var entries: [PetSimulatorEntry] = []
         
         let moodDecayModifier = try? modelContainer.mainContext.fetch(
