@@ -10,51 +10,34 @@ import SwiftData
 
 @MainActor
 class DataContainer {
-    static let appSchema = Schema([
-        Background.self,
-        DailyMission.self,
-        DailyReward.self,
-        MissionManager.self,
-        Modifier.self,
-        NotificationManager.self,
-        Pet.self,
-        ShownDecor.self,
-        StoredDecor.self,
-        TaskCategory.self,
-        TaskItem.self,
-        UserProfile.self,
-        UserStats.self
-    ])
-    static let sharedContainer = DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false).modelContainer
-    static var sharedContext: ModelContext {
-        sharedContainer.mainContext
-    }
-    
     let modelContainer: ModelContainer
-    
     var context: ModelContext {
         modelContainer.mainContext
     }
     
+    static let appSchema = Schema([
+        Background.self, DailyMission.self, DailyReward.self, MissionManager.self,
+        Modifier.self, NotificationManager.self, Pet.self, ShownDecor.self,
+        StoredDecor.self, TaskCategory.self, TaskItem.self, UserProfile.self,
+        UserStats.self
+    ])
+    
     static func createModelContainer(inMemory: Bool = true) -> ModelContainer? {
-        let schema = Schema([
-            Background.self, DailyMission.self, DailyReward.self, MissionManager.self,
-            Modifier.self, NotificationManager.self, Pet.self, ShownDecor.self,
-            StoredDecor.self, TaskItem.self, UserProfile.self, UserStats.self
-        ])
-        
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
-        return try? ModelContainer(for: schema, configurations: [modelConfiguration])
+        let modelConfiguration = ModelConfiguration(schema: DataContainer.appSchema, isStoredInMemoryOnly: inMemory)
+        return try? ModelContainer(for: DataContainer.appSchema, configurations: [modelConfiguration])
     }
     
     init(coins: Int = 999, mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0,
          loadInventory: Bool = true, loadDecorations: Bool = true, inMemory: Bool = true) {
+        
+        // Create Model Container
         if let modelContainer = DataContainer.createModelContainer(inMemory: inMemory) {
             self.modelContainer = modelContainer
         } else {
             fatalError("Could not create model container")
         }
         
+        // Initialize Models
         if (try? context.fetch(FetchDescriptor<UserProfile>()).isEmpty) ?? true {
             let user = UserProfile(coins: coins)
             if loadInventory {
@@ -93,6 +76,9 @@ class DataContainer {
         }
         if (try? context.fetch(FetchDescriptor<Pet>()).isEmpty) ?? true {
             context.insert(createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!)
+        }
+        if (try? context.fetch(FetchDescriptor<TaskCategory>()).isEmpty) ?? true  {
+            insertDefaultCategories()
         }
         
         try? context.save()
@@ -150,97 +136,6 @@ class DataContainer {
         ]
     }
     
-    init(coins: Int = 800,
-         mood: Double = 100,
-         energy: Double = 100,
-         experiencePoints: Int = 0,
-         loadInventory: Bool = true,
-         loadDecorations: Bool = true,
-         inMemory: Bool = true) {
-
-        let modelConfiguration = ModelConfiguration(schema: DataContainer.appSchema, isStoredInMemoryOnly: inMemory)
-        do {
-            modelContainer = try ModelContainer(for: DataContainer.appSchema, configurations: [modelConfiguration])
-            let descriptor = FetchDescriptor<UserProfile>()
-            let existingUsers = try? context.fetch(descriptor)
-            if existingUsers?.isEmpty ?? true {
-                let user = UserProfile(coins: coins)
-                if loadInventory {
-                    loadFoodInventory(user: user)
-                    loadToyInventory(user: user)
-                }
-                context.insert(user)
-                context.insert(UserStats())
-                
-                context.insert(DailyReward())
-                let missionManager = MissionManager()
-                missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
-                context.insert(missionManager)
-                context.insert(NotificationManager())
-                
-                insertBackgrounds()
-                insertStoredDecors()
-                if loadDecorations {
-                    loadRoomDecorations()
-                }
-                
-                insertModifiers()
-                context.insert(createPet(mood: mood, energy: energy, experiencePoints: experiencePoints)!)
-                try context.save()
-                print("Database empty, seed default user and pet success")
-            } else {
-                checkAndResetBrokenStreak()
-                print("User profile found, skipping seeding")
-                
-                if let missionManager = try context.fetch(FetchDescriptor<MissionManager>()).first {
-                    missionManager.refreshActiveMissions(missions: DataContainer.dailyMissions)
-                } else {
-                    let missionManager = MissionManager()
-                    missionManager.initializeActiveMissions(missions: DataContainer.dailyMissions)
-                    context.insert(missionManager)
-                }
-            }
-            
-            let categoryDescriptor = FetchDescriptor<TaskCategory>()
-            let existingCategories = try? context.fetch(categoryDescriptor)
-            if existingCategories?.isEmpty ?? true {
-                insertDefaultCategories()
-                try? context.save()
-            }
-        } catch {
-            fatalError("Could not create model container: \(error)")
-        }
-    }
-    
-    private func loadFoodInventory(user: UserProfile) {
-        user.foodInventory[Food.corn.name] = 3
-        user.foodInventory[Food.chickenWing.name] = 3
-        user.foodInventory[Food.porkBelly.name] = 3
-    }
-    
-    private func loadToyInventory(user: UserProfile) {
-        user.toyInventory[Toy.frisbee.name] = 3
-        user.toyInventory[Toy.treeBranch.name] = 3
-        user.toyInventory[Toy.rubberDuck.name] = 3
-    }
-    
-    private func insertModifiers() {
-        let modifiers = [
-            Modifier(label: "pet.mood", name: "Conserve Mood", details: "Mood decreases at a slower rate", level: 0, maxLevel: 5),
-            Modifier(label: "pet.energy", name: "Conserve Energy", details: "Energy decreases at a slower rate", level: 0, maxLevel: 5),
-            Modifier(label: "food.cost", name: "Lower Price", details: "Decrease cost of food", level: 0, maxLevel: 2),
-            Modifier(label: "food.mood", name: "Improve Taste", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "food.energy", name: "Increase Calories", details: "Energy increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "toy.cost", name: "Lower Price", details: "Decrease cost of toys", level: 0, maxLevel: 2),
-            Modifier(label: "toy.mood", name: "Improve Design", details: "Mood increases by a larger amount", level: 0, maxLevel: 5),
-            Modifier(label: "toy.energy", name: "Reduce Weight", details: "Energy decreases by a smaller amount", level: 0, maxLevel: 5),
-        ]
-            
-        for modifier in modifiers {
-            context.insert(modifier)
-        }
-    }
-    
     private func insertBackgrounds() {
         let backgrounds = [
             Background(name: "Room", imageName: "room"),
@@ -288,13 +183,6 @@ class DataContainer {
         }
     }
     
-    private func insertDefaultCategories() {
-        for category in TaskCategory.defaults {
-            context.insert(category)
-        }
-        print("Seed default task categories success")
-    }
-    
     private func loadRoomDecorations() {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return }
@@ -337,5 +225,12 @@ class DataContainer {
         guard let backgrounds = try? context.fetch(FetchDescriptor<Background>()) else { return nil }
         guard let room = backgrounds.filter({ $0.name == "Room" }).first else { return nil }
         return Pet(mood: mood, energy: energy, experiencePoints: experiencePoints, background: room)
+    }
+    
+    private func insertDefaultCategories() {
+        for category in TaskCategory.defaults {
+            context.insert(category)
+        }
+        print("Seed default task categories success")
     }
 }
