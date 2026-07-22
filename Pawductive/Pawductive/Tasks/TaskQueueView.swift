@@ -88,9 +88,8 @@ struct TaskQueueView: View {
                                     .background(Color.orange.opacity(0.12))
                                     .cornerRadius(6)
                                     .foregroundColor(.orange)
-                                Image(systemName: getCategoryIcon(for: task.categoryName))
+                                Text(getCategoryIcon(for: task.categoryName))
                                     .font(.title3)
-                                    .foregroundColor(.orange.opacity(0.8))
                                     .frame(width: 28, height: 28, alignment: .center)
                             }
                             .padding(.vertical, 4)
@@ -126,7 +125,7 @@ struct TaskQueueView: View {
     }
     
     private func getCategoryIcon(for categoryName: String) -> String {
-        categories.first(where: { $0.name == categoryName })?.iconName ?? "folder.fill"
+        categories.first(where: { $0.name == categoryName })?.iconName ?? "📁"
     }
 }
 
