@@ -11,23 +11,18 @@ import SwiftData
 struct TaskQueueView: View {
     @Query(sort: \TaskItem.creationDate, order: .reverse) private var tasks: [TaskItem]
     @Query private var profiles: [UserProfile]
+    @Query private var categories: [TaskCategory]
     @Environment(\.modelContext) private var modelContext
-    
     @State private var showTaskCreationSheet: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            //unified header (title + wallet balance + task creation button)
+            //unified header (title + wallet balance)
             HStack(alignment: .center, spacing: 12) {
                 Text("Task Queue")
                     .styleAsMainHeader()
                     .foregroundColor(.primary)
                 Spacer()
-                Button(action: { showTaskCreationSheet = true }) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(.orange)
-                }
                 if let profile = profiles.first {
                     UserCoinsView(profile: profile)
                 }
@@ -35,7 +30,25 @@ struct TaskQueueView: View {
             .padding(.horizontal)
             .padding(.top, 16)
             .padding(.bottom, 12)
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
+            
+            //new task button
+            Button(action: { showTaskCreationSheet = true }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add New Task")
+                        .bold()
+                }
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.orange)
+                .cornerRadius(12)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background(Color(.systemBackground))
             
             //task list
             if tasks.isEmpty {
@@ -49,7 +62,7 @@ struct TaskQueueView: View {
                 List {
                     ForEach(tasks) { task in
                         NavigationLink(value: task) {
-                            HStack(spacing: 15) {
+                            HStack(spacing: 12) {
                                 //status indicator circle
                                 Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
                                     .font(.title2)
@@ -60,21 +73,25 @@ struct TaskQueueView: View {
                                         .font(.headline)
                                         .strikethrough(task.isCompleted)
                                         .foregroundColor(task.isCompleted ? .secondary : .primary)
-                                    //task category + duration
-                                    HStack(spacing: 6) {
-                                        Text(task.categoryName)
-                                            .font(.caption)
-                                            .bold()
-                                            .padding(.horizontal, 8)
-                                            .padding(.vertical, 2)
-                                            .background(Color.orange.opacity(0.12))
-                                            .cornerRadius(6)
-                                            .foregroundColor(.orange)
-                                        Text("• \(formatMinutes(task.expectedDurationInMinutes))")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
+                                    Text("\(formatMinutes(task.expectedDurationInMinutes))")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
                                 }
+                                Spacer()
+                                
+                                //category name + icon
+                                Text(task.categoryName)
+                                    .font(.caption)
+                                    .bold()
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 2)
+                                    .background(Color.orange.opacity(0.12))
+                                    .cornerRadius(6)
+                                    .foregroundColor(.orange)
+                                Image(systemName: getCategoryIcon(for: task.categoryName))
+                                    .font(.title3)
+                                    .foregroundColor(.orange.opacity(0.8))
+                                    .frame(width: 28, height: 28, alignment: .center)
                             }
                             .padding(.vertical, 4)
                         }
@@ -106,6 +123,10 @@ struct TaskQueueView: View {
         } else {
             return "\(mins)m"
         }
+    }
+    
+    private func getCategoryIcon(for categoryName: String) -> String {
+        categories.first(where: { $0.name == categoryName })?.iconName ?? "folder.fill"
     }
 }
 
