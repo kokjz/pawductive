@@ -5,6 +5,7 @@
 //  Created by Lee Zi Rong on 9/7/26.
 //
 
+import WidgetKit
 import SwiftData
 import SwiftUI
 
@@ -19,38 +20,42 @@ struct DailyRewardView: View {
         users.first!
     }
     
+    @Environment(\.widgetRenderingMode) private var widgetMode
+    
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Free \(dailyReward.rewardType)!")
-                    .font(.headline)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
                     .fontDesign(.rounded)
                 Text("1x \(dailyReward.reward)")
-                    .font(.subheadline)
+                    .font(.caption)
                     .fontDesign(.rounded)
                 if let coins = dailyReward.bonusCoins {
                     Text("Bonus: \(coins) coins")
-                        .font(.subheadline)
+                        .font(.caption)
                         .fontDesign(.rounded)
                 }
             }
             
             Spacer()
             
-            Button {
+            Button(dailyReward.claimed ? "Claimed" : "Claim") {
                 dailyReward.claimReward(user: user)
-            } label: {
-                Text(dailyReward.claimed ? "Claimed" : "Claim")
             }
-            .buttonStyle(.borderedProminent)
+            .fontWeight(.semibold)
+            .buttonStyle(.bordered)
             .disabled(dailyReward.claimed)
         }
         .onAppear {
             dailyReward.update()
-//            dailyReward.bonusCoins = 90 // FOR TESTING ONLY
+//            // FOR TESTING ONLY
+//            dailyReward.bonusCoins = 90
         }
-        .padding()
-        .background(Color(.systemBackground))
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .background(Color(.systemBackground).opacity(widgetMode == .fullColor ? 1 : 0.2))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

@@ -19,7 +19,7 @@ struct ValueBarView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: height)
-                .fill(Color.gray.opacity(0.3))
+                .fill(Color.gray.opacity(0.5))
             RoundedRectangle(cornerRadius: height)
                 .offset(x: (ratio - 1) * width)
         }
