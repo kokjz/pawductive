@@ -74,7 +74,10 @@ struct TaskCreationView: View {
                 }
                 
                 //category picker
-                Section(header: Text("Category")) {
+                Section(
+                    header: Text("Category"),
+                    footer: Text("You may create new categories or edit existing categories from the app settings.")
+                ) {
                     if categories.isEmpty {
                         Text("Loading categories...")
                             .foregroundColor(.secondary)
@@ -82,7 +85,13 @@ struct TaskCreationView: View {
                         Picker("Select Category", selection: $selectedCategoryName) {
                             ForEach(categories) { category in
                                 HStack {
-                                    Image(systemName: category.iconName)
+                                    if UIImage(systemName: category.iconName) != nil {
+                                        Image(systemName: category.iconName)
+                                            .frame(width: 28, height: 28, alignment: .center)
+                                    } else {
+                                        Text(category.iconName)
+                                            .frame(width: 28, height: 28, alignment: .center)
+                                    }
                                     Text(category.name)
                                 }
                                 .tag(category.name)
