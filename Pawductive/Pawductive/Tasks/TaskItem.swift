@@ -15,12 +15,14 @@ final class TaskItem {
     var expectedDurationInMinutes: Int
     var isCompleted: Bool
     var creationDate: Date
+    var categoryName: String
     
-    init(title: String, expectedDurationInMinutes: Int) {
+    init(title: String, expectedDurationInMinutes: Int, categoryName: String = "General") {
         self.id = UUID()
         self.title = title
         self.expectedDurationInMinutes = expectedDurationInMinutes
         self.isCompleted = false
         self.creationDate = Date()
+        self.categoryName = categoryName
     }
 }
