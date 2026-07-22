@@ -15,7 +15,7 @@ import SwiftData
     @MainActor
     private func makeInMemoryContext() throws -> ModelContext {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: UserStats.self, configurations: config)
+        let container = try ModelContainer(for: DataContainer.appSchema, configurations: [config])
         return ModelContext(container)
     }
     
