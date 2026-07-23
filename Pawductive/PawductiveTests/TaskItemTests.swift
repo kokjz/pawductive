@@ -110,6 +110,40 @@ import SwiftData
         
         let studyCategory = categories.first(where: { $0.name == "Study" })
         #expect(studyCategory != nil)
-        #expect(studyCategory?.iconName == "book.fill")
+        #expect(studyCategory?.iconName == "📚")
     }
+    
+    //test 8: create custom user category
+        @Test @MainActor func testCreateAndSaveCustomUserCategory() throws {
+            let context = try makeInMemoryContext()
+            
+            let customCategory = TaskCategory(name: "Gaming", iconName: "🎮")
+            context.insert(customCategory)
+            try context.save()
+            
+            let descriptor = FetchDescriptor<TaskCategory>()
+            let categories = try context.fetch(descriptor)
+            
+            let savedCategory = categories.first(where: { $0.name == "Gaming" })
+            #expect(savedCategory != nil)
+            #expect(savedCategory?.iconName == "🎮")
+        }
+
+        //test 9: delete category
+        @Test @MainActor func testDeleteCategoryFromDatabase() throws {
+            let context = try makeInMemoryContext()
+            
+            let category = TaskCategory(name: "TempCategory", iconName: "🗑️")
+            context.insert(category)
+            try context.save()
+            
+            context.delete(category)
+            try context.save()
+            
+            let descriptor = FetchDescriptor<TaskCategory>()
+            let categories = try context.fetch(descriptor)
+            
+            let foundCategory = categories.first(where: { $0.name == "TempCategory" })
+            #expect(foundCategory == nil)
+        }
 }

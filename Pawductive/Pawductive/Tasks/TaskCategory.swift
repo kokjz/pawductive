@@ -14,7 +14,7 @@ final class TaskCategory {
     var name: String
     var iconName: String
     
-    init(name: String, iconName: String = "folder.fill") {
+    init(name: String, iconName: String = "📁") {
         self.id = UUID()
         self.name = name
         self.iconName = iconName
@@ -22,11 +22,11 @@ final class TaskCategory {
     
     static var defaults: [TaskCategory] {
         [
-            TaskCategory(name: "Study", iconName: "book.fill"),
-            TaskCategory(name: "Work", iconName: "briefcase.fill"),
-            TaskCategory(name: "Fitness", iconName: "figure.run"),
-            TaskCategory(name: "Leisure", iconName: "gamecontroller.fill"),
-            TaskCategory(name: "General", iconName: "folder.fill")
+            TaskCategory(name: "Study", iconName: "📚"),
+            TaskCategory(name: "Work", iconName: "💼"),
+            TaskCategory(name: "Fitness", iconName: "🏃"),
+            TaskCategory(name: "Leisure", iconName: "🎮"),
+            TaskCategory(name: "General", iconName: "📁")
         ]
     }
 }
