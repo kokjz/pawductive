@@ -114,7 +114,7 @@ struct CategoryManagerView: View {
     
     private func deleteCategory(offsets: IndexSet) {
         for index in offsets {
-            var category = categories[index]
+            let category = categories[index]
             for task in tasks {
                 if task.categoryName == category.name {
                     task.categoryName = ""
