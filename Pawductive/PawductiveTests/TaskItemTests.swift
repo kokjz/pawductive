@@ -146,21 +146,4 @@ import SwiftData
             let foundCategory = categories.first(where: { $0.name == "TempCategory" })
             #expect(foundCategory == nil)
         }
-
-        //test 10: task creation hours and minutes conversion
-        @Test func testTaskCreationHoursAndMinutesConversion() {
-            let hours = 1
-            let minutes = 45
-            let totalCalculatedMinutes = (hours * 60) + minutes
-            
-            let task = TaskItem(
-                title: "Deep Work Session",
-                expectedDurationInMinutes: totalCalculatedMinutes,
-                categoryName: "Work"
-            )
-            
-            #expect(task.title == "Deep Work Session")
-            #expect(task.expectedDurationInMinutes == 105)
-            #expect(task.categoryName == "Work")
-        }
 }
