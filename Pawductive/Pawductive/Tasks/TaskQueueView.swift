@@ -80,17 +80,19 @@ struct TaskQueueView: View {
                                 Spacer()
                                 
                                 //category name + icon
-                                Text(task.categoryName)
-                                    .font(.caption)
-                                    .bold()
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 2)
-                                    .background(Color.orange.opacity(0.12))
-                                    .cornerRadius(6)
-                                    .foregroundColor(.orange)
-                                Text(getCategoryIcon(for: task.categoryName))
-                                    .font(.title3)
-                                    .frame(width: 28, height: 28, alignment: .center)
+                                if (task.categoryName != "") {
+                                    Text(task.categoryName)
+                                        .font(.caption)
+                                        .bold()
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 2)
+                                        .background(Color.orange.opacity(0.12))
+                                        .cornerRadius(6)
+                                        .foregroundColor(.orange)
+                                    Text(getCategoryIcon(for: task.categoryName))
+                                        .font(.title3)
+                                        .frame(width: 28, height: 28, alignment: .center)
+                                }
                             }
                             .padding(.vertical, 4)
                         }
@@ -103,7 +105,9 @@ struct TaskQueueView: View {
         .navigationDestination(for: TaskItem.self) { task in
             TimerView(task: task)
         }
-        .sheet(isPresented: $showTaskCreationSheet) { TaskCreationView() }
+        .fullScreenCover(isPresented: $showTaskCreationSheet) {
+            TaskCreationView()
+        }
     }
     
     private func deleteTasks(offsets: IndexSet) {

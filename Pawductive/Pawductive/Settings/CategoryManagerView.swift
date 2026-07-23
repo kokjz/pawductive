@@ -11,6 +11,7 @@ import SwiftData
 struct CategoryManagerView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TaskCategory.name) private var categories: [TaskCategory]
+    @Query private var tasks: [TaskItem]
     
     @State private var showEmojiPicker: Bool = false
     @State private var newCategoryName: String = ""
@@ -56,6 +57,9 @@ struct CategoryManagerView: View {
                     }
                 }
                 .disabled(newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(categories.filter{
+                    $0.name == newCategoryName.trimmingCharacters(in: .whitespaces)
+                }.count > 0)
             }
             
             //existing categories list
@@ -89,6 +93,7 @@ struct CategoryManagerView: View {
                 emojis: presetEmojis
             )
             .presentationDetents([.height(420)])
+            .interactiveDismissDisabled()
         }
     }
     
@@ -109,7 +114,13 @@ struct CategoryManagerView: View {
     
     private func deleteCategory(offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(categories[index])
+            var category = categories[index]
+            for task in tasks {
+                if task.categoryName == category.name {
+                    task.categoryName = ""
+                }
+            }
+            modelContext.delete(category)
         }
         try? modelContext.save()
     }
@@ -145,13 +156,6 @@ struct EmojiPickerSheet: View {
             }
             .navigationTitle("Choose Icon")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
         }
     }
 }

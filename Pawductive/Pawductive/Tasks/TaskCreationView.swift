@@ -17,7 +17,7 @@ struct TaskCreationView: View {
     @State private var title: String = ""
     @State private var selectedHours: Int = 0
     @State private var selectedMinutes: Int = 30
-    @State private var selectedCategoryName: String = "General"
+    @State private var selectedCategoryName: String = ""
     
     private var totalDurationInMinutes: Int {
         (selectedHours * 60) + selectedMinutes
@@ -79,7 +79,7 @@ struct TaskCreationView: View {
                     footer: Text("You may create new categories or edit existing categories from the app settings.")
                 ) {
                     if categories.isEmpty {
-                        Text("Loading categories...")
+                        Text("No Catagories")
                             .foregroundColor(.secondary)
                     } else {
                         Picker("Select Category", selection: $selectedCategoryName) {
@@ -115,11 +115,7 @@ struct TaskCreationView: View {
                     .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || totalDurationInMinutes == 0)
                 }
             }
-            .onAppear {
-                if selectedCategoryName == "General" && !categories.isEmpty {
-                    selectedCategoryName = categories.first(where: { $0.name == "General" })?.name ?? categories.first!.name
-                }
-            }
+            .scrollDisabled(true)
         }
     }
     
