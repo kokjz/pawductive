@@ -31,6 +31,15 @@ struct SettingsManagerView: View {
                 }
             }
             
+            Section("Task Categories") {
+                NavigationLink(destination: CategoryManagerView()) {
+                    HStack {
+                        Text("Manage Categories")
+                        Spacer()
+                    }
+                }
+            }
+            
             Section("Simulator Settings") {
                 Toggle("Enable Hibernation", isOn: $pet.isHibernating)
                     .onChange(of: pet.isHibernating) { oldValue, newValue in
