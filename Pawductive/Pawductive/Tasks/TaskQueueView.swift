@@ -9,7 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct TaskQueueView: View {
-    @Query(sort: \TaskItem.sortOrder) private var tasks: [TaskItem]
+    @Query(sort: [
+        SortDescriptor(\TaskItem.sortOrder, order: .forward),
+        SortDescriptor(\TaskItem.creationDate, order: .reverse)
+    ]) private var tasks: [TaskItem]
     @Query private var profiles: [UserProfile]
     @Query private var categories: [TaskCategory]
     @Environment(\.modelContext) private var modelContext
@@ -54,7 +57,7 @@ struct TaskQueueView: View {
                     .foregroundColor(tasks.isEmpty ? .gray : .orange)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(Color(.secondarySystemGroupedBackground))
+                    .background(Color(.secondarySystemBackground))
                     .cornerRadius(12)
                     .disabled(tasks.isEmpty)
             }
@@ -83,8 +86,10 @@ struct TaskQueueView: View {
                     }
                     .onDelete(perform: deleteTasks)
                     .onMove(perform: moveTask)
+                    .listRowBackground(Color(.secondarySystemBackground))
                 }
                 .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
             }
         }
         .environment(\.editMode, $editMode)
