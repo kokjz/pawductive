@@ -79,69 +79,34 @@ struct ProfileView: View {
                 .padding(.top)
                 
                 if let stats = statsList.first, let pet = pets.first {
-                    //user statistics
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("User Statistics")
+                        Text("Statistics")
                             .styleAsSubHeader()
-                            
+                        
+                        //daily streak card
                         streakCard(streak: stats.currentStreak)
-                            
-                        HStack(spacing: 16) {
-                            statCard(
-                                title: "Total Tasks Completed",
-                                value: "\(stats.totalTasksCompleted)",
-                                icon: "checkmark.circle.fill",
-                                color: .green
-                            )
-                            statCard(
-                                title: "Total Minutes Focused",
-                                value: "\(stats.totalMinutesFocused)",
-                                icon: "clock.fill",
-                                color: .blue
-                            )
+                        
+                        //navlink to stats dashboard
+                        NavigationLink(destination: StatsDashboardView()) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "chart.bar.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.orange)
+                                Text("View More Statistics")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.headline)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .cornerRadius(12)
                         }
-                        .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(.horizontal)
                     .padding(.top)
-                    
-                    //pet statistics
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Pet Statistics")
-                            .styleAsSubHeader()
-                        
-                        HStack(spacing: 16) {
-                            statCard(
-                                title: "Total Food Received",
-                                value: "\(pet.totalFoodReceived)",
-                                icon: "fork.knife.circle.fill",
-                                color: .yellow
-                            )
-                            statCard(
-                                title: "Total Toys Received",
-                                value: "\(pet.totalToysReceived)",
-                                icon: "baseball.fill",
-                                color: .yellow
-                            )
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                        
-                        HStack(spacing: 16) {
-                            statCard(
-                                title: "High Mood Streak",
-                                value: "\(pet.highMoodStreak(now: now))",
-                                icon: "face.smiling.inverse",
-                                color: .orange
-                            )
-                            statCard(
-                                title: "High Energy Streak",
-                                value: "\(pet.highEnergyStreak(now: now))",
-                                icon: "bolt.circle.fill",
-                                color: .orange
-                            )
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                    }
                     .onAppear {
                         pet.update(
                             currDate: now,
@@ -149,8 +114,6 @@ struct ProfileView: View {
                             energyDecayModifier: energyDecayModifier
                         )
                     }
-                    .padding(.horizontal)
-                    .padding(.top)
                     
                     //achievement list
                     VStack(alignment: .leading, spacing: 12) {
@@ -215,28 +178,6 @@ struct ProfileView: View {
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(streak > 0 ? Color.orange.opacity(0.2) : Color.clear, lineWidth: 1))
-    }
-    
-    //statcard component
-    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(color)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(value)
-                    .font(.system(.title2, design: .rounded))
-                    .bold()
-                Text(title)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(12)
     }
     
     //achievement row component
