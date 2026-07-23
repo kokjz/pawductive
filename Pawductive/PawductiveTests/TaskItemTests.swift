@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 import SwiftData
+import SwiftUI
 @testable import Pawductive
 
 @Suite struct TaskItemTests {
@@ -145,5 +146,35 @@ import SwiftData
             
             let foundCategory = categories.first(where: { $0.name == "TempCategory" })
             #expect(foundCategory == nil)
+        }
+    
+        //test 10: task reordering sort order persistence
+        @Test @MainActor func testTaskReorderingSortOrder() throws {
+            let context = try makeInMemoryContext()
+            
+            let taskA = TaskItem(title: "Task A", expectedDurationInMinutes: 10, sortOrder: 0)
+            let taskB = TaskItem(title: "Task B", expectedDurationInMinutes: 10, sortOrder: 1)
+            let taskC = TaskItem(title: "Task C", expectedDurationInMinutes: 10, sortOrder: 2)
+            
+            context.insert(taskA)
+            context.insert(taskB)
+            context.insert(taskC)
+            try context.save()
+            
+            var taskList = [taskA, taskB, taskC]
+            taskList.move(fromOffsets: IndexSet(integer: 2), toOffset: 0)
+            
+            for (index, task) in taskList.enumerated() {
+                task.sortOrder = index
+            }
+            try context.save()
+            
+            let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\TaskItem.sortOrder)])
+            let fetchedTasks = try context.fetch(descriptor)
+            
+            #expect(fetchedTasks.count == 3)
+            #expect(fetchedTasks[0].title == "Task C")
+            #expect(fetchedTasks[1].title == "Task A")
+            #expect(fetchedTasks[2].title == "Task B")
         }
 }
