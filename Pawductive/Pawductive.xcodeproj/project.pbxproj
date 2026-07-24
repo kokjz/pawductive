@@ -71,8 +71,11 @@
 		870AC13D300CB37900536C21 /* Exceptions for "Pawductive" folder in "PawductiveWidgetsExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				ContentView.swift,
 				Info.plist,
 				PawductiveApp.swift,
+				Tasks/TaskQueueView.swift,
+				Timer/TimerView.swift,
 			);
 			target = 870AC0F9300CB33700536C21 /* PawductiveWidgetsExtension */;
 		};
