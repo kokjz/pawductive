@@ -176,7 +176,7 @@ struct ProfileView: View {
             }
             Spacer()
             
-            if let shareImage = renderStreakCard(stats: stats, pet: pet) {
+            if streak > 0, let shareImage = renderStreakCard(stats: stats, pet: pet) {
                 ShareLink(
                     item: shareImage,
                     subject: Text("My Pawductive Streak"),
@@ -190,6 +190,13 @@ struct ProfileView: View {
                         .background(Color.orange.opacity(0.12))
                         .clipShape(Circle())
                 }
+            } else {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.title3)
+                    .foregroundColor(.gray)
+                    .padding(10)
+                    .background(Color.gray.opacity(0.12))
+                    .clipShape(Circle())
             }
         }
         .padding()
