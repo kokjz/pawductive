@@ -51,5 +51,6 @@ struct DecorShopView: View {
 }
 
 #Preview {
-    DecorShopView().modelContainer(DataContainer().modelContainer)
+    DecorShopView()
+        .modelContainer(DataContainer().modelContainer)
 }

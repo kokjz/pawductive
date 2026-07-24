@@ -117,5 +117,5 @@ extension URL {
 
 #Preview {
     ContentView()
-        .modelContainer(DataContainer(experiencePoints: 33000).modelContainer)
+        .modelContainer(DataContainer(coins: 999, loadInventory: true, loadDecorations: true, loadTasks: true).modelContainer)
 }

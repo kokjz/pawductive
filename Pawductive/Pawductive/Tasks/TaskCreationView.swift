@@ -133,5 +133,5 @@ struct TaskCreationView: View {
 
 #Preview {
     TaskCreationView()
-        .modelContainer(DataContainer(inMemory: true).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }

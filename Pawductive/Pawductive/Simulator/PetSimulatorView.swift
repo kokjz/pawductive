@@ -158,5 +158,5 @@ struct PetSimulatorView: View {
     NavigationStack {
         PetSimulatorView()
     }
-    .modelContainer(DataContainer(mood: 100, energy: 100, experiencePoints: 999).modelContainer)
+    .modelContainer(DataContainer().modelContainer)
 }

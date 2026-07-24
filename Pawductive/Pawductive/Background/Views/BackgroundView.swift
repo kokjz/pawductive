@@ -42,9 +42,8 @@ struct BackgroundView: View {
 }
 
 #Preview {
-    let data = DataContainer(coins: 10000)
     NavigationStack {
         BackgroundView()
     }
-    .modelContainer(data.modelContainer)
+    .modelContainer(DataContainer().modelContainer)
 }

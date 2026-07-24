@@ -110,7 +110,5 @@ struct ToyStoreView: View {
 
 #Preview {
     ToyStoreView(currDate: Date.now)
-        .modelContainer(DataContainer(loadInventory: false).modelContainer)
-    ToyStoreView(currDate: Date.now)
-        .modelContainer(DataContainer(mood: 50, energy: 50).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }
