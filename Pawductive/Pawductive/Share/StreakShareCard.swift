@@ -10,23 +10,46 @@ import SwiftData
 
 struct StreakShareCard: View {
     let stats: UserStats
-    let petName: String
+    let pet: Pet
     
     var body: some View {
         VStack(spacing: 16) {
+            //card title
             Text("Pawductive 🐾")
                 .font(.system(.headline, design: .rounded))
                 .bold()
                 .foregroundColor(.white)
-            HStack(spacing: 16) {
-                Text("🐐🔥")
-                    .font(.system(size: 48))
+            
+            //streak
+            HStack(spacing: 12) {
+                Text("🐐")
+                    .font(.system(size: 36))
                 Text("\(stats.currentStreak) Day Streak!")
-                    .font(.system(.title2, design: .rounded))
+                    .font(.system(.title, design: .rounded))
                     .bold()
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                Text("🔥")
+                    .font(.system(size: 36))
             }
             
+            //pet + bg render
+            ZStack(alignment: .bottom) {
+                CanvasView(width: 290, height: 180)
+                    .allowsHitTesting(false)
+                Image(pet.image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 75, height: 75, alignment: .bottom)
+                    .padding(.bottom, 8)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+            )
+            
+            //stats
             HStack(spacing: 10) {
                 HStack(spacing: 6) {
                     Image(systemName: "clock.fill")
@@ -68,8 +91,18 @@ struct StreakShareCard: View {
 }
 
 #Preview {
-    StreakShareCard(
-        stats: UserStats(totalTasksCompleted: 12, totalMinutesFocused: 180, currentStreak: 5),
-        petName: "DOG"
-    )
+    let container = DataContainer(inMemory: true)
+    let context = container.context
+    
+    let background = Background(name: "Room", imageName: "room")
+    context.insert(background)
+    
+    let pet = Pet(name: "DOG", mood: 100, energy: 100, experiencePoints: 500, background: background)
+    context.insert(pet)
+    
+    let stats = UserStats(totalTasksCompleted: 12, totalMinutesFocused: 180, currentStreak: 5)
+    context.insert(stats)
+    
+    return StreakShareCard(stats: stats, pet: pet)
+        .modelContainer(container.modelContainer)
 }
