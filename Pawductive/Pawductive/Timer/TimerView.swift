@@ -11,6 +11,7 @@ import SwiftData
 struct TimerView: View {
     let task: TaskItem
     
+    @State private var shouldFailOnDismiss: Bool = false
     @State private var viewModel = TimerViewModel()
     @State private var settingsManager = SettingsManager.shared
     @State private var backgroundTime: Date? = nil
@@ -53,7 +54,7 @@ struct TimerView: View {
                     if settingsManager.isTimerPauseEnabled {
                         //if pause toggle enabled have both pause and giveup buttons
                         Button(action: {
-                            viewModel.failSession()
+                            shouldFailOnDismiss = true
                             dismiss()
                         }) {
                             Text("Give Up")
@@ -82,7 +83,7 @@ struct TimerView: View {
                     } else {
                         //if pause toggle disabled only give up button
                         Button(action: {
-                            viewModel.failSession()
+                            shouldFailOnDismiss = true
                             dismiss()
                         }) {
                             Text("Give Up")
@@ -117,11 +118,15 @@ struct TimerView: View {
         }
         .padding()
         .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true
             viewModel.startTimer(minutes: task.expectedDurationInMinutes)
+        }
+        .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
+            if shouldFailOnDismiss { viewModel.failSession() }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        
         .onChange(of: scenePhase) { oldValue, newValue in
             if newValue == .background {
                 //user exit app
@@ -137,7 +142,7 @@ struct TimerView: View {
                     backgroundTime = nil
                     if elapsed > Double(settingsManager.gracePeriodSeconds) {
                         //grace period exceeded
-                        viewModel.failSession()
+                        shouldFailOnDismiss = true
                         dismiss()
                     } else {
                         //within grace period
