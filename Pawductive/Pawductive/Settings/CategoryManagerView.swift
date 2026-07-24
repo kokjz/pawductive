@@ -164,5 +164,5 @@ struct EmojiPickerSheet: View {
     NavigationStack {
         CategoryManagerView()
     }
-    .modelContainer(DataContainer(inMemory: true).modelContainer)
+    .modelContainer(DataContainer().modelContainer)
 }

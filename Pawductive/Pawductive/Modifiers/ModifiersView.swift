@@ -72,5 +72,6 @@ struct ModifiersView: View {
 }
 
 #Preview {
-    ModifiersView().modelContainer(DataContainer().modelContainer)
+    ModifiersView()
+        .modelContainer(DataContainer().modelContainer)
 }
