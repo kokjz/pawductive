@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ProfileView: View {
-    //fetch stats from db
+    @Environment(\.modelContext) private var modelContext
     @Query private var statsList: [UserStats]
     @Query private var pets: [Pet]
     @Query private var users: [UserProfile]
@@ -84,7 +84,7 @@ struct ProfileView: View {
                             .styleAsSubHeader()
                         
                         //daily streak card
-                        streakCard(streak: stats.currentStreak)
+                        streakCard(stats: stats, pet: pet)
                         
                         //navlink to stats dashboard
                         NavigationLink(destination: StatsDashboardView()) {
@@ -153,8 +153,10 @@ struct ProfileView: View {
         .background(Color(.systemGroupedBackground))
     }
     
-    //streakcard component
-    private func streakCard(streak: Int) -> some View {
+    //streakcard component with sharelink
+    @ViewBuilder
+    private func streakCard(stats: UserStats, pet: Pet) -> some View {
+        let streak = stats.currentStreak
         HStack(spacing: 16) {
             ZStack {
                 Circle()
@@ -173,11 +175,38 @@ struct ProfileView: View {
                     .foregroundColor(.secondary)
             }
             Spacer()
+            
+            if let shareImage = renderStreakCard(stats: stats, pet: pet) {
+                ShareLink(
+                    item: shareImage,
+                    subject: Text("My Pawductive Streak"),
+                    message: Text("I'm on a \(streak)-day focus streak on Pawductive! 🐾🔥"),
+                    preview: SharePreview("Pawductive Focus Streak", image: shareImage)
+                ) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.title3)
+                        .foregroundColor(.orange)
+                        .padding(10)
+                        .background(Color.orange.opacity(0.12))
+                        .clipShape(Circle())
+                }
+            }
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(streak > 0 ? Color.orange.opacity(0.2) : Color.clear, lineWidth: 1))
+    }
+    
+    //imagerenderer for share sheet
+    @MainActor
+    private func renderStreakCard(stats: UserStats, pet: Pet) -> Image? {
+        let card = StreakShareCard(stats: stats, pet: pet)
+            .modelContext(modelContext)
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = 3.0
+        if let uiImage = renderer.uiImage { return Image(uiImage: uiImage) }
+        return nil
     }
     
     //achievement row component
