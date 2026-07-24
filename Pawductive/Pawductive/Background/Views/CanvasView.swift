@@ -91,5 +91,5 @@ struct CanvasView: View {
 
 #Preview {
     CanvasView(width: 400 * 0.9, height: 400 * 0.9)
-        .modelContainer(DataContainer(loadDecorations: true).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }

@@ -27,8 +27,8 @@ class DataContainer {
         return try? ModelContainer(for: DataContainer.appSchema, configurations: [modelConfiguration])
     }
     
-    init(coins: Int = 999, mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0,
-         loadInventory: Bool = true, loadDecorations: Bool = true, inMemory: Bool = true) {
+    init(coins: Int = 0, mood: Double = 100, energy: Double = 100, experiencePoints: Int = 0,
+         loadInventory: Bool = false, loadDecorations: Bool = false, loadTasks: Bool = false, inMemory: Bool = true) {
         
         // Create Model Container
         if let modelContainer = DataContainer.createModelContainer(inMemory: inMemory) {
@@ -79,6 +79,10 @@ class DataContainer {
         }
         if (try? context.fetch(FetchDescriptor<TaskCategory>()).isEmpty) ?? true  {
             insertDefaultCategories()
+            if loadTasks {
+                loadCompletedTasks()
+                loadIncompleteTasks()
+            }
         }
         
         try? context.save()
@@ -232,5 +236,37 @@ class DataContainer {
             context.insert(category)
         }
         print("Seed default task categories success")
+    }
+    
+    private func loadIncompleteTasks() {
+        let incompleteTasks = [
+            TaskItem(title: "task1", expectedDurationInMinutes: 15, categoryName: "Study"),
+            TaskItem(title: "task2", expectedDurationInMinutes: 15, categoryName: "Study"),
+            TaskItem(title: "task3", expectedDurationInMinutes: 15, categoryName: "Leisure"),
+            TaskItem(title: "task4", expectedDurationInMinutes: 15, categoryName: "Leisure"),
+            TaskItem(title: "task5", expectedDurationInMinutes: 15, categoryName: "Leisure"),
+        ]
+        
+        for task in incompleteTasks {
+            context.insert(task)
+        }
+    }
+    
+    private func loadCompletedTasks() {
+        let completedTasks = [
+            TaskItem(title: "task1", expectedDurationInMinutes: 15, categoryName: "General"),
+            TaskItem(title: "task2", expectedDurationInMinutes: 15, categoryName: "Fitness"),
+            TaskItem(title: "task3", expectedDurationInMinutes: 15, categoryName: "Fitness"),
+            TaskItem(title: "task4", expectedDurationInMinutes: 15, categoryName: "Fitness"),
+            TaskItem(title: "task5", expectedDurationInMinutes: 15, categoryName: "Work"),
+            TaskItem(title: "task6", expectedDurationInMinutes: 15, categoryName: "Work"),
+            TaskItem(title: "task7", expectedDurationInMinutes: 15, categoryName: ""),
+            TaskItem(title: "task8", expectedDurationInMinutes: 15, categoryName: ""),
+        ]
+        
+        for task in completedTasks {
+            task.isCompleted = true
+            context.insert(task)
+        }
     }
 }

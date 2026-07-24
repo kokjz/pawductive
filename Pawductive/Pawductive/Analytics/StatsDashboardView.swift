@@ -25,6 +25,7 @@ struct StatsDashboardView: View {
         }
         return durationMap.map { (categoryName, totalMins) in
             let icon = categories.first(where: { $0.name == categoryName })?.iconName ?? "📁"
+            let categoryName = categoryName == "" ? "Others" : categoryName
             return CategoryStat(categoryName: categoryName, minutesFocused: totalMins, iconName: icon)
         }.sorted(by: { $0.minutesFocused > $1.minutesFocused })
     }
@@ -123,7 +124,7 @@ struct StatsDashboardView: View {
                                 title: "Total Food Received",
                                 value: "\(pet.totalFoodReceived)",
                                 icon: "fork.knife.circle.fill",
-                                color: .yellow
+                                color: .orange
                             )
                             statCard(
                                 title: "Total Toys Received",
@@ -136,15 +137,15 @@ struct StatsDashboardView: View {
                         HStack(spacing: 16) {
                             statCard(
                                 title: "High Mood Streak",
-                                value: "\(pet.highMoodStreak(now: now)) Days",
+                                value: "\(pet.highMoodStreak(now: now)) days",
                                 icon: "face.smiling.inverse",
                                 color: .orange
                             )
                             statCard(
                                 title: "High Energy Streak",
-                                value: "\(pet.highEnergyStreak(now: now)) Days",
+                                value: "\(pet.highEnergyStreak(now: now)) days",
                                 icon: "bolt.circle.fill",
-                                color: .orange
+                                color: .yellow
                             )
                         }
                         .fixedSize(horizontal: false, vertical: true)
@@ -200,5 +201,5 @@ struct StatsDashboardView: View {
     NavigationStack {
         StatsDashboardView()
     }
-    .modelContainer(DataContainer(inMemory: true).modelContainer)
+    .modelContainer(DataContainer(loadTasks: true).modelContainer)
 }

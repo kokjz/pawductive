@@ -11,7 +11,7 @@ import SwiftData
 
 struct RewardMissionProvider: @MainActor TimelineProvider {
     @MainActor var dataContainer: DataContainer {
-        DataContainer(coins: 0, loadInventory: false, loadDecorations: false, inMemory: false)
+        DataContainer(inMemory: false)
     }
     
     @MainActor func placeholder(in context: Context) -> RewardMissionEntry {

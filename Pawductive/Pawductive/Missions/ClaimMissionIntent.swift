@@ -37,6 +37,11 @@ struct ClaimMissionIntent: AppIntent {
             return .result()
         }
         
+        guard let userStats = try? container.mainContext.fetch(FetchDescriptor<UserStats>()).first else {
+            print("Unable to fetch UserStats")
+            return .result()
+        }
+        
         let descriptor = FetchDescriptor<DailyMission>(predicate: #Predicate { $0.title == missionTitle })
         guard let dailyMission = try? container.mainContext.fetch(descriptor).first else {
             print("Unable to fetch DailyMission")
@@ -44,6 +49,7 @@ struct ClaimMissionIntent: AppIntent {
         }
         
         userProfile.coins += dailyMission.reward
+        userStats.totalCoinsEarned += dailyMission.reward
         dailyMission.claimed = true
         try? container.mainContext.save()
         WidgetCenter.shared.reloadTimelines(ofKind: "RewardMissionWidget")

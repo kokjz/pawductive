@@ -34,6 +34,11 @@ struct ClaimRewardIntent: AppIntent {
             return .result()
         }
         
+        guard let userStats = try? container.mainContext.fetch(FetchDescriptor<UserStats>()).first else {
+            print("Unable to fetch UserStats")
+            return .result()
+        }
+        
         guard let dailyReward = try? container.mainContext.fetch(FetchDescriptor<DailyReward>()).first else {
             print("Unable to fetch DailyReward")
             return .result()
@@ -45,6 +50,7 @@ struct ClaimRewardIntent: AppIntent {
         }
         
         dailyReward.claimReward(user: userProfile)
+        userStats.totalCoinsEarned += dailyReward.bonusCoins ?? 0
         try? container.mainContext.save()
         WidgetCenter.shared.reloadTimelines(ofKind: "RewardMissionWidget")
         print("Daily reward claimed successfully")

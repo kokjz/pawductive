@@ -110,8 +110,5 @@ struct FoodStoreView: View {
 
 #Preview {
     FoodStoreView(currDate: Date.now)
-        .modelContainer(DataContainer(loadInventory: false).modelContainer)
-    
-    FoodStoreView(currDate: Date.now)
-        .modelContainer(DataContainer(mood: 50, energy: 50).modelContainer)
+        .modelContainer(DataContainer().modelContainer)
 }
