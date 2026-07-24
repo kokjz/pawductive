@@ -15,39 +15,50 @@ struct StreakShareCard: View {
     var body: some View {
         VStack(spacing: 16) {
             //card title
-            Text("Pawductive 🐾")
-                .font(.system(.headline, design: .rounded))
-                .bold()
-                .foregroundColor(.white)
-            
-            //streak
-            HStack(spacing: 12) {
-                Text("🐐")
-                    .font(.system(size: 36))
-                Text("\(stats.currentStreak) Day Streak!")
-                    .font(.system(.title, design: .rounded))
-                    .bold()
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                Text("🔥")
-                    .font(.system(size: 36))
+            HStack {
+                Text("🐾")
+                    .scaleEffect(x: -1, y: 1)
+                Text("Pawductive")
+                Text("🐾")
             }
+            .font(.system(.title2, design: .rounded))
+            .bold()
+            .foregroundColor(.white)
             
             //pet + bg render
             ZStack(alignment: .bottom) {
-                CanvasView(width: 290, height: 180)
+                CanvasView(width: 320, height: 320)
                     .allowsHitTesting(false)
-                Image(pet.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 75, height: 75, alignment: .bottom)
-                    .padding(.bottom, 8)
+                
+                VStack {
+                    //streak
+                    HStack(spacing: 12) {
+                        Text("🔥")
+                            .font(.system(size: 54))
+                        Text("\(stats.currentStreak) DAY STREAK!")
+                            .font(.system(.title, design: .rounded))
+                            .bold()
+                            .foregroundColor(.orange)
+                            .multilineTextAlignment(.center)
+                        Text("🔥")
+                            .font(.system(size: 54))
+                    }
+                    .padding(8)
+                    .background(Color.white.opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding()
+
+                    Spacer()
+                    
+                    Image(pet.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100, alignment: .bottom)
+                        .padding(.bottom, 8)
+                }
+                .frame(maxHeight: 320)
             }
             .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-            )
             
             //stats
             HStack(spacing: 10) {
@@ -77,7 +88,7 @@ struct StreakShareCard: View {
             }
         }
         .padding(20)
-        .frame(width: 340)
+        .frame(width: 360, height: 440)
         .background(
             LinearGradient(
                 colors: [Color.orange, Color.red.opacity(0.85)],
