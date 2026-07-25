@@ -197,21 +197,23 @@ flowchart LR
     earnModifierPoints --> openModiferShop
     buyModifiers --> END
 ```
+
 ---
 
 
-## 🚀 What's New (Milestone 2 Summary)
+## 🚀 What's New (Milestone 3 Summary)
 
-Building upon Milestone 1's proof-of-concept, the application has been expanded into a more cohesive and extensive prototype. Our development for this milestone focused on deep state integration, greater timer flexibility, and a more personalized and engaging user and pet progression loop.
+The application has now been polished into a production-ready, feature-complete iOS application. The development for this final milestone focused on native platform integrations (iOS 18 Widgets), granular task customization, interactive analytics, and user quality-of-life enhancements.
 
-* **Interactive Pet & Habitat Customization:** Interactive tap-gesture pet animations, modifier-based leveling progression system, fully decoratable pet room
-* **Progressive Focus Economy:** New ramping quadratic reward curve formula to proportionally incentivise completion of longer tasks
-* **Daily Task Completion Streaks:** Consecutive tracking of daily user task completion, automatically resetting broken streaks to zero
-* **Timer & Backgrounding Flexibility:** Global settings panel with toggleable timer pause function and customizable app switch-out grace period
-* **User Progression Profile:** Dedicated 4th tab displaying user daily missions, user lifetime statistics, and dynamically sorted user achievements
-* **App Notifications:** Local push notification center for users to configure application push notifications that alert users on pending streak expiry or pet status
 
-More detailed information on new feature implementation for Milestone 2 can be found in a dedicated section below.
+* **Pet Hibernation & Expanded Achievements:** Added a state-freezing hibernation toggle to halt mood/energy decay during absences, plus 12 new pet achievement milestones
+* **Dynamic Focus Multipliers, Task Categorization & Ordering:** Streak-based coin multiplier, tagging of tasks with user-customisable categories, and persistent custom ordering of tasks on the task queue screen
+* **Timer Auto-Lock Prevention:** Configured screen auto-lock prevention during active timers, smooth view-reset transitions, and adaptive `HH:MM:SS` duration formatting for long study blocks
+* **Home Screen Widgets:** Custom WidgetKit extensions displaying live pet status, room decorations, and quick-claim reward progress
+* **Statistics Dashboard:** Dedicated analytics hub featuring Apple's native **Swift Charts** framework (`SectorMark`) to render interactive category focus time breakdowns
+* **Social Share Sheets & Snapshot Cards:** Implemented native iOS `ShareLink` and `ImageRenderer` engines to generate high-resolution snapshot graphics of user streaks and pet rooms that can be saved and shared to other applications
+
+More detailed information on new feature implementations for Milestone 3 can be found in the dedicated section below.
 
 
 ---
@@ -279,17 +281,57 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 * **User settings:** The top right of the Profile tab has a clickable gear icon that functions as a navigation link to the user settings view. Inside the user settings view, there is a toggle option for enabling or disabling the previously-mentioned timer pausing feature. Additionally, there is a click-through navigation link that takes the user to the grace period picker view, where they can use slider wheels for minutes and seconds to granularly adjust their preferred app switch-out grace period.
 * **User notifications:** The app will request for permission to send notifications when the user first launches the app. After the app receives permission to send notifications, the user can manage the notifications sent by the app tapping on the bell icon. The user can decide if the app should notify the user when the pet is low on mood or energy. In addition, the user can decide when the app should notify the user when their streak is expiring. These notifications are off by default to reduce disruption. 
 
+
 ---
 
 
-## 🚧 Potential Future Features (For Milestone 3)
+## ⚒️ Additional Features (Milestone 3)
 
->#### Feedback on this section will be highly appreciated! ❤️
+
+### 1. Pet
+New features were added to the simulator. The hibernation toggle will benefit users who do not use the app frequently and the simulator widget makes it easier to care for their pet.
+
+* **Hibernation Toggle:** The user can turn on this feature to pause the mood and energy levels. This feature will keep their pet happy and healthy when the user does not plan or is unable to use the app for a long period of time. Because the mood and energy levels do not decrease, the user cannot give food and toys once the mood and energy levels are full. Therefore, the user is not encouraged to turn on this feature if they wish to level up their pet. This message is delivered via an alert when the user tries to turn on this feature.
+* **Simulator Widget:** The user can use the widget to monitor their pet without opening the app. The user can use the widget to check the mood and energy levels. If the pet is low on mood and energy, the user can tap on the widget to open the app and manage their pet. In addition, the widget uses the simulator background. The user can decorate the background and the decorations will be shown in the widget.
+
+
+### 2. Tasks
+Numerous changes were made to how tasks were handled in Milestone 3, mainly centred around improved UX and balancing the in-app economy.
+* **Coin Streak Multiplier:** To reward users for daily consistency, a streak-based multiplier is applied to all completed focus sessions. For every consecutive day of an active focus streak, users earn an additional 2% bonus on total coins earned (e.g. a 10-day streak would grant an additional 20% bonus). To maintain game economy balance, this multiplier is capped at a maximum of 50%.
+* **Dedicated Task Creation Screen:** Rather than creating a task by typing out the name of it and duration in minutes at the top of the task queue screen, there is now a button in its place that takes users to a dedicated task creation screen where users can adjust various properties of the task such as its name and duration in hours and minutes for a more intuitive user experience.
+* **Task Categories:** Users can now also apply custom categories to their tasks (e.g. `"📚 Study"`, `"💼 Work"`). When creating a new task, a sub-menu picker allows users to select a category from those available. Users can also view, delete, and create custom categories with custom emojis in their user settings.
+* **Task Order Organisation:** Users can manually reorder and prioritise their task list using native iOS drag-and-drop gestures (`.onMove`) by pressing the **`Edit`** button on the top right of the task queue screen.
+
+### 3. Timer
+When testing the app on our phones, we noticed that the phone will auto lock when the user does not interact with their phone. If the timer was counting down, the user would lose their progress when they unlock their phone. To resolve this issue, we configured the phone to stay on when the user is on the timer screen. To conserve battery, the user is advised to dim their screen when the timer is counting down. 
+
+To support longer tasks which require multiple hours, when the time left is over 1 hour it is displayed in HH:MM:SS and when the time left is less than 1 hour it is displayed in MM:SS. In addition, the timer will only be reset after the view fully disappears from the screen to hide ugly reset animations.
+
+### 4. Profile
+Many features were added to the profile page for milestone 3. Features include daily rewards to encourage the user to use the app every day, a button to share the daily task streak with other users, and 12 new achievements for the pet simulator.
+
+* **Daily Reward:** The user can claim a random food or toy from the top of profile tab once a day. Even though the user has a chance to receive the best food or toy, the user must purchase additional food and toys to keep the pet both happy and healthy. The reward encourages the user to open the app and complete the daily missions for more rewards. To reward users who use the app frequently, users can receive up to 90 coins together with with the random food or toy when they claim their reward every single day. 
+* **Reward & Mission Widget:** The user can use this widget to claim daily rewards and check daily missions without opening the app. The user can check which missions are incomplete by looking at the current progress for each mission. The user can use this widget to ensure that all the missions have been completed so they will not miss any additional rewards. By encouraging the user to complete missions, this will encourage the user to use the app.
+* **Share Sheet:** The user streak card that was added earlier in Milestone 2 has now been upgraded with a sharing function. Users can export and share their active focus streaks directly from the streak card. This generates a high-resolution custom snapshot graphic that displays their current streak, pet, customised room background, and focus statistics. This functionality is only accessible when the user has a streak of 1 or higher.
+* **Statistics:** User statistics were migrated away from the Profile screen and replaced by a navigation link to its new location on a dedicated Statistics screen (check below for more details). 
+* **Pet Achievements:** 12 new achievements were added to the list of achievements. These achievements include milestones on the number of food and toys given to the pet and the longest duration where the pet was high on mood and energy. These achievements give users a goal and fills them pride when they finally unlock all the achievements.
+
+### 5. Statistics
+As mentioned earlier, all statistics have now been moved to a brand new Statistics Dashboard, accessible from the *"View More Statistics"* card on the Profile tab. Changes here were made to supplement the already-existing user statistics from Milestone 2.
+
+* **Category Statistics:** In addition to overall numbers for task completion, users can now also visualise their completed tasks per-category. An interactive donut chart provides an easy breakdown of the user's exact percentage and minute breakdown of focus time across all task categories.
+* **Pet Statistics:** Users can track their progress for the pet achievements here. The user can check the total number of food and toys given to the pet and the current number of consecutive days where the pet was high on mood and energy. These statistics tell the user whether they have put in the time and effort to care for their pet.
+
+
+---
+
+
+## 🚧 Future Plans 
 
 ### 1. Pet
 
-* **Pet statistics & achievements:** Add statistics and achievements for the pet simulator
-* **Pet hibernation:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for an extended period of time.
+* **[DONE] Pet statistics & achievements:** Add statistics and achievements for the pet simulator
+* **[DONE] Pet hibernation:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for an extended period of time.
 * **Pet accessories:** Allows users to purchase accessories that their pet can wear.
 
 ### 2. Shop
@@ -298,20 +340,20 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 * **Gacha system 💸:** User will spend a fixed amount of coins to buy items. Items have different rarity. User will receive a random item. Certain items may go on rate-ups with higher chances to obtain them on random rotation.
 
 ### 3. Tasks
-* **Streak-based coin multiplier:** A new multiplier that rewards users more the longer their current streak to add on to the current existing multiplier that rewards users proportionately more for longer tasks.
-* **Dedicated task creation screen:** A new view for users to create tasks on a dedicated screen instead of doing it from the top of the task list screen, potentially also giving users more customisation options at task creation.
-* **Task categorisation:** Allow users to tag their created tasks with categories. Users can make use of default categories, or create/edit custom categories from their user settings.
-* **Task order organisation:** Allow users to drag and reorganise the order of the tasks on their task list. 
+* **[DONE] Streak-based coin multiplier:** A new multiplier that rewards users more the longer their current streak to add on to the current existing multiplier that rewards users proportionately more for longer tasks.
+* **[DONE] Dedicated task creation screen:** A new view for users to create tasks on a dedicated screen instead of doing it from the top of the task list screen, potentially also giving users more customisation options at task creation.
+* **[DONE] Task categorisation:** Allow users to tag their created tasks with categories. Users can make use of default categories, or create/edit custom categories from their user settings.
+* **[DONE] Task order organisation:** Allow users to drag and reorganise the order of the tasks on their task list. 
 
 ### 4. Timer
 * **Ambient audio:** Allows users to pick ambient white noise to be played on their timer screen, such as lofi music, rain, or other noise that helps the user focus.
 
 ### 5. Others
 
-* **Login rewards:** Users receive coins/items when they open the app daily/weekly. Encourage the user to open the app to claim rewards. 
-* **App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, view task list, quickstart top task on list).
-* **Statistics dashboard:** Detailed dashboard in a separate view where users can see more data and insights about their usage statistics, such as their time spent on different categories of tasks.
-* **Share sheets / activity view:** Allow users to easily snapshot and share key activity information and their pet to other locations (e.g. to their friends on social media) through iOS built-in share sheet (Activity View).
+* **[DONE] Login rewards:** Users receive coins/items when they open the app daily/weekly. Encourage the user to open the app to claim rewards. 
+* **[DONE] App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, view task list, quickstart top task on list).
+* **[DONE] Statistics dashboard:** Detailed dashboard in a separate view where users can see more data and insights about their usage statistics, such as their time spent on different categories of tasks.
+* **[DONE] Share sheets / activity view:** Allow users to easily snapshot and share key activity information and their pet to other locations (e.g. to their friends on social media) through iOS built-in share sheet (Activity View).
 * **App-wide themes:** Allows users to customise app-wide visual themes from their user settings.
 
 
@@ -324,21 +366,23 @@ The biggest change in Milestone 2, we added a brand new Profile tab alongside th
 ### 1. Model-View-ViewModel (MVVM)
 The UI is decoupled from the business logic to ensure a testable and maintainable codebase. This provides several key advantages, such as decoupling between frontend and backend, greater ease of testing, and reusability.
 
-* **Models:** These `.swift` files represent the raw data structures and database schemas of the application. Models are pure structures or reference types that hold state and are independent of the UI. The current list of models include `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `Food`, `Toy`, `Pet`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
-* **Views:** These `.swift` files represent the declarative UI of the application. Views are solely responsible for rendering layouts, responding to user interactions, and observing realtime changes in viewmodels. The current list of views include `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
-* **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run async timers, and coordinate context transactions with the databases. The current list of viewmodels include `MissionManager`, `NotificationManager`, `SettingsManager`, `TimerViewModel`, and `DataContainer`.
+* **Models:** These `.swift` files represent the raw data structures and database schemas of the application. Models are pure structures or reference types that hold state and are independent of the UI. The current list of models include `CategoryStat`, `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `DailyReward`, `Food`, `Toy`, `Pet`, `TaskCategory`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
+* **Views:** These `.swift` files represent the declarative UI of the application. Views are solely responsible for rendering layouts, responding to user interactions, and observing realtime changes in viewmodels. The current list of views include `PawductiveWidgetsBundle`, `PetSimulatorWidget`, `RewardMissionWidget`, `StatsDashboardView`, `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `DailyRewardView`, `CategoryManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `StreakShareCard`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskCreationView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
+* **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run async timers, and coordinate context transactions with the databases. The current list of viewmodels include `ClaimMissionIntent`, `MissionManager`, `NotificationManager`, `ClaimRewardIntent` `SettingsManager`, `TimerViewModel`, and `DataContainer`.
 
 Additionally, to round up the list of `.swift` files that are part of the main application, `PawductiveApp` serves as the entry point for the application.
 
 
 ### 2. SwiftData Schema & Local Persistence
 A clean, relational database schema is used to manage all user, task, pet, and game-economy data locally using **SwiftData**.
-* `TaskItem`: Tracks individual task titles, expected focus durations, completion states, and creation timestamps.
+* `TaskItem`: Tracks individual task titles, expected focus durations, completion states, creation timestamps, and assigned category names.
+* `TaskCategory`: Tracks default and custom user task categories, including display names and assigned emoji category icons.
 * `UserProfile`: Tracks the user's active, spendable coin wallet, along with dictionaries storing their food and toy inventories.
 * `Pet`: Tracks the pet's name, age, level progression, cumulative XP, and real-time mood and energy decay.
 * `UserStats`: Tracks global lifetime user progression, including total completed tasks, total focus minutes, lifetime coins earned, and consecutive daily focus streaks.
 * `DailyMission`: Tracks the title, target requirements, active progress, claimed states, and reward amounts of individual daily missions.
 * `MissionManager`: Manages the current active daily missions list, checking calendar dates to trigger daily resets, and randomly drawing new missions from the global catalog.
+* `DailyReward`: Tracks daily login reward states, rolling random food/toy items, bonus coin payouts, claim statuses, and calendar claim timestamps.
 * `Modifier`: Tracks unlockable, level-up upgrades for pet decay rates and item efficiencies (e.g., lower store prices, reduced energy/mood decay, increased food calories).
 * `NotificationManager`: Tracks user configurations for local iOS push notifications (such as toggling alerts for low pet stats or expiring daily streaks).
 * `Background`: Represents distinct visual backdrops (e.g., the indoor "Room" or outdoor "Yard") where the pet resides.
@@ -352,27 +396,31 @@ A clean, relational database schema is used to manage all user, task, pet, and g
 Implements the modern **Swift Testing** framework to write test suites verifying the core logic. By utilizing isolated, in-memory databases (`isStoredInMemoryOnly: true`) during testing, database saves, deletes, and updates are verified without polluting the physical application files on disk. The current list of `.swift` test suites implement the following unit tests and ensure the following:
 
 **`BackgroundTests`**
-* _`testBuyDecor`_: Coins are deducted and number of stored decor increases
-* _`testSellDecor`_: Coins are refunded and number of stored decor decreases
-* _`testDisplayDecor`_: Increases shown decor, decreases stored decor
-* _`testStoreDecor`_: Increases stored decor, decreases shown decor
-* _`testReorderDecor`_: Selected decor is layered over other decors
+* _`testBuyDecor`_: Coins are deducted and number of stored decor increases.
+* _`testSellDecor`_: Coins are refunded and number of stored decor decreases.
+* _`testDisplayDecor`_: Increases shown decor, decreases stored decor.
+* _`testStoreDecor`_: Increases stored decor, decreases shown decor.
+* _`testReorderDecor`_: Selected decor is layered over other decors.
+
+**`DailyRewardTest`**
+* _`testUpdate`_: Bonus coins are accurately awarded the next day dependent on if the daily reward was claimed.
+* _`testClaimReward`_: Daily rewards are claimed and reflect in the user inventory accurately.
 
 **`MissionTests`**
-* _`testUpdateMission`_: Update mission progress when details match
-* _`testResetMission`_: Reset mission progress and reward claim status
-* _`testInitialMissions`_: Correct number and initial state of missions
-* _`testRefreshMissions`_: Old missions are reset, draw new missions
+* _`testUpdateMission`_: Mission progress is updated when details match.
+* _`testResetMission`_: Mission progress and reward claim status is reset accurately.
+* _`testInitialMissions`_: The number and initial state of missions are correct.
+* _`testRefreshMissions`_: Old missions are reset and  new missions are drawn.
 
 **`ModifierTests`**
-* _`testPetMoodModifier`_: As level increases, mood half life constant increases
-* _`testPetEnergyModifier`_: As level increases, daily energy consumption decreases 
-* _`testFoodCostModifier`_: As level increases, cost of food decreases
-* _`testFoodMoodModifier`_: As level increases, food increases mood by a larger amount
-* _`testFoodEnergyModifier`_: As level increases, food increases energy by a larger amount
-* _`testToyCostModifier`_: As level increases, cost of toys decreases 
-* _`testToyMoodModifier`_ As level increases, toys increase mood by a larger amount
-* _`testToyEnergyModifier`_: As level increases, toys decrease energy by a smaller amount
+* _`testPetMoodModifier`_: As level increases, mood half life constant increases.
+* _`testPetEnergyModifier`_: As level increases, daily energy consumption decreases.
+* _`testFoodCostModifier`_: As level increases, cost of food decreases.
+* _`testFoodMoodModifier`_: As level increases, food increases mood by a larger amount.
+* _`testFoodEnergyModifier`_: As level increases, food increases energy by a larger amount.
+* _`testToyCostModifier`_: As level increases, cost of toys decreases.
+* _`testToyMoodModifier`_ As level increases, toys increase mood by a larger amount.
+* _`testToyEnergyModifier`_: As level increases, toys decrease energy by a smaller amount.
 
 **`PetTests`**
 * _`testCanReceiveFood`_: Pet can receive food if and only if energy is not full.
@@ -382,16 +430,30 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 * _`testUpdatePet`_: Pet attributes update accurately on passage of time.
 * _`testExperiencePoints`_: Modifier points, maximum mood and energy scale with level.
 * _`testImageState`_: Displays correct sprite according to mood, energy and state.
+* _`testFoodStatistics`_: Pet statistics are accurately updated on receving new food.
+* _`testToyStatistics`_: Pet statistics are accurately updated on receiving new toy.
+* _`testMoodStreak`_: Pet mood streak is accurately updated for live streak and max streak statistics dependendent on pet mood relative to threshold.
+* _`testEnergyStreak`_: Pet energy streak is accurately updated for live streak and max streak statistics dependent on pet energy relative to threshold.
 
 **`SettingsManagerTests`**
 * _`testSettingsManagerMemoryAddress`_: Settings manager memory address is shared.
 * _`testSettingsManagerPersistence`_: User global settings are maintained and persist.
+
+**`StatsDashboardTests`**
+* _`testCategoryFocusTimeAggregation`_: Focus time is aggregated correctly per task category.
+* _`testCategoryStatSortingByHighestFocusTime`_: Task categories are accurately sorted in order by focus time from highest to lowest.
 
 **`TaskItemTests`**
 * _`testCreateAndSaveTask`_: Tasks can be saved successfully to the local database.
 * _`testDeleteTask`_: Tasks can be deleted successfully from the local database.
 * _`testToggleTaskCompletion`_: Task state can be toggled succesfully from incomplete to complete.
 * _`testTaskItemInitializationDateTolerance`_: Tasks are created in expected time with date tolerance.
+* _`testTaskItemDefaultCategory`_: Tasks initialise with the default category.
+* _`testTaskItemCustomCategory`_: Tasks can be assigned accurately with custom categories.
+* _`testDefaultCategorySeeding`_: Default categories selection is seeded on first run.
+* _`testCreateAndSaveCustomUserCategory`_: Custom user categories can be created and saved successfully.
+* _`testDeleteCategoryFromDatabase`_: User categories can be deleted successfully.
+* _`testTaskReorderingSortOrder`_: Tasks can be reordered successfully with persistence.
 
 **`TimerViewModelTests`**
 * _`testInitialState`_: Timer starts with clean, empty values.
@@ -401,6 +463,7 @@ Implements the modern **Swift Testing** framework to write test suites verifying
 * _`testStartingNewTimerWhileAlreadyRunningOverwritesSuccessfully`_: Timers running simultaneously are not allowed.
 * _`testDynamicCurrGainFormula`_: The correct amount of coins is awarded on completing tasks of various durations based on the ramping quadratic reward formula.
 * _`testPauseAndResume`_: Timer paused and running state is accurately reflected on timer pause, resume, and session failure.
+* _`testStreakBasedCoinMultiplier`_: The correct amount of coins is awarded on completing tasks with various user streaks based on the user streak multiplier.
 
 **`UserProfileTests`**
 * _`testCanAfford`_: User can afford only items that have a price lower or equal to their current coin total.
@@ -445,15 +508,22 @@ To support parallel development and maintain a clean repository history, a profe
 
 
 ## 🎮 Access Instructions
-Requirements: Apple Device with XCode and Simulator
+**Link to GitHub Repository:** https://github.com/kokjz/pawductive
 
-1. Clone this repository / download project files from GitHub and unzip pawductive-main.zip
+**Option 1:** Run the app on macOS with XCode Simulator 
+
+1. Download project files from GitHub and unzip pawductive-main.zip
 2. Open pawductive-main/Pawductive/Pawductive.xcodeproj in XCode
 3. Select run destination in XCode as any iOS Simulator
 4. Run the app by pressing the play icon or by pressing **⌘ + R**
-5. Try Pawductive by running it with the Simulator under any iOS device
 
-Alternatively, a pre-built binary in the form of an `.iPA` file can be downloaded from the latest pre-release or release. As this file is unsigned, you will need to sideload it onto any compatible iOS device and complete the signing process yourself. Please check the pre-release or release information for more details.
+**Option 2:** Use Sideloadly to sideload the app on your iPhone 
+
+1. Download the Pawductive.ipa in the latest [release](https://github.com/kokjz/pawductive/releases)
+2. Download [Sideloadly](https://sideloadly.io) for Windows/macOS
+3. Sideload the app with your Apple ID into your iPhone
+4. Message @zirong679 in Telegram if you encounter any issues
+
 
 ---
 
