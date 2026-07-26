@@ -7,6 +7,8 @@ Built for Orbital 26 by Team Pawductive **(Team 6658).**
 
 **Targeted Level of Achievement: Gemini**
 
+> NOTE: This README is best viewed either on the project's GitHub repository or with [HackMD](https://hackmd.io/@6658/H1ERYqn1Ge) for the best  reading experience.
+
 
 ---
 
@@ -253,7 +255,7 @@ More new features were added for the pet, most of which were targeted at making 
 
 * **User-interactive animations for pet sprite:** The pet now has multiple different sprites that change depending on the pet's energy and mood. When the pet is low on energy, the pet will be sleeping. When the pet has sufficient energy, the pet will be happy, normal or angry according to the pet's mood. The eating and playing sprite is shown for 3 seconds when the user gives food and toys to their pet. A small animation is also played when the user taps on the sprite. This shows that the pet loves to receive pets from the user. 
 * **Level system and modifiers:** The pet will gain experience when the user gives the pet food and toys. Expensive food and toys increase experience by a larger amount. Each level requires 3000 experience points. Maximum mood and energy increases when the pet levels up. In addition, the user will receive 3 modifier points which can be used to upgrade modifiers in the modifier shop. Modifiers can reduce the cost of food and toys, increase the amount of mood and energy the pet can gain from food and toys, and reduce the rate at which mood and energy levels decay. Users can mix and match the modifiers as they level up their pet to customize how they increase their pet to max level. 
-* **Simulator background and decorations:** When the user first launches the simulator, they are greeted with an empty room which is the default background. The user can spend their coins in the decoration shop to buy decorations. The user can arrange and layer the decorations to decorate the background according to their preferences. In additon, the user can explore a different set of decorations by changing the simulator background from room to yard. Expensive decorations show that the user has focused for a significant amount of time to earn coins to buy the decorations.  
+* **Simulator background and decorations:** When the user first launches the simulator, they are greeted with an empty room which is the default background. The user can spend their coins in the decoration shop to buy decorations. The user can arrange and layer the decorations to decorate the background according to their preferences. In additon, the user can explore a different set of decorations by changing the simulator background from room to yard. Expensive decorations show that the user has focused for a significant amount of time to earn coins to buy the decorations.
 * **Quality of life features**: Mood and energy descriptions are displayed over the value bars to help the user understand how food and toys change the mood and energy levels. 
 
 
@@ -326,35 +328,33 @@ As mentioned earlier, all statistics have now been moved to a brand new Statisti
 ---
 
 
-## 🚧 Future Plans 
+## 🚧 Future Plans
+
+While there are no active plans to make any major changes to the application with the completion of Milestone 3, below are some additional features that could be considered in the future should this project be revisited.
 
 ### 1. Pet
-
-* **[DONE] Pet statistics & achievements:** Add statistics and achievements for the pet simulator
-* **[DONE] Pet hibernation:** Allow users to pause / freeze the state of the pet to prevent loss of progress if they are unable to access the app for an extended period of time.
 * **Pet accessories:** Allows users to purchase accessories that their pet can wear.
+* **Different pets:** Users can change the pet living in the simulator. Users can choose from multiple breeds and species. Food and toys sold will depend on the species.
 
-### 2. Shop
-* **Rotating discounts:** Shop items go on special sales, either at random or on daily rotations, to further incentivise users to maintain consistency and introduce more in-game financial planning. 
-* **Dynamic pricing:** To encourage the user to buy different food and toys, prices increase when the user purchases too many copies of the same item within a short span of time.
-* **Gacha system 💸:** User will spend a fixed amount of coins to buy items. Items have different rarity. User will receive a random item. Certain items may go on rate-ups with higher chances to obtain them on random rotation.
+### 2. Tasks
+* **Task widget:** The widget will highlight important tasks and the user can start a task by tapping on the widget. The user can control which tasks appear in the widget.
+* **Task deadlines:** Let the user set deadlines for each task. The user can schedule notifications to remind the user when the deadline is approaching.
+* **Sort and filter:** Let the user can sort and filter tasks according to task details.
 
-### 3. Tasks
-* **[DONE] Streak-based coin multiplier:** A new multiplier that rewards users more the longer their current streak to add on to the current existing multiplier that rewards users proportionately more for longer tasks.
-* **[DONE] Dedicated task creation screen:** A new view for users to create tasks on a dedicated screen instead of doing it from the top of the task list screen, potentially also giving users more customisation options at task creation.
-* **[DONE] Task categorisation:** Allow users to tag their created tasks with categories. Users can make use of default categories, or create/edit custom categories from their user settings.
-* **[DONE] Task order organisation:** Allow users to drag and reorganise the order of the tasks on their task list. 
+### 3. Timer 
+* **Lock screen support:** Progress will not be lost when the phone is locked.
+* **Live activity:** Display the countdown in dynamic island or lock screen notifications. 
+* **Ambient audio:** Allow users to pick ambient white noise to be played on their timer screen, such as lofi music, rain, or other noise that helps the user focus.
 
-### 4. Timer
-* **Ambient audio:** Allows users to pick ambient white noise to be played on their timer screen, such as lofi music, rain, or other noise that helps the user focus.
+### 4. Achievements
+* **Unlock alerts:** The user is notified when they unlock an achievement. 
+* **Share sheets:** The user can share images to show that they have unlocked an achievement. Similar to the share sheet for the daily task streak.
 
 ### 5. Others
-
-* **[DONE] Login rewards:** Users receive coins/items when they open the app daily/weekly. Encourage the user to open the app to claim rewards. 
-* **[DONE] App widgets:** Allows user to add different app widgets to their home screen to support easy access of multiple features (e.g. viewing of live pet status, view task list, quickstart top task on list).
-* **[DONE] Statistics dashboard:** Detailed dashboard in a separate view where users can see more data and insights about their usage statistics, such as their time spent on different categories of tasks.
-* **[DONE] Share sheets / activity view:** Allow users to easily snapshot and share key activity information and their pet to other locations (e.g. to their friends on social media) through iOS built-in share sheet (Activity View).
-* **App-wide themes:** Allows users to customise app-wide visual themes from their user settings.
+* **Motivational notifications:** Motivational notifications will be delivered once a day. 
+* **Weekly leaderboard:** Users will be ranked according to the minutes focused each week. Users who finish at the top of the leaderboard can earn custom rewards.
+* **Friend system:** Users can add friends. Pets can receive food and toys from a friend. 
+* **App-wide themes:** Users can change app-wide visual themes via settings.
 
 
 ---
@@ -367,7 +367,7 @@ As mentioned earlier, all statistics have now been moved to a brand new Statisti
 The UI is decoupled from the business logic to ensure a testable and maintainable codebase. This provides several key advantages, such as decoupling between frontend and backend, greater ease of testing, and reusability.
 
 * **Models:** These `.swift` files represent the raw data structures and database schemas of the application. Models are pure structures or reference types that hold state and are independent of the UI. The current list of models include `CategoryStat`, `Background`, `Decor`, `ShownDecor`, `StoredDecor`, `DailyMission`, `MissionDetails`, `Modifier`, `DailyReward`, `Food`, `Toy`, `Pet`, `TaskCategory`, `TaskItem`, `Achievement`, `UserProfile`, and `UserStats`.
-* **Views:** These `.swift` files represent the declarative UI of the application. Views are solely responsible for rendering layouts, responding to user interactions, and observing realtime changes in viewmodels. The current list of views include `PawductiveWidgetsBundle`, `PetSimulatorWidget`, `RewardMissionWidget`, `StatsDashboardView`, `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `DailyRewardView`, `CategoryManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `StreakShareCard`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskCreationView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
+* **Views:** These `.swift` files represent the declarative UI of the application. Views are solely responsible for rendering layouts, responding to user interactions, and observing realtime changes in viewmodels. The current list of views include `PetSimulatorWidget`, `RewardMissionWidget`, `StatsDashboardView`, `BackgroundView`, `CanvasView`, `DecorShopView`, `DecorStoreView`, `ShopDecorView`, `StoreDecorView`, `DailyMissionsView`, `ModifiersView`, `ModifierView`, `NotificationManagerView`, `DailyRewardView`, `CategoryManagerView`, `GracePeriodPickerView`, `SettingsManagerView`, `StreakShareCard`, `ShopCategory`, `FoodShopView`, `ShopView`, `ToyShopView`, `FoodStoreView`, `PetSimulatorView`, `ToyStoreView`, `ValueBarView`, `TaskCreationView`, `TaskQueueView`, `TimerView`, `ProfileView`, `UserCoinsView`, `ContentView`, and `Text+Extensions`.
 * **ViewModels:** These `.swift` files represent the "brain" and the bridge of the application. Viewmodels are state-driven, observe user interactions, perform calculations, run async timers, and coordinate context transactions with the databases. The current list of viewmodels include `ClaimMissionIntent`, `MissionManager`, `NotificationManager`, `ClaimRewardIntent` `SettingsManager`, `TimerViewModel`, and `DataContainer`.
 
 Additionally, to round up the list of `.swift` files that are part of the main application, `PawductiveApp` serves as the entry point for the application.
@@ -510,19 +510,24 @@ To support parallel development and maintain a clean repository history, a profe
 ## 🎮 Access Instructions
 **Link to GitHub Repository:** https://github.com/kokjz/pawductive
 
-**Option 1:** Run the app on macOS with XCode Simulator 
+**Option 1: Run the app via XCode Simulator**
+
+This option requires an Apple Device capable of running macOS Sonoma 14.5 (or later).
 
 1. Download project files from GitHub and unzip pawductive-main.zip
 2. Open pawductive-main/Pawductive/Pawductive.xcodeproj in XCode
-3. Select run destination in XCode as any iOS Simulator
+3. Select run destination in XCode as any iOS Simulator (such as iPhone 17)
 4. Run the app by pressing the play icon or by pressing **⌘ + R**
 
-**Option 2:** Use Sideloadly to sideload the app on your iPhone 
+**Option 2: Sideload the app via Sideloadly**
+
+This option requires an Apple Device capable of running at least iOS 18.6 (or later), as well as any device capable of running at least Windows 7 (or later) or macOS 10.12 Sierra (or later). NOTE: Other sideloading options such as AltStore or Feather should also work, but have not been tested. Additionally, all sideloading carries inherent security risks, and we will not be held liable for any negative consequences that the user may be subject to in the process.
 
 1. Download the Pawductive.ipa in the latest [release](https://github.com/kokjz/pawductive/releases)
 2. Download [Sideloadly](https://sideloadly.io) for Windows/macOS
-3. Sideload the app with your Apple ID into your iPhone
-4. Message @zirong679 in Telegram if you encounter any issues
+3. Sideload the app with your Apple ID into your iPhone by following the standard instructions from Sideloadly.
+ 
+Feel free to drop either of us a message on Telegram @zirong679 or @kokjz if you encounter any issues.
 
 
 ---
@@ -542,35 +547,45 @@ To support parallel development and maintain a clean repository history, a profe
 
 ## 📸 App Screenshots
 
-### Task Queue and Timer
-<img src="https://hackmd.io/_uploads/ryZZvH1efl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/rkWZwBygMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SkWZwrkefx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SJu0kpszMe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/Hku0JpjMMg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="tasks"></a>Task Queue
+<img src="https://hackmd.io/_uploads/rkZYluGSGe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SkWYlOMHfe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/HJ-FldGrMx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-### Pet Simulator
-<img src="https://hackmd.io/_uploads/HyuA1ajGze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/Hy_0Jaozfx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="timer"></a>Timer Configurations
+<img src="https://hackmd.io/_uploads/SJu0kpszMe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/Hku0JpjMMg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SJ-Yl_GrGe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/S1Vpr_zrzl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-### Background and Modifiers
-<img src="https://hackmd.io/_uploads/SJ_CkTszfe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/H1_AyTizMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/HJ_C16jzMx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="simulator"></a>Pet Simulator & Modifiers
+<img src="https://hackmd.io/_uploads/HyuA1ajGze.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/Hy_0Jaozfx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/rJdAJasMfl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-<img src="https://hackmd.io/_uploads/SJOR1ToMGl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SyuAJTjGMl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/rJdAJasMfl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="background"></a>Background & Decorations
+<img src="https://hackmd.io/_uploads/SJ_CkTszfe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/HJ_C16jzMx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SJOR1ToMGl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SyuAJTjGMl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-### Food and Toy Shop
-<img src="https://hackmd.io/_uploads/BkOA16oGzg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/SkdC16oMGx.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="shop"></a>Food & Toy Shop
+<img src="https://hackmd.io/_uploads/BkOA16oGzg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/SkdC16oMGx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-### Daily Missions, Statistics & Achievements
-<img src="https://hackmd.io/_uploads/B1OCkaoMze.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/H1dCJasMMe.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="profile"></a>User Profile
+<img src="https://hackmd.io/_uploads/HJZYeOfBfg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/HyZtgOGSzl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/BJbYguMHzl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/S1ZtluMSzx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
 
-### Settings & Notifications
-<img src="https://hackmd.io/_uploads/ryuR1pjzfg.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/BkORyTszGl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
-<img src="https://hackmd.io/_uploads/B1uAJ6sfzl.png" style="width: 30%;">&nbsp; &nbsp; &nbsp;
+### <a id="settings"></a>Settings & Notifications
+<img src="https://hackmd.io/_uploads/S1btxdfSGx.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/BybtxOzBMg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/B1uAJ6sfzl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/ryuR1pjzfg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+
+### <a id="widgets"></a>Widgets & Share Sheet 
+<img src="https://hackmd.io/_uploads/BJZYluMSfl.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/ryWtx_frGg.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
+<img src="https://hackmd.io/_uploads/ryZFx_MSfe.png" style="width: 20%;">&nbsp; &nbsp; &nbsp;
